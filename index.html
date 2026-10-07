@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chomutovka – navigace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: mobilní průvodce OC — lišta "Jste zde", stav otevření, 3D prohlídka, menu podle kategorií webu, detail s trasou přes 3 patra kolem atria */
+/* BRAND: barvy jsou provizorní — po dodání loga / screenshotu stačí přepsat tokeny níže */
+:root{
+  --bg:#f4f5f7; --surface:#ffffff; --ink:#15202b; --muted:#5d6874; --line:#dfe3e8;
+  --brand:#0a6c8f; --brand-2:#08536e; --accent:#f2a516; --brand-soft:#e3f1f6; --room:#eaedf1; --room-hi:#fdf0d6; --ok:#1f8a4c; --off:#b3322f;
+  --display:'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --body:'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f161c; --surface:#172129; --ink:#eef2f5; --muted:#a2adb7; --line:#2a3741;
+  --brand:#3aa7cf; --brand-2:#0c4d66; --accent:#f5b53a; --brand-soft:#16323e; --room:#1f2b34; --room-hi:#3b3018; --ok:#4cc27e; --off:#ec6a66; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f161c; --surface:#172129; --ink:#eef2f5; --muted:#a2adb7; --line:#2a3741;
+  --brand:#3aa7cf; --brand-2:#0c4d66; --accent:#f5b53a; --brand-soft:#16323e; --room:#1f2b34; --room-hi:#3b3018; --ok:#4cc27e; --off:#ec6a66; color-scheme:dark }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-top:env(safe-area-inset-top,0px)}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:0 40px;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;font-weight:700}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:-16px;padding:12px 16px;background:var(--brand-2);color:#fff;display:flex;flex-direction:column;gap:8px}
+.brandrow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;min-width:0}
+.logo img{height:30px;width:auto;max-width:160px;background:#fff;border-radius:6px;padding:3px 6px}
+.logo .word{font:700 20px var(--display);letter-spacing:.01em}
+.logo small{display:block;font-size:11.5px;color:#cfe3ea;font-weight:500}
+.badge{font-size:10.5px;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.here{display:flex;align-items:center;gap:10px;font-size:14px}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--accent);flex:none;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,165,22,.6)}80%,100%{box-shadow:0 0 0 10px rgba(242,165,22,0)}}
+.here b{font-weight:700}
+.here button{margin-left:auto;font:700 12px var(--body);color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:99px;padding:4px 11px;cursor:pointer}
+
+.status{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:13.5px}
+.open{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--ok)}
+.open::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.open.closed{color:var(--off)}
+
+.tour{border-radius:16px;overflow:hidden;background:var(--brand);color:#fff}
+.tour iframe{display:block;width:100%;aspect-ratio:4/3;max-width:100%;border:0}
+.tstat{padding:8px 14px;font-size:12.5px;font-weight:600;color:#fff;background:var(--brand-2)}
+textarea.search{font:12px ui-monospace,Menlo,monospace;resize:vertical}
+.tour .inner{padding:20px 18px;display:flex;flex-direction:column;gap:10px}
+.tour h2{font-size:22px}
+.tour p{margin:0;font-size:13.5px;color:#dcecf2;max-width:60ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 14px var(--body);border-radius:10px;padding:11px 16px;text-decoration:none;cursor:pointer;border:1px solid transparent}
+.btn.accent{background:var(--accent);color:#1d1503;align-self:flex-start}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn:focus-visible,.chip:focus-visible,.item:focus-visible,input:focus-visible,.here button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.info div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.info b{font:700 14px var(--display)}
+.info span{font-size:12px;color:var(--muted)}
+@media (max-width:380px){ .info{grid-template-columns:1fr} }
+
+.search{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chip{flex:none;font:600 13px var(--body);padding:7px 13px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+.list{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.item{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:11px 14px;border:0;border-top:1px solid var(--line);background:transparent;color:inherit;text-align:left;font:inherit;cursor:pointer;width:100%}
+.item:first-child{border-top:0}
+.item:hover{background:var(--room)}
+.ico{width:40px;height:40px;border-radius:10px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font:700 13px var(--display)}
+.item .t{font-weight:700}
+.item .s{font-size:12.5px;color:var(--muted)}
+.meta{font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.pill{font-size:11px;font-weight:700}
+.pill.on{color:var(--ok)} .pill.off{color:var(--off)}
+.empty{padding:18px;color:var(--muted)}
+
+.detail{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:110px}
+.detail h2{font-size:24px}
+.detail .desc{margin:0;color:var(--muted)}
+.kv{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px}
+.kv span{color:var(--muted)}
+.sum{display:flex;gap:22px;flex-wrap:wrap}
+.sum div{display:flex;flex-direction:column}
+.sum b{font:700 22px var(--display);font-variant-numeric:tabular-nums}
+.plans{display:flex;flex-direction:column;gap:10px}
+.plan{border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--bg)}
+.plan .eyebrow{display:block;margin:0 0 4px 4px}
+.plan svg{width:100%;height:auto;display:block}
+svg .wall{fill:none;stroke:var(--ink);stroke-width:2.5}
+svg .room{fill:var(--room);stroke:var(--line);stroke-width:1}
+svg .room.hi{fill:var(--room-hi);stroke:var(--accent);stroke-width:2}
+svg .atrium{fill:var(--brand-soft);stroke:var(--brand);stroke-dasharray:4 3;stroke-width:1}
+svg .lbl{fill:var(--muted);font:700 7.5px var(--body);text-anchor:middle}
+svg .alb{fill:var(--brand);font:700 7.5px var(--body);text-anchor:middle;letter-spacing:.08em}
+svg .route{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.4s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+svg .me{fill:var(--brand);stroke:var(--surface);stroke-width:2}
+svg .mering{fill:none;stroke:var(--brand);stroke-width:2;opacity:.4}
+svg .pin{fill:var(--accent)}
+svg .door{stroke:var(--bg);stroke-width:6}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{display:grid;grid-template-columns:26px 1fr auto;gap:10px;padding:9px 0;border-top:1px solid var(--line);align-items:baseline;counter-increment:s}
+ol.steps li::before{content:counter(s);font:700 13px var(--display);color:var(--brand)}
+ol.steps li span:last-child{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:12px;color:var(--muted);margin:0}
+
+.nfc{border:2px dashed var(--brand);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.nfc h3{font-size:18px}
+.nfc .row{display:flex;flex-wrap:wrap;gap:8px}
+footer{font-size:12px;color:var(--muted);text-align:center;display:flex;flex-direction:column;gap:4px}
+@media (prefers-reduced-motion: reduce){ .dot{animation:none} svg .route{animation:none;stroke-dashoffset:0} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brandrow">
+      <div class="logo">
+        <img src="https://chomutovka.cz/img/logo.svg?ts=1698921604" alt="Chomutovka" onerror="this.remove();document.getElementById('word').hidden=false">
+        <div><span class="word" id="word" hidden>Chomutovka</span><small>Farského 4732, Chomutov</small></div>
+      </div>
+      <span class="badge">návrh View</span>
+    </div>
+    <div class="here"><span class="dot"></span><span>Jste zde: <b id="hereName">Hlavní vchod</b></span><button id="where">Změnit</button></div>
+  </header>
+
+  <div class="status"><span class="open" id="open">Otevřeno</span><span>Centrum 9–19 h · Tesco 7–20 h · denně</span></div>
+
+  <section class="tour" aria-label="3D prohlídka" id="tour"></section>
+
+  <section class="info" aria-label="Praktické informace">
+    <div><b>Parkování</b><span>120 míst, 1. hodina zdarma, víkendy zdarma</span></div>
+    <div><b>Wi-Fi zdarma</b><span>heslo: chomutovka</span></div>
+    <div><b>MHD</b><span>trolejbus 340–353, autobus 306, 314</span></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px" id="menu">
+    <div class="eyebrow">Kam se chcete dostat?</div>
+    <input id="q" class="search" type="search" placeholder="Hledat: dm, pošta, káva, boty…" autocomplete="off">
+    <div class="chips" id="chips" role="toolbar" aria-label="Kategorie"></div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section class="detail" id="detail" hidden></section>
+
+  <section class="nfc" id="nfcbox">
+    <div class="eyebrow">Simulace NFC a QR</div>
+    <h3>Přiložte telefon k tagu</h3>
+    <p class="note">V centru bude NFC tag s QR kódem u vchodu, u eskalátorů v každém patře a u pošty. Klepnutím simulujete načtení: stránka se otevře s vaší polohou a trasy se přepočítají odtamtud.</p>
+    <div class="row" id="tags"></div>
+  </section>
+
+  <section class="nfc admin" id="admin" hidden>
+    <div class="eyebrow">Pro View · příprava</div>
+    <h3>Nastavit body prohlídky</h3>
+    <p class="note">V prohlídce se postavte ke vchodu do obchodu, vyberte ho v seznamu a klepněte na Přiřadit. Až budou body hotové, zkopírujte nastavení a pošlete ho do vývoje, aby se vložilo natrvalo.</p>
+    <div class="kv"><div><span>Aktuální bod v prohlídce </span><b id="curSweep">—</b></div><div><span>Přiřazeno </span><b id="mapCount">0</b></div></div>
+    <select id="mapSel" class="search"></select>
+    <div class="actions">
+      <button class="btn primary" id="assign">Přiřadit aktuální bod</button>
+      <button class="btn ghost" id="jump">Přejít na přiřazený bod</button>
+      <button class="btn ghost" id="copyMap">Kopírovat nastavení</button>
+    </div>
+    <textarea id="mapJson" class="search" rows="4" aria-label="Nastavení bodů" placeholder="Sem můžete vložit dříve uložené nastavení a klepnout na Načíst."></textarea>
+    <button class="btn ghost" id="loadMap" style="align-self:flex-start">Načíst nastavení</button>
+    <p class="note" id="adminMsg"></p>
+  </section>
+
+  <footer>
+    <button class="btn ghost" id="toggleAdmin" style="align-self:center;font-size:12px;padding:6px 12px">Nastavit body prohlídky</button>
+    <span>Obchody, patra a otevírací doba jsou z chomutovka.cz. Rozmístění v patře je v ukázce orientační.</span>
+    <span>Připravila View Czech</span>
+  </footer>
+</div>
+
+<script>
+const SDK_KEY = '25637u49gkrstz3189402x35c';
+const MODEL = 'fgFYkGk9j2A';
+const TOUR_URL = `https://my.matterport.com/show/?m=${MODEL}&play=1&qs=1`;
+const SDK_URL = `${TOUR_URL}&applicationKey=${SDK_KEY}`;
+// přiřazení míst k bodům prohlídky (sweep ID) — vyplní se v režimu "Nastavit body prohlídky" a pak se sem vloží natrvalo
+const SWEEPS = {};
+const M_PER_UNIT = 0.2;
+const FLOORS = ['Přízemí','1. patro','2. patro'];
+const CATS = [['all','Vše'],['potraviny','Potraviny'],['moda','Móda'],['obuv','Obuv'],['sport','Sport, volný čas'],['kosmetika','Kosmetika, zdraví'],
+  ['darky','Klenoty, dárky'],['hracky','Hračky, knihy, papír'],['elektro','Elektro, bydlení'],['sluzby','Služby'],['jidlo','Občerstvení']];
+
+// sloty v patře: [x, y, w, h]
+const SLOT = {
+  T:[110,22,140,52],
+  L1:[25,28,70,44],L2:[25,78,70,44],L3:[25,128,70,44],L4:[25,178,70,44],L5:[25,228,70,44],
+  R1:[265,28,70,44],R2:[265,78,70,44],R3:[265,128,70,44],R4:[265,178,70,44],R5:[265,228,70,44],
+  B1:[110,222,55,44],B2:[195,222,55,44],
+  K1:[126,104,44,22],K2:[190,104,44,22]
+};
+// [id, název, patro, slot nebo [x,y] bod v chodbě, kategorie, popis, otevírací doba, telefon, zkratka do plánku]
+const P = [
+  ['tesco','Tesco',0,'T','potraviny','Potraviny, drogerie, průmyslové zboží a oblečení.','Po–Ne 7–20','474 336 040','TESCO'],
+  ['luxor','Knihkupectví Luxor',0,'L1','hracky','Knihy, komiksy, deskové hry a dárky. U Tesca.','Po–Ne 9–19','416 419 921','LUXOR'],
+  ['tabak','Tabák DonPealo',0,'L2','sluzby','Tabák, tisk, jízdenky, SAZKA a nápoje.','Po–Pá 7–19, So–Ne 8–19','727 953 265','TABÁK'],
+  ['tipsport','Tipsport',0,'L3','sluzby','Sázková kancelář, přenosy a losy. Prodej dárkových poukazů centra.','Po–Ne 9–19','702 012 670','TIPSPORT'],
+  ['superzoo','Super zoo',0,'L4','sport','Chovatelské potřeby, krmivo a zvířata.','Po–Ne 8–19','477 754 663','SUPER ZOO'],
+  ['vineco','Vinotéka Vineco',0,'L5','potraviny','Moravská vína lahvová i sudová, oříšky a čokolády.','Po–Ne 8–19','774 408 502','VINECO'],
+  ['drmax','Lékárna Dr. Max',0,'R1','kosmetika','Léky, doplňky stravy a dětská výživa.','Po–Ne 8–19','474 341 662','DR. MAX'],
+  ['grandoptical','GrandOptical',0,'R2','kosmetika','Brýle, kontaktní čočky, měření zraku a opravy.','Po–Ne 9–19','474 331 193','OPTIKA'],
+  ['pandora','PANDORA',0,'R3','darky','Šperky, náramky s přívěsky, prsteny a náušnice.','Po–Pá 9–19','737 325 960','PANDORA'],
+  ['quickshoes','QUICK SHOES',0,'R4','obuv','Obuv pro všechny věkové kategorie.','Po–Ne 9–19','474 650 040','QUICK SHOES'],
+  ['space','SPACE – mobilní telefony',0,'R5','elektro','Telefony, tablety, příslušenství, výkup a opravy.','Po–Ne 9–19','778 750 671','SPACE'],
+  ['lagarto','Lagarto Café',0,'B1','jidlo','Výběrová káva, sendviče, dezerty a limonády.','Po–Ne 7:30–19','774 169 629','LAGARTO'],
+  ['bluestyle','BLUE STYLE',0,'B2','sluzby','Cestovní kancelář, plánování dovolených.','Po–Ne 8–20','226 036 438','BLUE STYLE'],
+  ['bubbletea','Bubble tea',0,'K1','jidlo','Tradiční bubble tea.','Po–Ne 9–19','773 388 999','BUBBLE'],
+  ['filip','Filip radost z květin',0,'K2','darky','Řezané a hrnkové květiny a doplňky.','Po–Ne 8–19','731 435 005','KVĚTINY'],
+  ['atm0','Bankomaty Air Bank, KB a kryptomat',0,[150,90],'sluzby','U vstupu do Tesca.','','',''],
+  ['dm','dm drogerie',1,'T','kosmetika','Drogerie, kosmetika, bio produkty a fotoslužby.','Po–Ne 8–19','412 374 652','dm'],
+  ['posta','Česká pošta',1,'L1','sluzby','Pobočka Chomutov 2.','Po–Pá 8–18, So 8–12','954 243 002','POŠTA'],
+  ['kohinoor','Papírnictví KOH-I-NOOR',1,'L2','hracky','Školní, kancelářské a výtvarné potřeby.','Po–Ne 9–19','773 474 330','KOH-I-NOOR'],
+  ['horoskop','HOROSKOP',1,'L3','darky','Dárkové zboží, přírodní kosmetika a zdravá výživa.','Po–Ne 9–19','416 813 739','HOROSKOP'],
+  ['glam','360 GLAM BEAUTY & NAILS',1,'L4','kosmetika','Manikúra, pedikúra a kosmetické ošetření.','Po–Ne 8–19','774 217 925','360 GLAM'],
+  ['fann','FAnn parfumerie',1,'L5','kosmetika','Parfémy, dekorativní kosmetika a péče o pleť.','Po–Ne 9–19','705 677 771','FANN'],
+  ['orsay','ORSAY',1,'R1','moda','Dostupná dámská móda.','Po–Ne 9–19','724 012 719','ORSAY'],
+  ['exe','EXE JEANS',1,'R2','moda',"Džíny Levi's, Wrangler, Mustang a další.",'Po–Ne 9–19','724 150 694','EXE JEANS'],
+  ['takko','Takko',1,'R3','moda','Móda pro dospělé i děti.','Po–Ne 8–19','474 341 718','TAKKO'],
+  ['regatta','REGATTA',1,'R4','sport','Outdoorové oblečení a obuv pro celou rodinu.','Po–Ne 9–19','725 758 224','REGATTA'],
+  ['atm1','Bankomat ČSOB',1,[110,60],'sluzby','U vstupu na poštu.','','',''],
+  ['gastro','GASTRO zóna',2,'T','jidlo','Místo k posezení u restaurací ve 2. patře.','Po–Ne 9–19','','GASTRO ZÓNA'],
+  ['ceska','Česká kuchyně',2,'L1','jidlo','Česká jídla a denní menu, terasa.','Po–Ne 9–19','739 000 452','ČESKÁ KUCH.'],
+  ['cinske','Čínské bistro',2,'L2','jidlo','Čínská kuchyně na místě i s sebou.','Po–Ne 9–19','723 880 779','ČÍNSKÉ BISTRO'],
+  ['salade','Salade fresh & smoothie',2,'L3','jidlo','Smoothie, saláty, polévky a panini.','Po–Ne 9–19','605 308 828','SALADE'],
+  ['wc','Toalety (Euro klíč)',2,'L4','sluzby','Veřejné toalety, bezbariérové na Euro klíč.','Po–Ne 9–19','','WC'],
+  ['dracik','hračky Dráčik',2,'L5','hracky','Značkové hračky od světových výrobců.','Po–Ne 9–19','474 333 060','DRÁČIK'],
+  ['datart','DATART',2,'R1','elektro','Elektronika, spotřebiče a nářadí.','Po–Ne 9–19','577 055 773','DATART'],
+  ['sinsay','SINSAY',2,'R2','moda','Trendy móda za nízké ceny a domácnost.','Po–Ne 9–19','','SINSAY'],
+  ['pepco','Pepco',2,'R3','moda','Oblečení pro celou rodinu a domácí potřeby.','Po–Ne 9–19','228 881 508','PEPCO'],
+  ['scanquilt','SCANquilt',2,'R4','elektro','Ložní prádlo, spánkové produkty a bytové doplňky.','Po–Ne 9–19','246 058 169','SCANQUILT'],
+  ['tescoma','TESCOMA',2,'R5','elektro','Český výrobce kuchyňských potřeb.','Po–Ne 9–19','577 575 497','TESCOMA']
+].map(([id,name,floor,slot,cat,desc,hours,phone,short]) => ({id,name,floor,slot,cat,desc,hours,phone,short}));
+
+/* ---------- navigační graf ---------- */
+const N = {}; const E = [];
+const RING = [['TL',110,90],['mT',180,90],['TR',250,90],['mR',250,150],['BR',250,205],['mB',180,205],['BL',110,205],['mL',110,150]];
+const segPts = [0,1,2].map(() => RING.map(() => []));   // body na úsecích chodby pro každé patro
+function addNode(id,x,y,f,name){ N[id] = [x,y,f,name]; }
+[0,1,2].forEach(f => {
+  RING.forEach(([k,x,y]) => addNode(`${f}${k}`,x,y,f,`Chodba – ${FLOORS[f]}`));
+  addNode(`esc${f}`,180,165,f,'Eskalátory');
+  ['mT','mB','mL','mR'].forEach(k => E.push([`esc${f}`,`${f}${k}`]));
+});
+addNode('vchod',180,284,0,'Hlavní vchod'); E.push(['vchod','0mB']);
+N['esc0'][3] = 'Eskalátory';
+E.push(['esc0','esc1','esc'],['esc1','esc2','esc']);
+function nearestOnRing(cx,cy){
+  let best = null;
+  RING.forEach((a,i) => {
+    const b = RING[(i+1)%RING.length], dx = b[1]-a[1], dy = b[2]-a[2];
+    let t = ((cx-a[1])*dx + (cy-a[2])*dy) / (dx*dx+dy*dy); t = Math.max(0,Math.min(1,t));
+    const x = a[1]+t*dx, y = a[2]+t*dy, dd = Math.hypot(cx-x,cy-y);
+    if (!best || dd < best.dd) best = {i,t,x,y,dd};
+  });
+  return best;
+}
+P.forEach(p => {
+  let cx, cy;
+  if (Array.isArray(p.slot)) [cx,cy] = p.slot; else { const [x,y,w,h] = SLOT[p.slot]; cx = x+w/2; cy = y+h/2; }
+  const r = nearestOnRing(cx,cy);
+  const door = `d_${p.id}`;
+  addNode(door, r.x, r.y, p.floor, `Chodba u: ${p.name}`);
+  segPts[p.floor][r.i].push([r.t, door]);
+  if (r.dd < 2){ N[door][3] = p.name; p.node = door; }
+  else { addNode(p.id, cx, cy, p.floor, p.name); E.push([door, p.id]); p.node = p.id; }
+});
+[0,1,2].forEach(f => RING.forEach((a,i) => {
+  const b = RING[(i+1)%RING.length];
+  const pts = [[0,`${f}${a[0]}`], ...segPts[f][i].sort((x,y) => x[0]-y[0]), [1,`${f}${b[0]}`]];
+  for (let j=1;j<pts.length;j++) E.push([pts[j-1][1], pts[j][1]]);
+}));
+const byId = Object.fromEntries(P.map(p => [p.id,p]));
+const TAGS = [['vchod','Hlavní vchod'],['d_atm0','Vstup do Tesca'],['esc0','Eskalátory přízemí'],['esc1','Eskalátory 1. patro'],['esc2','Eskalátory 2. patro'],['posta','Pošta']];
+
+let here = 'vchod', cat = 'all', target = null;
+const $ = s => document.querySelector(s);
+const d = (a,b) => Math.hypot(N[a][0]-N[b][0], N[a][1]-N[b][1]);
+const hereLabel = () => (TAGS.find(t => t[0]===here) || [0, N[here][3]])[1];
+
+function graph(){
+  const g = {}; Object.keys(N).forEach(k => g[k] = []);
+  E.forEach(([a,b,t]) => { const w = t === 'esc' ? 45 : d(a,b); g[a].push([b,w,t]); g[b].push([a,w,t]); });
+  return g;
+}
+const G = graph();
+function route(s, t){
+  const dist = {}, prev = {}, todo = new Set(Object.keys(N));
+  Object.keys(N).forEach(k => dist[k] = Infinity); dist[s] = 0;
+  while (todo.size){
+    let u = null; todo.forEach(k => { if (u === null || dist[k] < dist[u]) u = k; });
+    if (dist[u] === Infinity || u === t) break;
+    todo.delete(u);
+    G[u].forEach(([v,w,ty]) => { if (dist[u]+w < dist[v]) { dist[v] = dist[u]+w; prev[v] = [u,ty]; } });
+  }
+  const path = [], types = []; let c = t;
+  while (c && c !== s){ path.unshift(c); types.unshift(prev[c] ? prev[c][1] : null); c = prev[c] && prev[c][0]; }
+  path.unshift(s);
+  return {path, types};
+}
+// pokyny: chodbové úseky slučujeme, jmenujeme jen orientační body (obchody, eskalátory)
+function steps(r){
+  const out = []; let meters = 0, acc = 0;
+  for (let i = 1; i < r.path.length; i++){
+    const a = r.path[i-1], b = r.path[i], ty = r.types[i-1];
+    if (ty === 'esc'){
+      let j = i; while (j+1 < r.path.length && r.types[j] === 'esc') j++;
+      const to = N[r.path[j]][2], up = to > N[a][2];
+      if (acc){ out.push(['Dojděte k eskalátorům v atriu', acc+' m']); acc = 0; }
+      out.push([`${up?'Vyjeďte':'Sjeďte'} eskalátorem do patra: ${FLOORS[to]}`, '']); i = j; continue;
+    }
+    const m = d(a,b)*M_PER_UNIT; meters += m; acc += m;
+    const last = i === r.path.length-1;
+    if (last){ out.push([`Dojděte k cíli`, Math.max(2,Math.round(acc))+' m']); acc = 0; }
+  }
+  // doplň orientační body podél cesty
+  const lastEsc = r.types.lastIndexOf('esc'), tgt = r.path[r.path.length-1];
+  const passed = r.path.slice(lastEsc+2, -1).filter(k => k.startsWith('d_') && byId[k.slice(2)] && byId[k.slice(2)].node !== tgt && k !== tgt).map(k => byId[k.slice(2)].name);
+  if (passed.length && out.length) out[out.length-1][0] = `Pokračujte kolem: ${passed.slice(-2).join(', ')}`;
+  out.forEach(o => { if (/^\d/.test(o[1])) o[1] = Math.max(2, Math.round(parseFloat(o[1])))+' m'; });
+  return {list:out, meters: Math.max(2, Math.round(meters))};
+}
+
+/* ---------- otevírací doba ---------- */
+const DAY = {Po:0,Út:1,St:2,Čt:3,Pá:4,So:5,Ne:6};
+function isOpen(hours, now = new Date()){
+  if (!hours) return null;
+  const wd = (now.getDay()+6)%7, h = now.getHours()+now.getMinutes()/60;
+  return hours.split(', ').some(part => {
+    const m = part.match(/^(\S+)\s+([\d:]+)–([\d:]+)$/); if (!m) return false;
+    const [a,b] = m[1].split('–'), from = DAY[a], to = b ? DAY[b] : DAY[a];
+    const t = s => { const [hh,mm] = s.split(':'); return +hh + (mm?+mm/60:0); };
+    return wd >= from && wd <= to && h >= t(m[2]) && h < t(m[3]);
+  });
+}
+
+/* ---------- plánek ---------- */
+function planSVG(floor, r){
+  let s = `<svg viewBox="0 0 360 300" role="img" aria-label="Plánek – ${FLOORS[floor]}">`;
+  s += `<rect class="atrium" x="122" y="100" width="116" height="94" rx="8"/><text class="alb" x="180" y="186">ATRIUM · ESKALÁTORY</text>`;
+  s += `<rect class="room" x="166" y="150" width="28" height="30" rx="3"/><text class="lbl" x="180" y="168">⇅</text>`;
+  P.filter(p => p.floor === floor && !Array.isArray(p.slot)).forEach(p => {
+    const [x,y,w,h] = SLOT[p.slot];
+    s += `<rect class="room${p.id===target?' hi':''}" x="${x}" y="${y}" width="${w}" height="${h}" rx="3"/>`;
+    s += `<text class="lbl" x="${x+w/2}" y="${y+h/2+3}">${p.short}</text>`;
+  });
+  s += `<rect class="wall" x="20" y="18" width="320" height="266" rx="4"/>`;
+  if (floor === 0) s += `<line class="door" x1="168" y1="284" x2="192" y2="284"/><text class="lbl" x="180" y="278">VCHOD</text>`;
+  const segs = []; let cur = [];
+  r.path.forEach(k => { if (N[k][2] === floor) cur.push(k); else { if (cur.length) segs.push(cur); cur = []; } });
+  if (cur.length) segs.push(cur);
+  segs.filter(sg => sg.length > 1).forEach(sg => {
+    let len = 0; for (let i=1;i<sg.length;i++) len += d(sg[i-1],sg[i]);
+    s += `<polyline class="route" style="--len:${Math.ceil(len)}" points="${sg.map(k => N[k][0]+','+N[k][1]).join(' ')}"/>`;
+  });
+  if (N[here][2] === floor) s += `<circle class="mering" cx="${N[here][0]}" cy="${N[here][1]}" r="12"/><circle class="me" cx="${N[here][0]}" cy="${N[here][1]}" r="6.5"/>`;
+  if (target){ const tn = byId[target].node; if (N[tn][2] === floor){ const [x,y] = N[tn]; s += `<path class="pin" d="M${x} ${y} l-7 -12 a8 8 0 1 1 14 0 z"/>`; } }
+  return s + '</svg>';
+}
+
+/* ---------- vykreslení ---------- */
+/* ---------- Matterport SDK ---------- */
+let sdk = null, curSweep = null, sweepGraph = null, guiding = false;
+let map = Object.assign({}, SWEEPS);
+try { Object.assign(map, JSON.parse(localStorage.getItem('chomutovka-sweeps') || '{}')); } catch(e) {}
+const saveMap = () => { try { localStorage.setItem('chomutovka-sweeps', JSON.stringify(map)); } catch(e) {} };
+const sweepOf = node => map[node] || (node.startsWith('d_') ? map[node.slice(2)] : map['d_'+node]);
+function setTourStatus(t){ const el = $('#tourStatus'); if (el) el.textContent = t; }
+function connectSdk(){
+  const s = document.createElement('script');
+  s.src = 'https://static.matterport.com/showcase-sdk/latest.js';
+  s.onload = async () => {
+    try {
+      sdk = await window.MP_SDK.connect($('#mp'), SDK_KEY, '');
+      setTourStatus('3D navigace připojena');
+      sdk.Sweep.current.subscribe(c => { curSweep = c && c.sid ? c.sid : null; const el = $('#curSweep'); if (el) el.textContent = curSweep || '—'; });
+      try { sweepGraph = await sdk.Sweep.createGraph(); } catch(e) { sweepGraph = null; }
+      renderDetail(false);
+    } catch(e) {
+      setTourStatus('3D navigaci se nepodařilo připojit. Zkontrolujte, že je doména stránky povolená u SDK klíče.');
+    }
+  };
+  s.onerror = () => setTourStatus('Knihovnu Matterport SDK se nepodařilo načíst.');
+  document.head.appendChild(s);
+}
+const wait = ms => new Promise(r => setTimeout(r, ms));
+async function guide(){
+  if (!sdk || guiding || !target) return;
+  const to = sweepOf(byId[target].node), from = sweepOf(here) || curSweep;
+  if (!to){ setTourStatus('Toto místo ještě není v prohlídce přiřazené. Přiřadíte ho v režimu Nastavit body prohlídky.'); return; }
+  guiding = true; $('#tour').scrollIntoView({behavior:'smooth', block:'start'});
+  try {
+    if (from && from !== curSweep) { await sdk.Sweep.moveTo(from, {transition: sdk.Sweep.Transition.INSTANT}); await wait(400); }
+    let path = [to];
+    if (sweepGraph && from){
+      const res = await sdk.Graph.createAStarRunner(sweepGraph, sweepGraph.vertex(from), sweepGraph.vertex(to)).exec();
+      if (res && res.path && res.path.length) path = res.path.map(v => v.id);
+    }
+    setTourStatus(`Provádím k cíli: ${byId[target].name}`);
+    for (let i = 0; i < path.length; i++){
+      if (path[i] === curSweep) continue;
+      await sdk.Sweep.moveTo(path[i], {transition: sdk.Sweep.Transition.FLY, transitionTime: 900});
+      await wait(250);
+    }
+    setTourStatus(`Jste v cíli: ${byId[target].name}`);
+  } catch(e) {
+    try { await sdk.Sweep.moveTo(to, {transition: sdk.Sweep.Transition.FLY}); setTourStatus(`Jste v cíli: ${byId[target].name}`); }
+    catch(e2) { setTourStatus('Přesun v prohlídce se nepodařil.'); }
+  }
+  guiding = false;
+}
+
+function renderTour(){
+  const embed = location.protocol === 'file:' || (location.protocol.startsWith('http') && !/claude|anthropic/i.test(location.hostname));
+  $('#tour').innerHTML = embed
+    ? `<iframe id="mp" src="${SDK_URL}" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="3D prohlídka Chomutovky"></iframe><div class="tstat" id="tourStatus">Připojuji 3D navigaci…</div>`
+    : `<div class="inner"><div class="eyebrow" style="color:#cfe3ea">3D prohlídka</div>
+        <h2>Projděte si Chomutovku ve 3D</h2>
+        <p>Na webu centra se prohlídka zobrazí přímo zde. Po výběru obchodu vás provede trasou krok za krokem.</p>
+        <a class="btn accent" href="${TOUR_URL}" target="_blank" rel="noopener">Spustit 3D prohlídku</a></div>`;
+  if (embed) connectSdk();
+}
+function renderOpen(){
+  const now = new Date(), h = now.getHours()+now.getMinutes()/60, el = $('#open'), open = h >= 9 && h < 19;
+  el.textContent = open ? 'Otevřeno · zavírá v 19:00' : (h >= 7 && h < 20 ? 'Centrum zavřeno · Tesco otevřeno' : 'Zavřeno · otevírá v 9:00');
+  el.classList.toggle('closed', !open);
+}
+function renderChips(){ $('#chips').innerHTML = CATS.map(([k,l]) => `<button class="chip" aria-pressed="${k===cat}" data-c="${k}">${l}</button>`).join(''); }
+function renderList(){
+  const q = $('#q').value.trim().toLowerCase();
+  const items = P.filter(p => (cat==='all' || p.cat===cat) && (!q || (p.name+' '+p.desc).toLowerCase().includes(q)));
+  $('#list').innerHTML = items.length ? items.map(p => {
+    const st = steps(route(here, p.node)), o = isOpen(p.hours);
+    const dist = p.node === here ? 'jste zde' : `${st.meters} m · ${FLOORS[p.floor]}`;
+    const pill = o === null ? '' : `<span class="pill ${o?'on':'off'}">${o?'otevřeno':'zavřeno'}</span>`;
+    return `<button class="item" data-p="${p.id}"><span class="ico">${p.name.replace(/[^A-Za-zÁ-ž0-9]/g,'').slice(0,2).toUpperCase()}</span>
+      <span style="min-width:0"><span class="t">${p.name}</span><br><span class="s">${p.desc}</span></span>
+      <span class="meta">${dist}${pill}</span></button>`;
+  }).join('') : `<div class="empty">Nic jsme nenašli. Zkuste jiné slovo, třeba „káva“ nebo „boty“.</div>`;
+}
+function renderDetail(scroll){
+  const el = $('#detail');
+  if (!target){ el.hidden = true; return; }
+  const p = byId[target], r = route(here, p.node), st = steps(r), o = isOpen(p.hours);
+  const min = Math.max(1, Math.round(st.meters/1.1/60 + r.types.filter(t => t==='esc').length*0.5));
+  const floors = [...new Set(r.path.map(k => N[k][2]))].sort();
+  const atTarget = p.node === here;
+  el.hidden = false;
+  el.innerHTML = `
+    <div><div class="eyebrow">${FLOORS[p.floor]}${o===null?'':` · <span class="pill ${o?'on':'off'}">${o?'právě otevřeno':'právě zavřeno'}</span>`}</div><h2>${p.name}</h2></div>
+    <p class="desc">${p.desc}</p>
+    ${p.hours || p.phone ? `<div class="kv">${p.hours?`<div><span>Otevřeno </span>${p.hours}</div>`:''}${p.phone?`<div><span>Telefon </span>${p.phone}</div>`:''}</div>` : ''}
+    ${atTarget ? `<p><b>Tady právě stojíte.</b></p>` : `
+    <div class="sum"><div><b>${st.meters} m</b><span class="eyebrow">vzdálenost</span></div>
+      <div><b>${min} min</b><span class="eyebrow">chůzí</span></div>
+      <div><b>${floors.length > 1 ? FLOORS[p.floor] : 'stejné patro'}</b><span class="eyebrow">cíl</span></div></div>`}
+    <div class="plans">${floors.map(f => `<div class="plan"><span class="eyebrow">${FLOORS[f]}</span>${planSVG(f, r)}</div>`).join('')}</div>
+    ${atTarget ? '' : `<ol class="steps">${st.list.map(([t,m]) => `<li><span>${t}</span><span>${m}</span></li>`).join('')}<li><span>Jste v cíli: ${p.name}</span><span></span></li></ol>`}
+    <div class="actions">
+      ${sdk ? `<button class="btn primary" id="guide">Provést mě ve 3D</button>` : `<a class="btn primary" href="${TOUR_URL}" target="_blank" rel="noopener">Otevřít 3D prohlídku</a>`}
+      <button class="btn ghost" id="back">Zpět na seznam</button>
+    </div>
+    <p class="note">${sdk ? (sweepOf(p.node) ? 'Prohlídka vás plynule provede po trase až k cíli.' : 'Místo zatím není v prohlídce přiřazené, přiřadíte ho v režimu Nastavit body prohlídky.') : 'Plynulé provedení prohlídkou funguje, když je stránka na povolené webové adrese.'}</p>`;
+  if (scroll) el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'});
+}
+function renderTags(){ $('#tags').innerHTML = TAGS.map(([id,l]) => `<button class="chip" aria-pressed="${id===here}" data-t="${id}">${l}</button>`).join(''); }
+function setHere(id){
+  if (!N[id]) { const p = byId[id]; if (!p) return; id = p.node; }
+  here = id; $('#hereName').textContent = hereLabel();
+  renderTags(); renderList(); renderDetail(false);
+}
+
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-c]'); if (c){ cat = c.dataset.c; renderChips(); renderList(); return; }
+  const p = e.target.closest('[data-p]'); if (p){ target = p.dataset.p; renderDetail(true); return; }
+  const t = e.target.closest('[data-t]'); if (t){ setHere(t.dataset.t); window.scrollTo({top:0,behavior:'smooth'}); return; }
+  if (e.target.id === 'where'){ $('#nfcbox').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  if (e.target.id === 'back'){ target = null; renderDetail(false); $('#menu').scrollIntoView({block:'start'}); return; }
+  if (e.target.id === 'guide'){ guide(); return; }
+  if (e.target.id === 'toggleAdmin'){ const a = $('#admin'); a.hidden = !a.hidden; if (!a.hidden){ renderAdmin(); a.scrollIntoView({behavior:'smooth'}); } return; }
+  if (e.target.id === 'assign'){
+    if (!curSweep){ adminMsg('Prohlídka není připojená nebo v ní ještě nestojíte na žádném bodě.'); return; }
+    map[$('#mapSel').value] = curSweep; saveMap(); renderAdmin(); adminMsg(`Přiřazeno: ${$('#mapSel').selectedOptions[0].text}`); renderDetail(false); return;
+  }
+  if (e.target.id === 'jump'){
+    const s = map[$('#mapSel').value];
+    if (!s || !sdk){ adminMsg('Tohle místo ještě nemá přiřazený bod.'); return; }
+    sdk.Sweep.moveTo(s, {transition: sdk.Sweep.Transition.FLY}).catch(() => adminMsg('Přesun se nepodařil.')); return;
+  }
+  if (e.target.id === 'copyMap'){
+    const txt = JSON.stringify(map); $('#mapJson').value = txt;
+    const done = () => adminMsg('Nastavení je zkopírované. Pošlete ho do vývoje.');
+    try { navigator.clipboard.writeText(txt).then(done, () => { $('#mapJson').select(); adminMsg('Nastavení je v poli níže, označte ho a zkopírujte.'); }); }
+    catch(err) { $('#mapJson').select(); adminMsg('Nastavení je v poli níže, označte ho a zkopírujte.'); }
+    return;
+  }
+  if (e.target.id === 'loadMap'){
+    try { Object.assign(map, JSON.parse($('#mapJson').value)); saveMap(); renderAdmin(); adminMsg('Nastavení načteno.'); }
+    catch(err) { adminMsg('Text v poli není platné nastavení. Vložte celý zkopírovaný text.'); }
+  }
+});
+function adminMsg(t){ $('#adminMsg').textContent = t; }
+const MAP_TARGETS = () => [...TAGS.filter(([id]) => !id.startsWith('d_') && !byId[id]).map(([id,l]) => [id,l]), ...P.map(p => [p.node, `${p.name} (${FLOORS[p.floor]})`])];
+function renderAdmin(){
+  const sel = $('#mapSel'), v = sel.value;
+  sel.innerHTML = MAP_TARGETS().map(([id,l]) => `<option value="${id}">${map[id] ? '✓ ' : ''}${l}</option>`).join('');
+  if (v) sel.value = v;
+  $('#mapCount').textContent = `${MAP_TARGETS().filter(([id]) => map[id]).length} z ${MAP_TARGETS().length}`;
+}
+$('#q').addEventListener('input', renderList);
+window.addEventListener('hashchange', () => setHere(location.hash.slice(1)));
+
+renderTour(); renderOpen(); setInterval(renderOpen, 60000); renderChips();
+const h0 = location.hash.slice(1); if (h0) setHere(h0);
+$('#hereName').textContent = hereLabel();
+renderTags(); renderList();
+target = 'dm'; renderDetail(false);
+</script>
+</body>
+</html>
