@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#ffffff">
 <title>Chomutovka – průvodce centrem</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
 /* Layout: mobilní aplikace v jednom sloupci (max 480 px) — horní lišta "Jste zde", 5 záložek dole, spodní panely (sheet) pro detail. */
 /* BRAND: barvy Chomutovky jsou zatím provizorní — po dodání loga stačí přepsat --brand a --accent. */
@@ -22,7 +22,8 @@
   --c-obuv:#e6e0f8; --i-obuv:#5542a3; --c-sport:#d6f0e6; --i-sport:#1d6f4e; --c-kosmetika:#f0ddf6; --i-kosmetika:#82349b;
   --c-darky:#fbecc4; --i-darky:#7d5b00; --c-hracky:#ffe1d6; --i-hracky:#a64124; --c-elektro:#d9e9f9; --i-elektro:#215894;
   --c-sluzby:#e4e9ee; --i-sluzby:#45535f;
-  --display:'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --display:'Fraunces', Georgia, 'Times New Roman', serif;
+  --num:'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --body:'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme:light;
 }
@@ -119,7 +120,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.
 .st.on{color:var(--ok)} .st.off{color:var(--off)}
 .tag-demo{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:2px 6px}
 .input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
-.cat-badge{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font:700 14px var(--display);flex:none}
+.cat-badge{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font:700 14px var(--num);flex:none}
 .c-jidlo{--cb:var(--c-jidlo);--ci:var(--i-jidlo)} .c-potraviny{--cb:var(--c-potraviny);--ci:var(--i-potraviny)} .c-moda{--cb:var(--c-moda);--ci:var(--i-moda)}
 .c-obuv{--cb:var(--c-obuv);--ci:var(--i-obuv)} .c-sport{--cb:var(--c-sport);--ci:var(--i-sport)} .c-kosmetika{--cb:var(--c-kosmetika);--ci:var(--i-kosmetika)}
 .c-darky{--cb:var(--c-darky);--ci:var(--i-darky)} .c-hracky{--cb:var(--c-hracky);--ci:var(--i-hracky)} .c-elektro{--cb:var(--c-elektro);--ci:var(--i-elektro)} .c-sluzby{--cb:var(--c-sluzby);--ci:var(--i-sluzby)}
@@ -143,7 +144,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:10px;min-height:118px;min-width:0}
 .tile .ti{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand)}
-.tile b{font:700 15px var(--display)}
+.tile b{font:700 15px var(--body)}
 .tile span{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
 .tile .meter{height:5px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin-top:auto}
 .tile .meter i{display:block;height:100%;background:var(--accent);border-radius:9px}
@@ -173,7 +174,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.
 input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
 .sfield .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
 .list{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.item{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;border:0;border-top:1px solid var(--line);background:none;text-align:left;width:100%}
+.item{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;border:0;border-top:1px solid var(--line);background:none;text-align:left;width:100%}
 .item:first-child{border-top:0}
 .item:active{background:var(--surface-2)}
 .item .nm{font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -193,21 +194,21 @@ input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display
 .rhead span{font-size:12.5px;color:var(--muted)}
 .rnums{display:flex;gap:18px}
 .rnums div{display:flex;flex-direction:column}
-.rnums b{font:700 20px var(--display);font-variant-numeric:tabular-nums}
+.rnums b{font:700 20px var(--num);font-variant-numeric:tabular-nums}
 .rnums span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
 .xbtn{width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--muted)}
 .hint{display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:12px 14px}
 .planbox{position:relative;width:100%;aspect-ratio:360/320;max-width:100%;border-radius:20px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line);touch-action:none;user-select:none;-webkit-user-select:none}
 #planSvg,#planSvg svg{width:100%;height:100%;display:block}
 .floors{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;gap:6px}
-.floors button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font:800 13px var(--display);box-shadow:var(--shadow);position:relative;color:var(--ink)}
+.floors button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font:800 13px var(--num);box-shadow:var(--shadow);position:relative;color:var(--ink)}
 .floors button[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
 .floors button .rdot{position:absolute;right:-3px;top:-3px;width:11px;height:11px;border-radius:50%;background:var(--accent);border:2px solid var(--surface)}
 .zoom{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
 .zoom button{width:40px;height:38px;border:0;background:var(--surface);display:grid;place-items:center;border-top:1px solid var(--line)}
 .zoom button:first-child{border-top:0}
 .nextfloor{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;border:0;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:13px;border-radius:99px;padding:9px 14px;display:flex;align-items:center;gap:6px;box-shadow:var(--shadow);white-space:nowrap}
-.floorname{position:absolute;right:12px;top:12px;font:700 12px var(--display);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 10px;color:var(--muted)}
+.floorname{position:absolute;right:12px;top:12px;font:700 12px var(--num);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 10px;color:var(--muted)}
 svg .bld{fill:var(--walk);stroke:var(--wall);stroke-width:3}
 svg .atr{fill:var(--atr);stroke:var(--atr-line);stroke-width:1.2;stroke-dasharray:5 4}
 svg .atl{fill:var(--atr-line);font:800 7px var(--body);letter-spacing:.2em;text-anchor:middle}
@@ -266,10 +267,10 @@ svg .escb text{fill:var(--on-accent);font:800 6.5px var(--body);text-anchor:midd
 .ring.warn .fg{stroke:var(--warn)} .ring.paid .fg{stroke:var(--brand)}
 .ring .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
 .ring .ctr span{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-.ring .ctr b{font:700 44px var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.ring .ctr b{font:700 44px var(--num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .pay div{background:var(--surface-2);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column}
-.pay b{font:700 18px var(--display);font-variant-numeric:tabular-nums}
+.pay b{font:700 18px var(--num);font-variant-numeric:tabular-nums}
 .pay span{font-size:12px;color:var(--muted)}
 .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600;font-size:14px;background:none;border:0;padding:4px 0;width:100%;text-align:left}
 .switch .tg{width:46px;height:28px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .2s}
@@ -302,7 +303,7 @@ svg .escb text{fill:var(--on-accent);font:800 6.5px var(--body);text-anchor:midd
 .cpn.used{opacity:.6}
 .evt{display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px}
 .evt .dt{background:var(--brand-soft);color:var(--brand);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:8px 0;line-height:1.1}
-.evt .dt b{font:700 22px var(--display)}
+.evt .dt b{font:700 22px var(--num)}
 .evt .dt span{font-size:11px;font-weight:800;text-transform:uppercase}
 .evt b.t{display:block}
 .evt span.s{font-size:12.5px;color:var(--muted)}
@@ -333,11 +334,68 @@ svg .escb text{fill:var(--on-accent);font:800 6.5px var(--body);text-anchor:midd
 .tagbtn .i{color:var(--brand)}
 .tagbtn.cur{border-color:var(--brand);background:var(--brand-soft)}
 .tagbtn small{display:block;font-weight:600;color:var(--warn);font-size:11.5px}
-.code{font:800 34px var(--display);letter-spacing:.08em;text-align:center;color:var(--brand);background:var(--brand-soft);border-radius:18px;padding:18px 10px}
+.code{font:800 34px var(--num);letter-spacing:.08em;text-align:center;color:var(--brand);background:var(--brand-soft);border-radius:18px;padding:18px 10px}
 .timer{text-align:center;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 textarea.input{resize:vertical;min-height:84px}
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--app);font-weight:700;font-size:14px;border-radius:14px;padding:12px 16px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:min(440px,calc(100% - 32px));display:flex;gap:10px;align-items:center;animation:up .25s}
 .toast .i{color:var(--accent)}
+
+/* FOTKY A PRÉMIOVÉ KARTY */
+.ph{position:relative;overflow:hidden;background:linear-gradient(140deg,var(--cb,var(--brand-soft)) 0%,color-mix(in srgb,var(--ci,var(--brand)) 30%,var(--cb,var(--brand-soft))) 100%)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ph .ini{position:absolute;inset:0;display:grid;place-items:center;font:600 22px var(--display);color:var(--ci,var(--brand));letter-spacing:.02em}
+.ph-wrap{position:relative}
+.r16x10{aspect-ratio:16/10}.r2x1{aspect-ratio:2/1}.r21x9{aspect-ratio:21/9}
+.thumb{width:56px;height:56px;border-radius:16px;flex:none}
+.thumb .ini{font-size:17px}
+.hero2{position:relative;margin:-14px -16px 0;min-height:340px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:22px 16px 18px;gap:12px;overflow:hidden;background:#0b2631}
+.hero2 > .ph{position:absolute;inset:0;background:linear-gradient(160deg,#0f4b62,#06222d)}
+.hero2::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,16,22,.05) 0%,rgba(4,16,22,.25) 35%,rgba(4,16,22,.88) 100%);pointer-events:none}
+.hero2 > *:not(.ph){position:relative;z-index:1}
+.hero2 .greet{font-size:13.5px;color:#e3eef2;font-weight:600;display:flex;align-items:center;gap:6px}
+.hero2 h1{font:600 36px/1.02 var(--display);color:#fff;letter-spacing:-.02em}
+.hero2 .chips .chip{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22);color:#fff;backdrop-filter:blur(6px)}
+.dcard{flex:0 0 80%;scroll-snap-align:start;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;text-align:left;padding:0;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.dbadge{position:absolute;left:12px;top:12px;z-index:1;background:var(--accent);color:var(--on-accent);font:800 15px var(--body);border-radius:11px;padding:6px 10px;box-shadow:0 4px 14px rgba(0,0,0,.18);font-variant-numeric:tabular-nums}
+.dbadge.big{font-size:18px;padding:8px 12px}
+.dcard .bd,.cp .bd,.ev .bd{padding:13px 15px 15px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.dcard b.dt{font:600 18px/1.2 var(--display)}
+.shopline{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.02em;display:flex;gap:6px;align-items:center}
+.price{display:flex;gap:8px;align-items:baseline;font-variant-numeric:tabular-nums}
+.price b{font:800 19px var(--body);color:var(--ink)}
+.price s{color:var(--faint);font-size:13.5px}
+.valid{font-size:12px;color:var(--muted)}
+.cp{background:var(--surface);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+.cp h3,.ev h3{font:600 21px/1.2 var(--display)}
+.cond{margin:2px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.cond li{display:flex;gap:6px}
+.cond li::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--faint);margin-top:7px;flex:none}
+.perf{position:relative;border-top:2px dashed var(--line);margin:8px -15px 4px}
+.perf::before,.perf::after{content:"";position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:var(--app);border:1px solid var(--line)}
+.perf::before{left:-11px}.perf::after{right:-11px}
+.cp-foot{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.btn.sm{min-height:40px;padding:8px 14px;font-size:13.5px;border-radius:12px;white-space:nowrap}
+.cp.used .ph img{filter:grayscale(1) opacity(.6)}
+.usedmark{position:absolute;right:12px;top:12px;z-index:1;background:var(--surface);color:var(--ok);font-weight:800;font-size:12.5px;border-radius:10px;padding:5px 9px;display:flex;gap:4px;align-items:center}
+.usedmark .i{width:15px;height:15px}
+.ev{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.datechip{position:absolute;left:12px;bottom:-18px;z-index:1;background:var(--surface);border-radius:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;padding:6px 10px;line-height:1.05;min-width:52px}
+.datechip b{font:700 22px var(--num);color:var(--ink)}
+.datechip span{font-size:10.5px;font-weight:800;text-transform:uppercase;color:var(--brand)}
+.ev .bd{padding-top:24px}
+.sh-hero{position:relative;margin:-10px -16px 0;height:210px;border-radius:24px 24px 0 0;overflow:hidden;flex:none}
+.sh-hero .ph{position:absolute;inset:0}
+.sh-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 30%,rgba(4,14,20,.78) 100%);pointer-events:none}
+.sh-hero .xbtn{position:absolute;right:12px;top:12px;z-index:2;background:rgba(255,255,255,.92);border:0;color:#13202a}
+.sh-hero .tx{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;color:#fff;display:flex;flex-direction:column;gap:2px}
+.sh-hero .tx span{font-size:12.5px;font-weight:700;color:#dbe7ec}
+.sh-hero .tx h2{font:600 26px/1.1 var(--display);color:#fff}
+.sh-hero .grab2{position:absolute;left:50%;top:8px;transform:translateX(-50%);width:40px;height:5px;border-radius:9px;background:rgba(255,255,255,.7);z-index:2}
+.bcbox{background:#fff;border-radius:18px;padding:16px 14px 10px;border:1px solid var(--line)}
+.bc{width:100%;height:96px;display:block}
+.codetx{font:800 22px var(--num);letter-spacing:.12em;text-align:center;color:var(--ink);font-variant-numeric:tabular-nums}
+.park-ph{margin:-18px -18px 0;border-radius:22px 22px 0 0;overflow:hidden}
+.hero2 .here-mini{display:inline-flex;align-items:center;gap:6px}
 
 /* VEDENÍ */
 .mg-head{display:flex;align-items:center;gap:12px}
@@ -345,7 +403,7 @@ textarea.input{resize:vertical;min-height:84px}
 .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:4px}
 .kpi span{font-size:12px;color:var(--muted);font-weight:700}
-.kpi b{font:700 26px var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi b{font:700 26px var(--num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .kpi em{font-style:normal;font-size:12px;font-weight:800;color:var(--ok)}
 .hours{display:flex;align-items:flex-end;gap:5px;height:130px;padding-top:18px}
 .hours div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;min-width:0}
@@ -369,7 +427,7 @@ textarea.input{resize:vertical;min-height:84px}
 .tblwrap{overflow-x:auto}
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .trio div{background:var(--surface-2);border-radius:14px;padding:10px;display:flex;flex-direction:column}
-.trio b{font:700 18px var(--display);font-variant-numeric:tabular-nums}
+.trio b{font:700 18px var(--num);font-variant-numeric:tabular-nums}
 .trio span{font-size:11.5px;color:var(--muted)}
 .prob{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
 .prob:first-child{border-top:0}
@@ -505,6 +563,9 @@ uk:{tabHome:'Головна',tabShops:'Магазини',tabMap:'План',tabPa
  lunch:'Час обідати',lunchSub:'Денне меню та бістро на 2-му поверсі',huntIntro:'Зіграйте у квест',huntIntroSub:'Зберіть 6 печаток і отримайте нагороду',
  parkWarn:'Безкоштовне паркування закінчиться через {0} хв',parkWarnSub:'Далі 10 Kč за другу годину',dealPick:'Порада дня: {0}',copied:'Пароль скопійовано',resetDone:'Тестові дані видалено',back:'Назад',close:'Закрити'}
 };
+Object.assign(I18N.cs,{free:'Zdarma',showAgain:'Zobrazit kód',redeemHint:'Uplatněte až u pokladny. Kód pak platí 10 minut.',demoOffers:'Ukázkové nabídky. V ostrém provozu je zadávají sami nájemci.',conditions:'Podmínky',whatsOn:'Co se v centru děje',expired:'Platnost kódu vypršela'});
+Object.assign(I18N.de,{free:'Gratis',showAgain:'Code zeigen',redeemHint:'Erst an der Kasse einlösen. Der Code gilt dann 10 Minuten.',demoOffers:'Beispielangebote. Im Betrieb tragen die Mieter sie selbst ein.',conditions:'Bedingungen',whatsOn:'Was ist los',expired:'Code abgelaufen'});
+Object.assign(I18N.uk,{free:'Безкоштовно',showAgain:'Показати код',redeemHint:'Використайте біля каси. Код діє 10 хвилин.',demoOffers:'Приклади пропозицій. Реальні додають самі орендарі.',conditions:'Умови',whatsOn:'Що відбувається',expired:'Термін дії коду минув'});
 let lang = store.get('lang', 'cs'); if (!I18N[lang]) lang = 'cs';
 function t(k, ...a){ let s = (I18N[lang][k] ?? I18N.cs[k] ?? k); if (typeof s === 'string') a.forEach((v,i) => s = s.replace('{'+i+'}', v)); return s; }
 const LANGS = [['cs','Čeština','CZ'],['de','Deutsch','DE'],['uk','Українська','UA']];
@@ -644,28 +705,80 @@ const TAGS = [
  {id:'dracik',node:byId.dracik.node,name:'U Dráčika · 2. patro',stamp:true}
 ];
 
+/* ================= FOTKY ================= */
+// Volně použitelné fotky z Unsplash (pro ukázku). V ostré verzi se nahradí fotkami obchodů z centra.
+const PH = {
+  mall:'https://images.unsplash.com/photo-1758448500799-0162cffd85d6',
+  coffee:'https://images.unsplash.com/photo-1767065584025-b1c5ecfbffbb',
+  bubble:'https://images.unsplash.com/photo-1756969953423-2c199c6dbd79',
+  soup:'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981',
+  toys:'https://images.unsplash.com/photo-1638802538115-041e14d28d6a',
+  dog:'https://images.unsplash.com/photo-1632236568054-12f36ecee2f6',
+  glasses:'https://images.unsplash.com/photo-1544177586-c9b9fb1f45c2',
+  cosmetics:'https://images.unsplash.com/photo-1785581778868-79100f7fe56c',
+  fashion:'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04',
+  wine:'https://images.unsplash.com/photo-1474722883778-792e7990302f',
+  flowers:'https://images.unsplash.com/photo-1565695951564-007d8f297e48',
+  sneakers:'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a',
+  xmas:'https://images.unsplash.com/photo-1543721578-b7ee30f88d08',
+  parking:'https://images.unsplash.com/photo-1682402178953-f2cb484d4024',
+  noodles:'https://images.unsplash.com/photo-1504669221159-56caf7b07f57',
+  salad:'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af'
+};
+const PHOTO_Q = '?auto=format&fit=crop&w=900&q=70';
+const SHOP_PH = {lagarto:'coffee',bubbletea:'bubble',ceska:'soup',gastro:'soup',cinske:'noodles',salade:'salad',dracik:'toys',superzoo:'dog',grandoptical:'glasses',
+  dm:'cosmetics',fann:'cosmetics',glam:'cosmetics',horoskop:'cosmetics',orsay:'fashion',exe:'fashion',takko:'fashion',sinsay:'fashion',pepco:'fashion',regatta:'fashion',
+  quickshoes:'sneakers',vineco:'wine',filip:'flowers',tesco:'mall',parkoviste:'parking'};
+function photo(key, cls='', cat='', ini=''){
+  const u = key && PH[key];
+  return `<div class="ph ${cls} ${cat ? 'c-'+cat : ''}">${ini ? `<span class="ini">${esc(ini)}</span>` : ''}${u ? `<img src="${u}${PHOTO_Q}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`;
+}
+
 /* ================= UKÁZKOVÉ AKCE ================= */
+// Ukázkové nabídky ve stylu skutečných kupónů obchodních center. V ostrém provozu je zadávají nájemci.
 const COUPONS = [
- {id:'c1',shop:'lagarto',big:'−20 %',title:'Káva a dezert',days:6},
- {id:'c2',shop:'bubbletea',big:'2 + 1',title:'Třetí bubble tea zdarma',days:3},
- {id:'c3',shop:'ceska',big:'Zdarma',title:'Polévka k polednímu menu',days:4},
- {id:'c4',shop:'dracik',big:'−15 %',title:'Stavebnice a společenské hry',days:12},
- {id:'c5',shop:'superzoo',big:'−10 %',title:'Krmivo pro psy a kočky',days:8},
- {id:'c6',shop:'grandoptical',big:'Zdarma',title:'Měření zraku',days:20}
+ {id:'c1',shop:'lagarto',img:'coffee',badge:'−25 %',title:'Snídaně: cappuccino a croissant',old:119,now:89,cond:['Po–Pá 7:30–11:00','1 kupón na osobu a návštěvu'],days:6},
+ {id:'c2',shop:'bubbletea',img:'bubble',badge:'2 + 1',title:'Ke dvěma bubble tea třetí zdarma',cond:['Zdarma je nejlevnější nápoj','Platí denně'],days:3},
+ {id:'c7',shop:'salade',img:'salad',badge:'−17 %',title:'Salát a smoothie 0,4 l',old:228,now:189,cond:['Výběr z celé nabídky salátů','Platí denně'],days:5},
+ {id:'c3',shop:'ceska',img:'soup',badge:'Polévka 0 Kč',title:'Polévka zdarma k polednímu menu',note:'Polední menu od 139 Kč',cond:['Po–Pá 11:00–14:00','Jen při konzumaci na místě'],days:4},
+ {id:'c4',shop:'dracik',img:'toys',badge:'−20 %',title:'Stavebnice a společenské hry',cond:['Při nákupu nad 500 Kč','Nelze kombinovat s jinými slevami'],days:12},
+ {id:'c5',shop:'superzoo',img:'dog',badge:'−15 %',title:'Granule pro psy a kočky',cond:['Balení od 2 kg','Nejvýše 3 kusy na nákup'],days:8},
+ {id:'c6',shop:'grandoptical',img:'glasses',badge:'0 Kč',title:'Měření zraku zdarma',old:300,now:0,cond:['Při objednávce dioptrických brýlí','Termín si rezervujte na prodejně'],days:20},
+ {id:'c8',shop:'vineco',img:'wine',badge:'−10 %',title:'Sleva na celý nákup vína',cond:['Při nákupu nad 600 Kč','Netýká se sudových vín'],days:14},
+ {id:'c9',shop:'filip',img:'flowers',badge:'199 Kč',title:'Kytice týdne',old:249,now:199,cond:['Do vyprodání zásob'],days:6}
 ];
 const DOW = {cs:['Ne','Po','Út','St','Čt','Pá','So'],de:['So','Mo','Di','Mi','Do','Fr','Sa'],uk:['Нд','Пн','Вт','Ср','Чт','Пт','Сб']};
 const MON = {cs:['led','úno','bře','dub','kvě','čvn','čvc','srp','zář','říj','lis','pro'],de:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],uk:['січ','лют','бер','кві','тра','чер','лип','сер','вер','жов','лис','гру']};
 function nextDow(dow){ const d = new Date(); d.setHours(0,0,0,0); const diff = ((dow - d.getDay() + 7) % 7) || 7; d.setDate(d.getDate()+diff); return d; }
 function events(){
   const ev = [
-    {d:nextDow(5),title:'Ochutnávka moravských vín',sub:'16–19 h · Vinotéka Vineco, přízemí',shop:'vineco'},
-    {d:nextDow(6),title:'Adventní tvoření pro děti',sub:'10–14 h · Gastro zóna, 2. patro',shop:'gastro'}
+    {d:nextDow(5),title:'Ochutnávka moravských vín',time:'16–19 h',where:'Vinotéka Vineco, přízemí',shop:'vineco',img:'wine'},
+    {d:nextDow(6),title:'Adventní tvoření pro děti',time:'10–14 h',where:'Gastro zóna, 2. patro',shop:'gastro',img:'xmas'}
   ];
   const now = new Date(), mik = new Date(now.getFullYear(), 11, 5);
-  if (mik > now) ev.push({d:mik,title:'Mikulášská nadílka',sub:'14–17 h · atrium, přízemí',shop:null});
+  if (mik > now) ev.push({d:mik,title:'Mikulášská nadílka',time:'14–17 h',where:'Atrium, přízemí',shop:null,img:'xmas'});
   return ev.sort((a,b) => a.d - b.d);
 }
 const validDate = days => { const d = new Date(); d.setDate(d.getDate()+days); return `${d.getDate()}. ${d.getMonth()+1}.`; };
+function priceHTML(c){
+  if (c.now === 0) return `<div class="price"><b>${t('free')}</b>${c.old ? `<s>${c.old} Kč</s>` : ''}</div>`;
+  if (c.now) return `<div class="price"><b>${c.now} Kč</b>${c.old ? `<s>${c.old} Kč</s>` : ''}</div>`;
+  return c.note ? `<div class="price"><span class="muted" style="font-size:13px">${esc(c.note)}</span></div>` : '';
+}
+/* čárový kód EAN-13 pro uplatnění na pokladně */
+const EAN_L = ['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'];
+const EAN_G = ['0100111','0110011','0011011','0100001','0011101','0111001','0000101','0010001','0001001','0010111'];
+const EAN_R = EAN_L.map(x => x.split('').map(c => c === '0' ? '1' : '0').join(''));
+const EAN_P = ['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'];
+function barcodeSVG(d12){
+  const ds = d12.split('').map(Number), ck = (10 - ds.reduce((a,v,i) => a + v*(i%2 ? 3 : 1), 0) % 10) % 10, all = d12 + ck;
+  let bits = '101'; const par = EAN_P[+all[0]];
+  for (let i=1;i<=6;i++) bits += par[i-1] === 'L' ? EAN_L[+all[i]] : EAN_G[+all[i]];
+  bits += '01010'; for (let i=7;i<=12;i++) bits += EAN_R[+all[i]]; bits += '101';
+  let r = '', x = 0;
+  while (x < bits.length){ if (bits[x] === '1'){ let w = 1; while (bits[x+w] === '1') w++; r += `<rect x="${x}" y="0" width="${w}" height="56"/>`; x += w; } else x++; }
+  return {svg:`<svg class="bc" viewBox="0 0 ${bits.length} 56" preserveAspectRatio="none" role="img" aria-label="Čárový kód ${all}"><g fill="#111">${r}</g></svg>`, all};
+}
 
 /* ================= STAV ================= */
 let tab = 'home', prevTab = 'home', target = null, mapFloor = 0, pane = 'plan', shopCat = 'all', q = '', range = '30', reportType = 'mess', parkType = 'out';
@@ -808,33 +921,43 @@ function goTab(id, opts={}){
 }
 
 /* ================= DOMŮ ================= */
+function dealCard(c){
+  const s = byId[c.shop];
+  return `<button class="dcard" data-act="coupon" data-arg="${c.id}"><div class="ph-wrap">${photo(c.img,'r16x10',s.cat,initials(s.name))}<span class="dbadge">${esc(c.badge)}</span></div>
+    <span class="bd"><span class="shopline">${esc(s.name)} · ${t('floor'+s.floor)}</span><b class="dt">${esc(c.title)}</b>${priceHTML(c)}<span class="valid">${t('validTo', validDate(c.days))}</span></span></button>`;
+}
+function evCard(ev){
+  return `<article class="ev"><div class="ph-wrap">${photo(ev.img,'r21x9','darky')}<span class="datechip"><span>${DOW[lang][ev.d.getDay()]}</span><b>${ev.d.getDate()}</b><span>${MON[lang][ev.d.getMonth()]}</span></span></div>
+    <div class="bd"><span class="shopline">${esc(ev.time)} · ${esc(ev.where)}</span><h3>${esc(ev.title)}</h3>${ev.shop ? `<div><button class="link" data-act="nav" data-arg="${ev.shop}">${t('navigate')} →</button></div>` : ''}</div></article>`;
+}
 function renderHome(){
   const hr = new Date().getHours(), gi = hr < 10 ? 0 : hr < 12 ? 1 : hr < 18 ? 2 : 3;
   const stamps = store.get('stamps', []), nc = unusedCoupons(), ps = parkState();
-  // chytrá karta podle situace
   let smart;
   if (ps && !ps.wk && ps.freeLeft > 0 && ps.freeLeft <= 15) smart = {cls:'warn', ic:'clock', b:t('parkWarn', Math.ceil(ps.freeLeft)), s:t('parkWarnSub'), act:'tab', arg:'park'};
   else if (hr >= 11 && hr < 14) smart = {ic:'food', b:t('lunch'), s:t('lunchSub'), act:'cat', arg:'jidlo'};
   else if (stamps.length === 0) smart = {ic:'star', b:t('huntIntro'), s:t('huntIntroSub'), act:'tab', arg:'deals'};
-  else { const c = nc[0] || COUPONS[0]; smart = {ic:'gift', b:t('dealPick', byId[c.shop].name), s:`${c.big} · ${c.title}`, act:'coupon', arg:c.id}; }
+  else { const c = nc[0] || COUPONS[0]; smart = {ic:'gift', b:t('dealPick', byId[c.shop].name), s:`${c.badge} · ${c.title}`, act:'coupon', arg:c.id}; }
   const parkSub = ps ? (ps.wk ? t('qParkWeekend') : ps.freeLeft > 0 ? t('qParkFree', Math.ceil(ps.freeLeft)) : t('qParkPaid', ps.price)) : t('qParkIdle');
+  const ev = events()[0];
   $('#v-home').innerHTML = `
-    <div class="hero">
-      <span class="greet">${t('greet')[gi]} · ${esc(hereLabel())}</span>
+    <div class="hero2">${photo('mall')}
+      <span class="greet">${t('greet')[gi]} · ${ic('pin')}${esc(hereLabel())}</span>
       <h1>${t('whatLooking')}</h1>
       <button class="searchbtn" data-act="gosearch">${ic('search')}<span>${t('searchPh')}</span></button>
-      <div class="chips">${['Káva','Lékárna','Dárek pro dítě','Pošta','Boty','Baterky'].map(s => `<button class="chip" data-act="quick" data-arg="${s}">${s}</button>`).join('')}</div>
+      <div class="chips">${['Káva','Lékárna','Dárek pro dítě','Pošta','Boty','Baterky'].map(x => `<button class="chip" data-act="quick" data-arg="${x}">${x}</button>`).join('')}</div>
     </div>
     <div><div class="eyebrow" style="margin-bottom:8px">${t('forYouNow')}</div>
       <button class="smart ${smart.cls||''}" data-act="${smart.act}" data-arg="${smart.arg}"><span class="si">${ic(smart.ic)}</span><span><b>${esc(smart.b)}</b><span>${esc(smart.s)}</span></span>${ic('chev')}</button></div>
+    <div class="sec-h"><h2>${t('dealsToday')}</h2><button class="link" data-act="tab" data-arg="deals">${t('seeAll')} →</button></div>
+    <div class="hscroll">${nc.slice(0,5).map(dealCard).join('') || `<div class="hint">${ic('check')} ${t('used')}</div>`}</div>
     <div class="tiles">
       <button class="tile ${ps?'live':''}" data-act="tab" data-arg="park"><span class="ti">${ic('car')}</span><b>${t('qPark')}</b><span id="tilePark">${parkSub}</span></button>
-      <button class="tile" data-act="tab" data-arg="deals"><span class="ti">${ic('tag')}</span><b>${t('qDeals')}</b><span>${t('qDealsSub', nc.length)}</span></button>
-      <button class="tile" data-act="tab" data-arg="deals"><span class="ti">${ic('star')}</span><b>${t('qHunt')}</b><span>${t('qHuntSub', stamps.length)}</span><span class="meter"><i style="width:${stamps.length/6*100}%"></i></span></button>
       <button class="tile" data-act="tab" data-arg="map"><span class="ti">${ic('map')}</span><b>${t('qMap')}</b><span>${t('qMapSub')}</span></button>
+      <button class="tile" data-act="tab" data-arg="deals"><span class="ti">${ic('star')}</span><b>${t('qHunt')}</b><span>${t('qHuntSub', stamps.length)}</span><span class="meter"><i style="width:${stamps.length/6*100}%"></i></span></button>
+      <button class="tile" data-act="tab" data-arg="deals"><span class="ti">${ic('tag')}</span><b>${t('qDeals')}</b><span>${t('qDealsSub', nc.length)}</span></button>
     </div>
-    <div class="sec-h"><h2>${t('dealsToday')}</h2><button class="link" data-act="tab" data-arg="deals">${t('seeAll')}</button></div>
-    <div class="hscroll">${nc.slice(0,4).map(c => { const s = byId[c.shop]; return `<button class="mini-cpn c-${s.cat}" data-act="coupon" data-arg="${c.id}"><span class="off">${c.big}</span><span class="tx"><b>${esc(c.title)}</b><span>${esc(s.name)} · ${t('floor'+s.floor)}</span><span>${t('validTo', validDate(c.days))}</span></span></button>`; }).join('') || `<div class="hint">${ic('check')} ${t('used')}</div>`}</div>
+    ${ev ? `<div class="sec-h"><h2>${t('whatsOn')}</h2><button class="link" data-act="tab" data-arg="deals">${t('seeAll')} →</button></div>${evCard(ev)}` : ''}
     <div class="info">
       <button data-act="wifi">${ic('wifi')}<span><b>${t('wifi')}</b><span>${t('wifiSub')}</span></span></button>
       <button data-act="nav" data-arg="wc">${ic('wc')}<span><b>${t('toilets')}</b><span>${t('toiletsSub')}</span></span></button>
@@ -867,7 +990,7 @@ function renderShopChips(){
 function shopRow(p){
   const r = route(p.node), o = isOpen(p.hours);
   const dist = p.node === here ? t('here') : `${walkMeters(r)} m`;
-  return `<button class="item" data-act="shop" data-arg="${p.id}"><span class="cat-badge c-${p.cat}">${esc(initials(p.name))}</span>
+  return `<button class="item" data-act="shop" data-arg="${p.id}">${photo(SHOP_PH[p.id], 'thumb', p.cat, initials(p.name))}
     <span style="min-width:0"><span class="nm">${esc(p.name)}</span><span class="ds">${esc(p.desc)}</span></span>
     <span class="rt"><span class="ln"><span class="fl">${t('fs'+p.floor)}</span></span><span>${dist}</span>${o===null?'':`<span class="st ${o?'on':'off'}">${o?t('open'):t('closed')}</span>`}</span></button>`;
 }
@@ -891,17 +1014,18 @@ function openShop(id){
   const cp = COUPONS.find(c => c.shop === id), used = store.get('used', {});
   const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' Chomutovka Chomutov')}`;
   openSheet(`
-    <div class="sh-head"><span class="cat-badge c-${p.cat}">${esc(initials(p.name))}</span><div style="min-width:0"><h2>${esc(p.name)}</h2><div class="meta">${esc(catName(p.cat))} · ${t('floor'+p.floor)}</div></div><button class="xbtn" data-act="close" aria-label="${t('close')}">${ic('close')}</button></div>
+    <div class="sh-hero">${photo(SHOP_PH[id], '', p.cat, initials(p.name))}<span class="grab2"></span><button class="xbtn" data-act="close" aria-label="${t('close')}">${ic('close')}</button>
+      <div class="tx"><span>${esc(catName(p.cat))} · ${t('floor'+p.floor)}</span><h2>${esc(p.name)}</h2></div></div>
     ${o===null?'':`<div><span class="st ${o?'on':'off'}">${o?t('open'):t('closed')}</span> <span class="muted" style="font-size:13px">· ${esc(fmtHours(p.hours))}</span></div>`}
     <p style="margin:0">${esc(p.desc)}</p>
     <div class="hint" style="border-style:solid">${ic('walk')} ${atHere ? t('here') : t('walkAway', walkMeters(r), minutes(r))}</div>
-    ${cp ? `<div class="cpn c-${p.cat} ${used[cp.id]?'used':''}"><div class="off">${cp.big}</div><div class="tx"><b>${esc(cp.title)}</b><span>${t('validTo', validDate(cp.days))}</span><button class="btn accent" data-act="coupon" data-arg="${cp.id}" ${used[cp.id]?'disabled':''}>${used[cp.id]?t('used'):t('redeem')}</button></div></div>` : ''}
+    ${cp ? `<button class="dcard" style="flex:none;width:100%" data-act="coupon" data-arg="${cp.id}"><span class="bd"><span class="shopline">${ic('tag')} ${t('qDeals')} · <span class="dbadge" style="position:static;box-shadow:none;padding:2px 7px;font-size:12.5px">${esc(cp.badge)}</span></span><b class="dt">${esc(cp.title)}</b>${priceHTML(cp)}<span class="valid">${used[cp.id] ? t('used') : t('validTo', validDate(cp.days))}</span></span></button>` : ''}
     ${p.hours || p.phone ? `<div class="kv">${p.hours?`<div><span>${t('hours')}</span><b>${esc(fmtHours(p.hours))}</b></div>`:''}${p.phone?`<div><span>${t('phone')}</span><b>${esc(p.phone)}</b></div>`:''}</div>` : ''}
     <div class="row">
       <button class="btn primary big" data-act="nav" data-arg="${id}">${ic('pin')}${t('navigate')}</button>
       <button class="btn soft big" data-act="nav3d" data-arg="${id}">${ic('cube')}${t('in3d')}</button>
     </div>
-    ${SPECIAL[id] ? '' : `<a class="btn ghost" href="${gUrl}" target="_blank" rel="noopener">${ic('star')}${t('reviews')}</a>`}`);
+    ${SPECIAL[id] ? '' : `<a class="btn ghost" href="${gUrl}" target="_blank" rel="noopener">${ic('star')}${t('reviews')}</a>`}`, '', true);
   logEv('view', {shop:id});
 }
 
@@ -1132,7 +1256,7 @@ function renderPark(){
   if (!parking){
     $('#v-park').innerHTML = `
       <div class="park-hero">
-        <span class="pi">${ic('car')}</span>
+        <div class="park-ph">${photo('parking','r21x9')}</div>
         <h2>${t('parkTitle')}</h2><p>${t('parkSub')}</p>
         <div class="seg"><button data-act="parktype" data-arg="out" aria-pressed="${parkType==='out'}">${t('outdoor')}</button><button data-act="parktype" data-arg="under" aria-pressed="${parkType==='under'}">${t('underground')}</button></div>
         <input id="spot" class="input" placeholder="${t('spotNote')}" autocomplete="off">
@@ -1167,6 +1291,18 @@ function updatePark(){
 }
 
 /* ================= AKCE ================= */
+const CODE_MIN = 10;
+function cpCard(c, used){
+  const s = byId[c.shop], u = used[c.id], live = u && Date.now() - u < CODE_MIN*60000;
+  return `<article class="cp ${u?'used':''}"><div class="ph-wrap">${photo(c.img,'r2x1',s.cat,initials(s.name))}<span class="dbadge big">${esc(c.badge)}</span>${u ? `<span class="usedmark">${ic('check')}${t('used')}</span>` : ''}</div>
+    <div class="bd"><span class="shopline">${esc(s.name)} · ${t('floor'+s.floor)}</span><h3>${esc(c.title)}</h3>${priceHTML(c)}
+      <ul class="cond">${c.cond.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+      <div class="perf"></div>
+      <div class="cp-foot"><span class="valid">${t('validTo', validDate(c.days))}</span>
+        <div class="row" style="flex-wrap:nowrap;gap:8px"><button class="btn ghost sm" data-act="nav" data-arg="${c.shop}" aria-label="${t('navigate')}">${ic('pin')}</button>
+        ${live ? `<button class="btn primary sm" data-act="showcode" data-arg="${c.id}">${t('showAgain')}</button>` : u ? `<button class="btn ghost sm" disabled>${ic('check')}${t('used')}</button>` : `<button class="btn accent sm" data-act="coupon" data-arg="${c.id}">${t('redeem')}</button>`}</div></div>
+    </div></article>`;
+}
 function renderDeals(){
   const stamps = store.get('stamps', []), used = store.get('used', {});
   const stampTags = TAGS.filter(x => x.stamp);
@@ -1178,33 +1314,37 @@ function renderDeals(){
       ${stamps.length >= 6 ? `<div class="reward"><span class="eyebrow">${t('demo')}</span><code>CHM-6Z6</code><span>${t('rewardTxt')}</span></div>` : `<button class="btn accent" data-act="nfc">${ic('nfc')}${t('menuNfc')}</button>`}
     </div>
     <div class="sec-h"><h2>${t('coupons')}</h2><span class="tag-demo">${t('demo')}</span></div>
-    ${COUPONS.map(c => { const s = byId[c.shop], u = used[c.id]; return `
-      <div class="cpn c-${s.cat} ${u?'used':''}"><div class="off">${c.big}<small>${esc(s.short)}</small></div>
-      <div class="tx"><b>${esc(c.title)}</b><span>${esc(s.name)} · ${t('floor'+s.floor)} · ${t('validTo', validDate(c.days))}</span>
-      <div class="row" style="gap:8px"><button class="btn accent" data-act="coupon" data-arg="${c.id}" ${u?'disabled':''}>${u?ic('check')+t('used'):t('redeem')}</button><button class="btn ghost" style="min-height:38px;padding:8px 12px;font-size:13.5px;flex:0 0 auto" data-act="nav" data-arg="${c.shop}">${ic('pin')}</button></div></div></div>`; }).join('')}
+    <p class="muted" style="margin:-8px 0 0;font-size:13px">${t('demoOffers')}</p>
+    ${COUPONS.map(c => cpCard(c, used)).join('')}
     <div class="sec-h"><h2>${t('events')}</h2><span class="tag-demo">${t('demo')}</span></div>
-    ${events().map(ev => `<div class="evt"><div class="dt"><span>${DOW[lang][ev.d.getDay()]}</span><b>${ev.d.getDate()}</b><span>${MON[lang][ev.d.getMonth()]}</span></div><div><b class="t">${esc(ev.title)}</b><span class="s">${esc(ev.sub)}</span>${ev.shop?`<div><button class="link" data-act="nav" data-arg="${ev.shop}">${t('navigate')} →</button></div>`:''}</div></div>`).join('')}`;
+    ${events().map(evCard).join('')}`;
 }
 let cpnTimer = null;
 function openCoupon(id){
   const c = COUPONS.find(x => x.id === id), s = byId[c.shop], used = store.get('used', {});
   if (used[id]) { showCode(id); return; }
   openSheet(`
-    <div class="sh-head"><span class="cat-badge c-${s.cat}">${ic('tag')}</span><div><h2>${c.big} · ${esc(c.title)}</h2><div class="meta">${esc(s.name)} · ${t('floor'+s.floor)}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
-    <p class="muted" style="margin:0">${t('validTo', validDate(c.days))} · <span class="tag-demo">${t('demo')}</span></p>
+    <div class="sh-hero">${photo(c.img, '', s.cat, initials(s.name))}<span class="grab2"></span><button class="xbtn" data-act="close" aria-label="${t('close')}">${ic('close')}</button>
+      <div class="tx"><span>${esc(s.name)} · ${t('floor'+s.floor)}</span><h2>${esc(c.title)}</h2></div><span class="dbadge big">${esc(c.badge)}</span></div>
+    ${priceHTML(c)}
+    <div><div class="eyebrow" style="margin-bottom:6px">${t('conditions')}</div><ul class="cond" style="font-size:14px">${c.cond.map(x => `<li>${esc(x)}</li>`).join('')}<li>${t('validTo', validDate(c.days))}</li></ul></div>
+    <div class="hint">${ic('clock')} ${t('redeemHint')}</div>
     <button class="btn accent big" data-act="redeem" data-arg="${id}">${ic('check')}${t('redeemNow')}</button>
-    <button class="btn ghost" data-act="nav" data-arg="${c.shop}">${ic('pin')}${t('navigate')}</button>`);
+    <button class="btn ghost" data-act="nav" data-arg="${c.shop}">${ic('pin')}${t('navigate')}</button>`, '', true);
 }
 function showCode(id){
   const c = COUPONS.find(x => x.id === id), s = byId[c.shop], used = store.get('used', {});
-  const code = 'CHM-' + (id.toUpperCase() + String(used[id] % 9973).padStart(4,'0')).slice(0,6);
+  const d12 = ('859' + String(used[id]).slice(-6) + String(COUPONS.indexOf(c)+1).padStart(3,'0')).slice(0,12);
+  const bc = barcodeSVG(d12);
   openSheet(`
-    <div class="sh-head"><span class="cat-badge c-${s.cat}">${ic('check')}</span><div><h2>${esc(c.title)}</h2><div class="meta">${esc(s.name)}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <div class="sh-head"><span class="cat-badge c-${s.cat}">${ic('check')}</span><div style="min-width:0"><h2>${esc(c.title)}</h2><div class="meta">${esc(s.name)} · ${esc(c.badge)}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
     <div class="eyebrow" style="text-align:center">${t('showCashier')}</div>
-    <div class="code">${code}</div>
-    <div class="timer">${t('couponOnce')} <span id="cpnLeft">10:00</span></div>`);
+    <div class="bcbox">${bc.svg}<div class="codetx">${bc.all}</div></div>
+    <div class="timer" id="cpnT">${t('couponOnce')} <span id="cpnLeft">${CODE_MIN}:00</span></div>
+    <ul class="cond">${c.cond.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`);
   clearInterval(cpnTimer);
-  const tick = () => { const left = 10 - (Date.now() - used[id])/60000; const el = $('#cpnLeft'); if (!el){ clearInterval(cpnTimer); return; } el.textContent = left > 0 ? mmss(left) : '0:00'; };
+  const tick = () => { const left = CODE_MIN - (Date.now() - used[id])/60000, el = $('#cpnLeft'); if (!el){ clearInterval(cpnTimer); return; }
+    if (left > 0) el.textContent = mmss(left); else { $('#cpnT').textContent = t('expired'); clearInterval(cpnTimer); } };
   tick(); cpnTimer = setInterval(tick, 1000);
 }
 
@@ -1215,7 +1355,7 @@ const SAMPLE = {
   tags:[['Parkovací automat',1480],['Hlavní vchod',1105],['Gastro zóna – stoly',804],['Vstup do Tesca',611],['Atrium – přízemí',402],['U pošty · 1. patro',248],['Eskalátory · 1. patro',162]],
   missing:[['Oprava obuvi a klíčů',214],['Výměna baterie v hodinkách',181],['Sportovní obuv',152],['Sushi',133],['Dětský koutek uvnitř',97],['Nabíjení elektroauta',64]],
   nav:[['dm drogerie',212],['Česká pošta',188],['Lékárna Dr. Max',164],['DATART',131],['Česká kuchyně',118],['Toalety (Euro klíč)',109]],
-  cpn:{c1:[1240,212],c2:[860,151],c3:[702,118],c4:[520,74],c5:[410,52],c6:[300,35]},
+  cpn:{c1:[1240,212],c2:[860,151],c7:[690,104],c3:[702,118],c4:[520,74],c5:[410,52],c6:[300,35],c8:[350,41],c9:[480,88]},
   park:{saved:1120, avg:74, free:38}, langs:[['Čeština',86],['Deutsch',9],['Українська',5]],
   probs:[['Rozlitý nápoj u eskalátorů, 2. patro','před 2 dny'],['Nefunguje osoušeč rukou na WC','před 5 dny']]
 };
@@ -1266,9 +1406,9 @@ function renderMgmt(){
 
 /* ================= SPODNÍ PANELY ================= */
 let lastFocus = null;
-function openSheet(html, cls=''){
+function openSheet(html, cls='', noGrab=false){
   lastFocus = document.activeElement;
-  const sh = $('#sheet'); sh.className = 'sheet ' + cls; sh.innerHTML = `<div class="grab"></div>` + html;
+  const sh = $('#sheet'); sh.className = 'sheet ' + cls; sh.innerHTML = (noGrab ? '' : `<div class="grab"></div>`) + html; sh.scrollTop = 0;
   $('#sheetWrap').hidden = false;
   const f = sh.querySelector('button, a, input, textarea'); if (f) f.focus({preventScroll:true});
 }
@@ -1371,6 +1511,7 @@ document.addEventListener('click', e => {
     case 'parkstop': parking = null; store.set('parking', null); renderTabs(); renderPark(); break;
     case 'remind': parking.remind = !parking.remind; store.set('parking', parking); el.setAttribute('aria-checked', parking.remind); break;
     case 'coupon': openCoupon(arg); break;
+    case 'showcode': showCode(arg); break;
     case 'redeem': { const u = store.get('used', {}); u[arg] = Date.now(); store.set('used', u); logEv('redeem', {coupon:arg}); renderTabs(); if (tab === 'deals') renderDeals(); if (tab === 'home') renderHome(); showCode(arg); break; }
     case 'menu': menuSheet(); break;
     case 'nfc': nfcSheet(); break;
