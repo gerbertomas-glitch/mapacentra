@@ -3,532 +3,1422 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Chomutovka – navigace</title>
+<meta name="theme-color" content="#ffffff">
+<title>Chomutovka – průvodce centrem</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: mobilní průvodce OC — lišta "Jste zde", stav otevření, 3D prohlídka, menu podle kategorií webu, detail s trasou přes 3 patra kolem atria */
-/* BRAND: barvy jsou provizorní — po dodání loga / screenshotu stačí přepsat tokeny níže */
+/* Layout: mobilní aplikace v jednom sloupci (max 480 px) — horní lišta "Jste zde", 5 záložek dole, spodní panely (sheet) pro detail. */
+/* BRAND: barvy Chomutovky jsou zatím provizorní — po dodání loga stačí přepsat --brand a --accent. */
 :root{
-  --bg:#f4f5f7; --surface:#ffffff; --ink:#15202b; --muted:#5d6874; --line:#dfe3e8;
-  --brand:#0a6c8f; --brand-2:#08536e; --accent:#f2a516; --brand-soft:#e3f1f6; --room:#eaedf1; --room-hi:#fdf0d6; --ok:#1f8a4c; --off:#b3322f;
+  --bg:#e9edf1; --app:#f4f6f8; --surface:#ffffff; --surface-2:#eef2f5; --ink:#13202a; --muted:#5a6671; --faint:#86929c; --line:#e0e5ea;
+  --brand:#0b6e91; --brand-deep:#064760; --brand-soft:#e1eff5; --on-brand:#ffffff;
+  --accent:#f2a516; --accent-soft:#fdf0d5; --on-accent:#231703;
+  --ok:#1b8749; --ok-soft:#dff2e6; --off:#c0392f; --off-soft:#fbe3e1; --warn:#a96200; --warn-soft:#fdeed5;
+  --walk:#f7f9fb; --wall:#c3ccd5; --atr:#d7eaf2; --atr-line:#9cc7d8;
+  --shadow:0 1px 2px rgba(15,32,44,.05),0 6px 20px rgba(15,32,44,.07);
+  --shadow-up:0 -6px 24px rgba(15,32,44,.10);
+  --c-jidlo:#fde3cf; --i-jidlo:#9a4815; --c-potraviny:#dcefd0; --i-potraviny:#376b1d; --c-moda:#fadbe7; --i-moda:#982b55;
+  --c-obuv:#e6e0f8; --i-obuv:#5542a3; --c-sport:#d6f0e6; --i-sport:#1d6f4e; --c-kosmetika:#f0ddf6; --i-kosmetika:#82349b;
+  --c-darky:#fbecc4; --i-darky:#7d5b00; --c-hracky:#ffe1d6; --i-hracky:#a64124; --c-elektro:#d9e9f9; --i-elektro:#215894;
+  --c-sluzby:#e4e9ee; --i-sluzby:#45535f;
   --display:'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --body:'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#0f161c; --surface:#172129; --ink:#eef2f5; --muted:#a2adb7; --line:#2a3741;
-  --brand:#3aa7cf; --brand-2:#0c4d66; --accent:#f5b53a; --brand-soft:#16323e; --room:#1f2b34; --room-hi:#3b3018; --ok:#4cc27e; --off:#ec6a66; color-scheme:dark } }
+  --bg:#070c10; --app:#0d1419; --surface:#151f26; --surface-2:#1c2830; --ink:#ecf1f4; --muted:#a1adb7; --faint:#7b8893; --line:#25323b;
+  --brand:#46aed5; --brand-deep:#0b3a4c; --brand-soft:#123241; --on-brand:#04202b;
+  --accent:#f6b740; --accent-soft:#3a2d12; --on-accent:#231703;
+  --ok:#4fc483; --ok-soft:#113022; --off:#f06e66; --off-soft:#3b1a18; --warn:#f0a94a; --warn-soft:#3a2810;
+  --walk:#182229; --wall:#33424d; --atr:#123241; --atr-line:#2b6680;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.3); --shadow-up:0 -6px 24px rgba(0,0,0,.4);
+  --c-jidlo:#3d2617; --i-jidlo:#f2b48a; --c-potraviny:#1f3317; --i-potraviny:#a7d78d; --c-moda:#3b1c28; --i-moda:#f0a3c0;
+  --c-obuv:#26213f; --i-obuv:#bcb0f2; --c-sport:#15342a; --i-sport:#8fd9b9; --c-kosmetika:#31203a; --i-kosmetika:#dcaaea;
+  --c-darky:#3a3015; --i-darky:#ecd08a; --c-hracky:#3d2219; --i-hracky:#f5ad95; --c-elektro:#172b40; --i-elektro:#9cc4ef;
+  --c-sluzby:#222c34; --i-sluzby:#b3c0cb; color-scheme:dark } }
 :root[data-theme="dark"]{
-  --bg:#0f161c; --surface:#172129; --ink:#eef2f5; --muted:#a2adb7; --line:#2a3741;
-  --brand:#3aa7cf; --brand-2:#0c4d66; --accent:#f5b53a; --brand-soft:#16323e; --room:#1f2b34; --room-hi:#3b3018; --ok:#4cc27e; --off:#ec6a66; color-scheme:dark }
+  --bg:#070c10; --app:#0d1419; --surface:#151f26; --surface-2:#1c2830; --ink:#ecf1f4; --muted:#a1adb7; --faint:#7b8893; --line:#25323b;
+  --brand:#46aed5; --brand-deep:#0b3a4c; --brand-soft:#123241; --on-brand:#04202b;
+  --accent:#f6b740; --accent-soft:#3a2d12; --on-accent:#231703;
+  --ok:#4fc483; --ok-soft:#113022; --off:#f06e66; --off-soft:#3b1a18; --warn:#f0a94a; --warn-soft:#3a2810;
+  --walk:#182229; --wall:#33424d; --atr:#123241; --atr-line:#2b6680;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.3); --shadow-up:0 -6px 24px rgba(0,0,0,.4);
+  --c-jidlo:#3d2617; --i-jidlo:#f2b48a; --c-potraviny:#1f3317; --i-potraviny:#a7d78d; --c-moda:#3b1c28; --i-moda:#f0a3c0;
+  --c-obuv:#26213f; --i-obuv:#bcb0f2; --c-sport:#15342a; --i-sport:#8fd9b9; --c-kosmetika:#31203a; --i-kosmetika:#dcaaea;
+  --c-darky:#3a3015; --i-darky:#ecd08a; --c-hracky:#3d2219; --i-hracky:#f5ad95; --c-elektro:#172b40; --i-elektro:#9cc4ef;
+  --c-sluzby:#222c34; --i-sluzby:#b3c0cb; color-scheme:dark }
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-top:env(safe-area-inset-top,0px)}
-.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:0 40px;display:flex;flex-direction:column;gap:18px}
-h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;font-weight:700}
-.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--app);position:relative;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+@media (min-width:520px){ .app{box-shadow:0 0 0 1px var(--line),0 20px 60px rgba(0,0,0,.12)} }
+.view{padding-inline:16px;padding-block:14px 8px;display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sec-h h2{font-size:18px}
+.link{background:none;border:0;padding:4px 0;color:var(--brand);font-weight:700;font-size:13.5px}
+.muted{color:var(--muted)}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px}
 
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:-16px;padding:12px 16px;background:var(--brand-2);color:#fff;display:flex;flex-direction:column;gap:8px}
-.brandrow{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.logo{display:flex;align-items:center;gap:10px;min-width:0}
-.logo img{height:30px;width:auto;max-width:160px;background:#fff;border-radius:6px;padding:3px 6px}
-.logo .word{font:700 20px var(--display);letter-spacing:.01em}
-.logo small{display:block;font-size:11.5px;color:#cfe3ea;font-weight:500}
-.badge{font-size:10.5px;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:99px;padding:2px 9px;white-space:nowrap}
-.here{display:flex;align-items:center;gap:10px;font-size:14px}
-.dot{width:11px;height:11px;border-radius:50%;background:var(--accent);flex:none;animation:pulse 2s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,165,22,.6)}80%,100%{box-shadow:0 0 0 10px rgba(242,165,22,0)}}
-.here b{font-weight:700}
-.here button{margin-left:auto;font:700 12px var(--body);color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:99px;padding:4px 11px;cursor:pointer}
+/* horní lišta */
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 8px) 16px 8px;display:flex;flex-direction:column;gap:6px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{display:flex;align-items:center;gap:8px;background:none;border:0;padding:2px 0;min-width:0}
+.logo img{height:30px;width:auto;max-width:170px;display:block}
+.logo .word{font:700 21px var(--display);color:var(--brand);letter-spacing:-.02em}
+.bar-r{display:flex;gap:6px;align-items:center}
+.ibtn{height:38px;min-width:38px;padding:0 10px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:12.5px}
+.sub{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.here{display:flex;align-items:center;gap:8px;background:var(--brand-soft);color:var(--ink);border:0;border-radius:99px;padding:5px 10px 5px 9px;font-size:13px;min-width:0;max-width:66%}
+.here .lbl{color:var(--muted);white-space:nowrap}
+.here b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.here .i{width:15px;height:15px;color:var(--muted)}
+.pulse{width:9px;height:9px;border-radius:50%;background:var(--brand);flex:none;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--brand) 55%,transparent)}80%,100%{box-shadow:0 0 0 9px transparent}}
+.opill{font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.opill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.opill.on{color:var(--ok)} .opill.part{color:var(--warn)} .opill.off{color:var(--off)}
 
-.status{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:13.5px}
-.open{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--ok)}
-.open::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
-.open.closed{color:var(--off)}
+/* spodní záložky */
+.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);z-index:30;background:var(--surface);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+.tab{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;color:var(--faint);font-size:11px;font-weight:700;position:relative;border-radius:12px}
+.tab .ico{width:44px;height:28px;border-radius:99px;display:grid;place-items:center;transition:background .2s}
+.tab[aria-current="page"]{color:var(--brand)}
+.tab[aria-current="page"] .ico{background:var(--brand-soft)}
+.tab .badge{position:absolute;top:4px;left:calc(50% + 10px);min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--accent);color:var(--on-accent);font-size:10px;display:grid;place-items:center;font-weight:800}
+.tab .badge.dot{min-width:9px;width:9px;height:9px;padding:0;top:6px;background:var(--ok)}
 
-.tour{border-radius:16px;overflow:hidden;background:var(--brand);color:#fff}
-.tour iframe{display:block;width:100%;aspect-ratio:4/3;max-width:100%;border:0}
-.tstat{padding:8px 14px;font-size:12.5px;font-weight:600;color:#fff;background:var(--brand-2)}
-textarea.search{font:12px ui-monospace,Menlo,monospace;resize:vertical}
-.tour .inner{padding:20px 18px;display:flex;flex-direction:column;gap:10px}
-.tour h2{font-size:22px}
-.tour p{margin:0;font-size:13.5px;color:#dcecf2;max-width:60ch}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 14px var(--body);border-radius:10px;padding:11px 16px;text-decoration:none;cursor:pointer;border:1px solid transparent}
-.btn.accent{background:var(--accent);color:#1d1503;align-self:flex-start}
-.btn.primary{background:var(--brand);color:#fff}
-.btn.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
-.btn:focus-visible,.chip:focus-visible,.item:focus-visible,input:focus-visible,.here button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* společné prvky */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14.5px;border-radius:14px;padding:12px 16px;border:1px solid transparent;text-decoration:none;min-height:46px}
+.btn .i{width:18px;height:18px}
+.btn.primary{background:var(--brand);color:var(--on-brand)}
+.btn.accent{background:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.btn.soft{background:var(--brand-soft);color:var(--brand)}
+.btn.block{width:100%}
+.btn.big{min-height:54px;font-size:16px;border-radius:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row > .btn{flex:1 1 140px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;font-weight:700;font-size:13px;padding:8px 13px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--app);border-color:var(--ink)}
+.chip .sw{width:9px;height:9px;border-radius:3px}
+.fl{display:inline-grid;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:7px;background:var(--surface-2);color:var(--muted);font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.st{font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:5px}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.on{color:var(--ok)} .st.off{color:var(--off)}
+.tag-demo{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:2px 6px}
+.input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.cat-badge{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font:700 14px var(--display);flex:none}
+.c-jidlo{--cb:var(--c-jidlo);--ci:var(--i-jidlo)} .c-potraviny{--cb:var(--c-potraviny);--ci:var(--i-potraviny)} .c-moda{--cb:var(--c-moda);--ci:var(--i-moda)}
+.c-obuv{--cb:var(--c-obuv);--ci:var(--i-obuv)} .c-sport{--cb:var(--c-sport);--ci:var(--i-sport)} .c-kosmetika{--cb:var(--c-kosmetika);--ci:var(--i-kosmetika)}
+.c-darky{--cb:var(--c-darky);--ci:var(--i-darky)} .c-hracky{--cb:var(--c-hracky);--ci:var(--i-hracky)} .c-elektro{--cb:var(--c-elektro);--ci:var(--i-elektro)} .c-sluzby{--cb:var(--c-sluzby);--ci:var(--i-sluzby)}
+.cat-badge{background:var(--cb);color:var(--ci)}
 
-.info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.info div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:2px;min-width:0}
-.info b{font:700 14px var(--display)}
+/* DOMŮ */
+.hero{background:var(--brand-deep);color:#fff;border-radius:22px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-70px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.14),rgba(255,255,255,0) 70%);pointer-events:none}
+.hero .greet{font-size:13.5px;color:#cfe4ec;font-weight:600}
+.hero h1{font-size:25px;line-height:1.15;color:#fff}
+.searchbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;color:#4f5c66;border:0;border-radius:14px;padding:14px;font-size:15px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.searchbtn .i{color:#0b6e91}
+.hero .chips .chip{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.18);color:#fff}
+.smart{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px}
+.smart .si{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--warn)}
+.smart.warn{border-color:color-mix(in srgb,var(--warn) 45%,var(--line));background:var(--warn-soft)}
+.smart.warn .si{background:var(--surface);color:var(--warn)}
+.smart b{display:block;font-size:15px}
+.smart span{font-size:13px;color:var(--muted)}
+.smart > .i{color:var(--faint)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:10px;min-height:118px;min-width:0}
+.tile .ti{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand)}
+.tile b{font:700 15px var(--display)}
+.tile span{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tile .meter{height:5px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin-top:auto}
+.tile .meter i{display:block;height:100%;background:var(--accent);border-radius:9px}
+.tile.live .ti{background:var(--ok-soft);color:var(--ok)}
+.hscroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;scroll-snap-type:x mandatory}
+.hscroll::-webkit-scrollbar{display:none}
+.mini-cpn{flex:0 0 72%;scroll-snap-align:start;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;text-align:left;padding:0}
+.mini-cpn .off{background:var(--cb);color:var(--ci);font:700 20px var(--display);display:grid;place-items:center;width:84px;flex:none;text-align:center;padding:6px}
+.mini-cpn .tx{padding:12px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.mini-cpn .tx b{font-size:14px}
+.mini-cpn .tx span{font-size:12.5px;color:var(--muted)}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info button,.info div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:left;display:flex;gap:10px;align-items:flex-start;min-width:0}
+.info .i{color:var(--brand);margin-top:1px}
+.info b{display:block;font-size:14px}
 .info span{font-size:12px;color:var(--muted)}
-@media (max-width:380px){ .info{grid-template-columns:1fr} }
+.rate{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;text-decoration:none}
+.rate .stars{color:var(--accent);display:flex}
+.rate .stars .i{width:16px;height:16px;fill:currentColor;stroke:none}
+.foot{font-size:12px;color:var(--faint);text-align:center;padding-block:4px 8px}
 
-.search{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
-.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
-.chip{flex:none;font:600 13px var(--body);padding:7px 13px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
-
-.list{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.item{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:11px 14px;border:0;border-top:1px solid var(--line);background:transparent;color:inherit;text-align:left;font:inherit;cursor:pointer;width:100%}
+/* OBCHODY */
+.search-wrap{position:sticky;top:var(--top-h,88px);z-index:10;background:var(--app);margin-inline:-16px;padding:10px 16px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid transparent}
+.sfield{position:relative}
+.sfield .i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.sfield .input{padding-left:42px;padding-right:42px}
+input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.sfield .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
+.list{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.item{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;border:0;border-top:1px solid var(--line);background:none;text-align:left;width:100%}
 .item:first-child{border-top:0}
-.item:hover{background:var(--room)}
-.ico{width:40px;height:40px;border-radius:10px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font:700 13px var(--display)}
-.item .t{font-weight:700}
-.item .s{font-size:12.5px;color:var(--muted)}
-.meta{font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.pill{font-size:11px;font-weight:700}
-.pill.on{color:var(--ok)} .pill.off{color:var(--off)}
-.empty{padding:18px;color:var(--muted)}
+.item:active{background:var(--surface-2)}
+.item .nm{font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .ds{font-size:12.5px;color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .rt{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.item .rt .ln{display:flex;gap:6px;align-items:center}
+.res-h{font-size:13px;color:var(--muted);font-weight:600}
+.empty{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 
-.detail{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:110px}
-.detail h2{font-size:24px}
-.detail .desc{margin:0;color:var(--muted)}
-.kv{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px}
+/* PLÁNEK */
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:14px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:11px;padding:9px;font-weight:700;font-size:13.5px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.rcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.rhead{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center}
+.rhead b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rhead span{font-size:12.5px;color:var(--muted)}
+.rnums{display:flex;gap:18px}
+.rnums div{display:flex;flex-direction:column}
+.rnums b{font:700 20px var(--display);font-variant-numeric:tabular-nums}
+.rnums span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.xbtn{width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--muted)}
+.hint{display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:12px 14px}
+.planbox{position:relative;width:100%;aspect-ratio:360/320;max-width:100%;border-radius:20px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line);touch-action:none;user-select:none;-webkit-user-select:none}
+#planSvg,#planSvg svg{width:100%;height:100%;display:block}
+.floors{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.floors button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font:800 13px var(--display);box-shadow:var(--shadow);position:relative;color:var(--ink)}
+.floors button[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.floors button .rdot{position:absolute;right:-3px;top:-3px;width:11px;height:11px;border-radius:50%;background:var(--accent);border:2px solid var(--surface)}
+.zoom{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
+.zoom button{width:40px;height:38px;border:0;background:var(--surface);display:grid;place-items:center;border-top:1px solid var(--line)}
+.zoom button:first-child{border-top:0}
+.nextfloor{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;border:0;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:13px;border-radius:99px;padding:9px 14px;display:flex;align-items:center;gap:6px;box-shadow:var(--shadow);white-space:nowrap}
+.floorname{position:absolute;right:12px;top:12px;font:700 12px var(--display);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 10px;color:var(--muted)}
+svg .bld{fill:var(--walk);stroke:var(--wall);stroke-width:3}
+svg .atr{fill:var(--atr);stroke:var(--atr-line);stroke-width:1.2;stroke-dasharray:5 4}
+svg .atl{fill:var(--atr-line);font:800 7px var(--body);letter-spacing:.2em;text-anchor:middle}
+svg .esc rect{fill:var(--surface);stroke:var(--atr-line);stroke-width:1.2}
+svg .esc path{fill:none;stroke:var(--brand);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+svg .room rect{fill:var(--cb);stroke:var(--surface);stroke-width:2}
+svg .room text{fill:var(--ci);font:800 6.8px var(--body);text-anchor:middle;letter-spacing:.02em;pointer-events:none}
+svg .room{cursor:pointer}
+svg .room.hi rect{stroke:var(--accent);stroke-width:3}
+svg .room.dim{opacity:.45}
+svg .poi circle{fill:var(--surface);stroke:var(--brand);stroke-width:1.4}
+svg .poi text{fill:var(--brand);font:800 5.6px var(--body);text-anchor:middle}
+svg .door{stroke:var(--walk);stroke-width:6}
+svg .dlbl{fill:var(--muted);font:800 7px var(--body);text-anchor:middle;letter-spacing:.12em}
+svg .park rect{fill:var(--brand-soft);stroke:var(--atr-line);stroke-width:1}
+svg .park text{fill:var(--brand);font:800 7.5px var(--body);text-anchor:middle;letter-spacing:.1em}
+svg .rt-halo{fill:none;stroke:color-mix(in srgb,var(--accent) 30%,transparent);stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+svg .rt{fill:none;stroke:var(--accent);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round}
+svg .rt-dots{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-dasharray:.1 9;animation:march 1s linear infinite}
+@keyframes march{to{stroke-dashoffset:-9.1}}
+svg .me-pulse{fill:var(--brand);opacity:.22;transform-box:fill-box;transform-origin:center;animation:mep 2s ease-out infinite}
+@keyframes mep{0%{transform:scale(.6);opacity:.35}100%{transform:scale(1.8);opacity:0}}
+svg .me-dot{fill:var(--brand);stroke:var(--surface);stroke-width:2.5}
+svg .pin path{fill:var(--accent);stroke:var(--surface);stroke-width:1.5}
+svg .pin circle{fill:var(--surface)}
+svg .escb rect{fill:var(--accent)}
+svg .escb text{fill:var(--on-accent);font:800 6.5px var(--body);text-anchor:middle}
+.legend{display:flex;gap:6px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);font-weight:600}
+.legend i{width:10px;height:10px;border-radius:3px;background:var(--cb)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.steps li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.steps li:first-child{border-top:0}
+.steps .si{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);color:var(--muted)}
+.steps li.on .si{background:var(--brand-soft);color:var(--brand)}
+.steps li.end .si{background:var(--accent-soft);color:var(--warn)}
+.steps li button{all:unset;cursor:pointer}
+.steps .m{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tourbox{width:100%;aspect-ratio:3/4;max-height:62vh;border-radius:20px;overflow:hidden;background:var(--brand-deep);border:1px solid var(--line)}
+.tourbox iframe{width:100%;height:100%;border:0;display:block}
+.tour-fb{height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;padding:20px;color:#fff;background:linear-gradient(160deg,var(--brand),var(--brand-deep))}
+.tour-fb h3{font-size:22px;color:#fff}
+.tour-fb p{margin:0;color:#d4e8ef;font-size:14px}
+.tstat{font-size:12.5px;font-weight:600;color:var(--muted);padding:8px 2px 0}
+
+/* PARKOVÁNÍ */
+.park-hero{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.park-hero .pi{width:52px;height:52px;border-radius:16px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center}
+.park-hero .pi .i{width:28px;height:28px}
+.park-hero h2{font-size:22px}
+.park-hero p{margin:0;color:var(--muted)}
+.ring{position:relative;width:220px;height:220px;max-width:100%;margin:4px auto 0}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .bg{fill:none;stroke:var(--surface-2);stroke-width:14}
+.ring .fg{fill:none;stroke:var(--ok);stroke-width:14;stroke-linecap:round;transition:stroke-dashoffset .9s linear, stroke .3s}
+.ring.warn .fg{stroke:var(--warn)} .ring.paid .fg{stroke:var(--brand)}
+.ring .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
+.ring .ctr span{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.ring .ctr b{font:700 44px var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay div{background:var(--surface-2);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column}
+.pay b{font:700 18px var(--display);font-variant-numeric:tabular-nums}
+.pay span{font-size:12px;color:var(--muted)}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600;font-size:14px;background:none;border:0;padding:4px 0;width:100%;text-align:left}
+.switch .tg{width:46px;height:28px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.switch .tg::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.switch[aria-checked="true"] .tg{background:var(--ok)}
+.switch[aria-checked="true"] .tg::after{transform:translateX(18px)}
+.rules{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.rules li{display:flex;gap:10px;font-size:14px}
+.rules li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand);margin-top:8px;flex:none}
+.spot{font-size:13px;color:var(--muted);text-align:center}
+
+/* AKCE */
+.hunt{background:var(--brand-deep);color:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.hunt h2{font-size:20px;color:#fff}
+.hunt p{margin:0;color:#cfe4ec;font-size:14px}
+.stamps{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.stamp{aspect-ratio:1;border-radius:50%;border:2px dashed rgba(255,255,255,.35);display:grid;place-items:center;color:rgba(255,255,255,.45)}
+.stamp.got{border:0;background:var(--accent);color:var(--on-accent);animation:pop .4s ease-out}
+.stamp .i{width:18px;height:18px}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.reward{background:#fff;color:#13202a;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.reward code{font:800 20px var(--display);letter-spacing:.06em;color:#064760}
+.cpn{display:grid;grid-template-columns:96px minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.cpn .off{background:var(--cb);color:var(--ci);font:700 22px var(--display);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;gap:2px;border-right:2px dashed var(--surface)}
+.cpn .off small{font:700 10.5px var(--body);letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+.cpn .tx{padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cpn .tx b{font-size:15px}
+.cpn .tx span{font-size:12.5px;color:var(--muted)}
+.cpn .tx .btn{min-height:38px;padding:8px 12px;font-size:13.5px;align-self:flex-start}
+.cpn.used{opacity:.6}
+.evt{display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px}
+.evt .dt{background:var(--brand-soft);color:var(--brand);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:8px 0;line-height:1.1}
+.evt .dt b{font:700 22px var(--display)}
+.evt .dt span{font-size:11px;font-weight:800;text-transform:uppercase}
+.evt b.t{display:block}
+.evt span.s{font-size:12.5px;color:var(--muted)}
+
+/* SHEET */
+.sheet-wrap{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.scrim{position:absolute;inset:0;background:rgba(6,16,22,.45);animation:fade .2s}
+.sheet{position:relative;width:min(480px,100%);max-height:88vh;overflow:auto;background:var(--surface);border-radius:24px 24px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:var(--shadow-up);animation:up .25s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:14px}
+.sheet.half{max-height:52vh}
+.sheet .grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 2px}
+@keyframes up{from{transform:translateY(40px);opacity:.4}}
+@keyframes fade{from{opacity:0}}
+.sh-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center}
+.sh-head h2{font-size:20px}
+.sh-head .meta{font-size:13px;color:var(--muted)}
+.kv{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.kv div{display:flex;justify-content:space-between;gap:12px;padding:11px 14px;border-top:1px solid var(--line);font-size:14px}
+.kv div:first-child{border-top:0}
 .kv span{color:var(--muted)}
-.sum{display:flex;gap:22px;flex-wrap:wrap}
-.sum div{display:flex;flex-direction:column}
-.sum b{font:700 22px var(--display);font-variant-numeric:tabular-nums}
-.plans{display:flex;flex-direction:column;gap:10px}
-.plan{border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--bg)}
-.plan .eyebrow{display:block;margin:0 0 4px 4px}
-.plan svg{width:100%;height:auto;display:block}
-svg .wall{fill:none;stroke:var(--ink);stroke-width:2.5}
-svg .room{fill:var(--room);stroke:var(--line);stroke-width:1}
-svg .room.hi{fill:var(--room-hi);stroke:var(--accent);stroke-width:2}
-svg .atrium{fill:var(--brand-soft);stroke:var(--brand);stroke-dasharray:4 3;stroke-width:1}
-svg .lbl{fill:var(--muted);font:700 7.5px var(--body);text-anchor:middle}
-svg .alb{fill:var(--brand);font:700 7.5px var(--body);text-anchor:middle;letter-spacing:.08em}
-svg .route{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.4s ease-out forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
-svg .me{fill:var(--brand);stroke:var(--surface);stroke-width:2}
-svg .mering{fill:none;stroke:var(--brand);stroke-width:2;opacity:.4}
-svg .pin{fill:var(--accent)}
-svg .door{stroke:var(--bg);stroke-width:6}
-ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
-ol.steps li{display:grid;grid-template-columns:26px 1fr auto;gap:10px;padding:9px 0;border-top:1px solid var(--line);align-items:baseline;counter-increment:s}
-ol.steps li::before{content:counter(s);font:700 13px var(--display);color:var(--brand)}
-ol.steps li span:last-child{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.actions{display:flex;gap:10px;flex-wrap:wrap}
-.note{font-size:12px;color:var(--muted);margin:0}
+.kv b{font-weight:600;text-align:right;user-select:all}
+.menu{display:flex;flex-direction:column}
+.menu button,.menu a{display:flex;align-items:center;gap:14px;padding:13px 4px;border:0;border-top:1px solid var(--line);background:none;text-align:left;text-decoration:none;font-weight:600;font-size:15px}
+.menu button:first-child{border-top:0}
+.menu .mi{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--surface-2);color:var(--brand)}
+.menu small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.tags{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tagbtn{display:flex;gap:10px;align-items:center;text-align:left;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:13.5px;min-width:0}
+.tagbtn .i{color:var(--brand)}
+.tagbtn.cur{border-color:var(--brand);background:var(--brand-soft)}
+.tagbtn small{display:block;font-weight:600;color:var(--warn);font-size:11.5px}
+.code{font:800 34px var(--display);letter-spacing:.08em;text-align:center;color:var(--brand);background:var(--brand-soft);border-radius:18px;padding:18px 10px}
+.timer{text-align:center;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+textarea.input{resize:vertical;min-height:84px}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--app);font-weight:700;font-size:14px;border-radius:14px;padding:12px 16px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:min(440px,calc(100% - 32px));display:flex;gap:10px;align-items:center;animation:up .25s}
+.toast .i{color:var(--accent)}
 
-.nfc{border:2px dashed var(--brand);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
-.nfc h3{font-size:18px}
-.nfc .row{display:flex;flex-wrap:wrap;gap:8px}
-footer{font-size:12px;color:var(--muted);text-align:center;display:flex;flex-direction:column;gap:4px}
-@media (prefers-reduced-motion: reduce){ .dot{animation:none} svg .route{animation:none;stroke-dashoffset:0} }
+/* VEDENÍ */
+.mg-head{display:flex;align-items:center;gap:12px}
+.mg-head h1{font-size:21px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.kpi span{font-size:12px;color:var(--muted);font-weight:700}
+.kpi b{font:700 26px var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi em{font-style:normal;font-size:12px;font-weight:800;color:var(--ok)}
+.hours{display:flex;align-items:flex-end;gap:5px;height:130px;padding-top:18px}
+.hours div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;min-width:0}
+.hours i{display:block;width:100%;border-radius:6px 6px 2px 2px;background:color-mix(in srgb,var(--brand) 35%,var(--surface-2))}
+.hours div.pk i{background:var(--brand)}
+.hours small{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hours div.pk b{font-size:11px;color:var(--brand);font-variant-numeric:tabular-nums}
+.hbars{display:flex;flex-direction:column;gap:10px}
+.hbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;font-size:13.5px}
+.hbar .tr{grid-column:1 / -1;height:8px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.hbar .tr i{display:block;height:100%;border-radius:9px;background:var(--brand)}
+.hbar.miss .tr i{background:var(--accent)}
+.hbar b{font-variant-numeric:tabular-nums;font-weight:700}
+.hbar .new{font-size:10.5px;font-weight:800;color:var(--ok);background:var(--ok-soft);border-radius:5px;padding:1px 5px;margin-left:6px}
+.insight{display:flex;gap:10px;background:var(--accent-soft);border-radius:14px;padding:12px;font-size:13.5px}
+.insight .i{color:var(--warn)}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.tbl th{text-align:left;color:var(--muted);font-weight:700;font-size:11.5px;padding:0 0 8px}
+.tbl td{padding:9px 0;border-top:1px solid var(--line)}
+.tbl td:not(:first-child),.tbl th:not(:first-child){text-align:right;padding-left:8px}
+.tblwrap{overflow-x:auto}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.trio div{background:var(--surface-2);border-radius:14px;padding:10px;display:flex;flex-direction:column}
+.trio b{font:700 18px var(--display);font-variant-numeric:tabular-nums}
+.trio span{font-size:11.5px;color:var(--muted)}
+.prob{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
+.prob:first-child{border-top:0}
+.prob small{color:var(--muted)}
+.pill{font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;margin-left:6px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.new{background:var(--accent-soft);color:var(--warn)}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <div class="brandrow">
-      <div class="logo">
-        <img src="https://chomutovka.cz/img/logo.svg?ts=1698921604" alt="Chomutovka" onerror="this.remove();document.getElementById('word').hidden=false">
-        <div><span class="word" id="word" hidden>Chomutovka</span><small>Farského 4732, Chomutov</small></div>
-      </div>
-      <span class="badge">návrh View</span>
-    </div>
-    <div class="here"><span class="dot"></span><span>Jste zde: <b id="hereName">Hlavní vchod</b></span><button id="where">Změnit</button></div>
-  </header>
-
-  <div class="status"><span class="open" id="open">Otevřeno</span><span>Centrum 9–19 h · Tesco 7–20 h · denně</span></div>
-
-  <section class="tour" aria-label="3D prohlídka" id="tour"></section>
-
-  <section class="info" aria-label="Praktické informace">
-    <div><b>Parkování</b><span>120 míst, 1. hodina zdarma, víkendy zdarma</span></div>
-    <div><b>Wi-Fi zdarma</b><span>heslo: chomutovka</span></div>
-    <div><b>MHD</b><span>trolejbus 340–353, autobus 306, 314</span></div>
-  </section>
-
-  <section style="display:flex;flex-direction:column;gap:12px" id="menu">
-    <div class="eyebrow">Kam se chcete dostat?</div>
-    <input id="q" class="search" type="search" placeholder="Hledat: dm, pošta, káva, boty…" autocomplete="off">
-    <div class="chips" id="chips" role="toolbar" aria-label="Kategorie"></div>
-    <div class="list" id="list"></div>
-  </section>
-
-  <section class="detail" id="detail" hidden></section>
-
-  <section class="nfc" id="nfcbox">
-    <div class="eyebrow">Simulace NFC a QR</div>
-    <h3>Přiložte telefon k tagu</h3>
-    <p class="note">V centru bude NFC tag s QR kódem u vchodu, u eskalátorů v každém patře a u pošty. Klepnutím simulujete načtení: stránka se otevře s vaší polohou a trasy se přepočítají odtamtud.</p>
-    <div class="row" id="tags"></div>
-  </section>
-
-  <section class="nfc admin" id="admin" hidden>
-    <div class="eyebrow">Pro View · příprava</div>
-    <h3>Nastavit body prohlídky</h3>
-    <p class="note">V prohlídce se postavte ke vchodu do obchodu, vyberte ho v seznamu a klepněte na Přiřadit. Až budou body hotové, zkopírujte nastavení a pošlete ho do vývoje, aby se vložilo natrvalo.</p>
-    <div class="kv"><div><span>Aktuální bod v prohlídce </span><b id="curSweep">—</b></div><div><span>Přiřazeno </span><b id="mapCount">0</b></div></div>
-    <select id="mapSel" class="search"></select>
-    <div class="actions">
-      <button class="btn primary" id="assign">Přiřadit aktuální bod</button>
-      <button class="btn ghost" id="jump">Přejít na přiřazený bod</button>
-      <button class="btn ghost" id="copyMap">Kopírovat nastavení</button>
-    </div>
-    <textarea id="mapJson" class="search" rows="4" aria-label="Nastavení bodů" placeholder="Sem můžete vložit dříve uložené nastavení a klepnout na Načíst."></textarea>
-    <button class="btn ghost" id="loadMap" style="align-self:flex-start">Načíst nastavení</button>
-    <p class="note" id="adminMsg"></p>
-  </section>
-
-  <footer>
-    <button class="btn ghost" id="toggleAdmin" style="align-self:center;font-size:12px;padding:6px 12px">Nastavit body prohlídky</button>
-    <span>Obchody, patra a otevírací doba jsou z chomutovka.cz. Rozmístění v patře je v ukázce orientační.</span>
-    <span>Připravila View Czech</span>
-  </footer>
+<div class="app" id="app">
+  <header class="top" id="top"></header>
+  <main>
+    <section class="view" id="v-home"></section>
+    <section class="view" id="v-shops" hidden></section>
+    <section class="view" id="v-map" hidden></section>
+    <section class="view" id="v-park" hidden></section>
+    <section class="view" id="v-deals" hidden></section>
+    <section class="view" id="v-mgmt" hidden></section>
+  </main>
+  <nav class="tabs" id="tabs" aria-label="Hlavní menu"></nav>
 </div>
+<div class="sheet-wrap" id="sheetWrap" hidden><div class="scrim" data-act="close"></div><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
 
 <script>
+'use strict';
+/* ================= NASTAVENÍ ================= */
 const SDK_KEY = '25637u49gkrstz3189402x35c';
 const MODEL = 'fgFYkGk9j2A';
 const TOUR_URL = `https://my.matterport.com/show/?m=${MODEL}&play=1&qs=1`;
 const SDK_URL = `${TOUR_URL}&applicationKey=${SDK_KEY}`;
-// přiřazení míst k bodům prohlídky (sweep ID) — vyplní se v režimu "Nastavit body prohlídky" a pak se sem vloží natrvalo
-const SWEEPS = {};
+const SWEEPS = {};   // body 3D prohlídky vložené natrvalo (z režimu Nastavit body prohlídky)
+const WIFI_PASS = 'chomutovka';
+const GOOGLE_CENTER = 'https://www.google.com/maps/search/?api=1&query=OC%20Chomutovka%20Farsk%C3%A9ho%204732%20Chomutov';
 const M_PER_UNIT = 0.2;
-const FLOORS = ['Přízemí','1. patro','2. patro'];
-const CATS = [['all','Vše'],['potraviny','Potraviny'],['moda','Móda'],['obuv','Obuv'],['sport','Sport, volný čas'],['kosmetika','Kosmetika, zdraví'],
-  ['darky','Klenoty, dárky'],['hracky','Hračky, knihy, papír'],['elektro','Elektro, bydlení'],['sluzby','Služby'],['jidlo','Občerstvení']];
 
-// sloty v patře: [x, y, w, h]
-const SLOT = {
-  T:[110,22,140,52],
+/* ================= ÚLOŽIŠTĚ ================= */
+const store = {
+  get(k, d){ try { const v = localStorage.getItem('chv-'+k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem('chv-'+k, JSON.stringify(v)); } catch(e){} },
+  clear(){ try { Object.keys(localStorage).filter(k => k.startsWith('chv-')).forEach(k => localStorage.removeItem(k)); } catch(e){} }
+};
+
+/* ================= TEXTY / JAZYKY ================= */
+const I18N = {
+cs:{tabHome:'Domů',tabShops:'Obchody',tabMap:'Plánek',tabPark:'Parkování',tabDeals:'Akce',youAreHere:'Jste zde',
+ openNow:'Otevřeno do 19:00',partOpen:'Jen Tesco do 20:00',closedNow:'Zavřeno · od 9:00',
+ greet:['Dobré ráno','Dobrý den','Dobré odpoledne','Dobrý večer'],whatLooking:'Co dnes hledáte?',searchPh:'Obchod nebo zboží: káva, baterky, dárek…',
+ forYouNow:'Pro vás teď',qPark:'Parkování',qParkIdle:'Hlídat hodinu zdarma',qParkFree:'Zdarma ještě {0} min',qParkPaid:'Zatím {0} Kč',qParkWeekend:'Dnes zdarma',
+ qDeals:'Kupóny',qDealsSub:'{0} aktivních',qHunt:'Hledačka',qHuntSub:'{0} ze 6 razítek',qMap:'Plánek centra',qMapSub:'35 obchodů · 3 patra',
+ dealsToday:'Akce dne',seeAll:'Vše',wifi:'Wi-Fi zdarma',wifiSub:'Klepnutím zkopírujete heslo',toilets:'Toalety',toiletsSub:'Ukázat cestu',atm:'Bankomaty',atmSub:'K nejbližšímu',
+ transit:'MHD',transitSub:'Trolejbus 340–353, bus 306, 314',rateUs:'Líbí se vám v Chomutovce?',rateUsSub:'Ohodnoťte nás na Googlu',
+ open:'otevřeno',closed:'zavřeno',floor0:'Přízemí',floor1:'1. patro',floor2:'2. patro',fs0:'P',fs1:'1',fs2:'2',nearest:'Seřazeno podle vzdálenosti',found:'Našli jsme {0}',
+ navigate:'Navigovat',in3d:'Ve 3D',reviews:'Recenze na Googlu',phone:'Telefon',hours:'Otevřeno',walkAway:'{0} m · {1} min chůze',
+ noResults:'Tohle v Chomutovce zatím nenajdete.',noResultsSub:'Hledání jsme zaznamenali pro vedení centra. Zkuste třeba:',
+ plan:'Plánek',tour:'3D prohlídka',tapHint:'Klepněte na obchod v plánku nebo ho vyhledejte v Obchodech.',dist:'vzdálenost',time:'chůze',min:'min',
+ walkToEsc:'Dojděte k eskalátorům v atriu',escUp:'Vyjeďte eskalátorem: {0}',escDown:'Sjeďte eskalátorem: {0}',walkPast:'Pokračujte kolem: {0}',walkTo:'Dojděte k cíli',arrive:'Jste v cíli: {0}',
+ continueTo:'Pokračujte: {0}',guide3d:'Provést mě ve 3D',here:'Tady právě stojíte',routeTo:'Trasa',
+ parkTitle:'Hlídejte si parkování zdarma',parkSub:'První hodina je zdarma, o víkendu celý den. Upozorníme vás, než začnete platit.',parkedNow:'Zaparkoval(a) jsem',
+ outdoor:'Venkovní',underground:'Podzemní',spotNote:'Kde stojíte? (nepovinné, např. u sloupu B3)',freeLeft:'Zdarma ještě',parkedFor:'Parkujete',toPayNow:'teď byste platili',
+ nextStep:'za {0} min to bude',weekendFree:'Dnes parkujete zdarma',toCar:'Navigovat k autu',leaving:'Odjíždím',remind:'Upozornit 10 minut předem',
+ remindMsg:'Za 10 minut končí parkování zdarma.',priceList:'Ceník a pravidla',parkedSince:'od {0}',parkTip:'Tip: tag u parkovacího automatu spustí hlídání jedním přiložením.',
+ rules:['První hodina zdarma','Druhá hodina 10 Kč, každá další započatá 30 Kč','Víkendy a svátky zdarma','Platba u vchodu, jen hotovost (do 200 Kč)','Ztracený lístek 500 Kč · podzemí bez LPG'],
+ hunt:'Hledačka po centru',huntSub:'Najděte v centru 6 tagů, přiložte k nim telefon a získejte odměnu.',huntDone:'Máte všech 6! Odměna je vaše.',
+ rewardTxt:'Bubble tea zdarma · ukažte kód u stánku',coupons:'Kupóny jen přes Chomutovku',redeem:'Uplatnit',used:'Uplatněno',validTo:'platí do {0}',events:'Akce v centru',
+ showCashier:'Ukažte kód obsluze',couponOnce:'Kupón platí jednou. Zbývá',redeemNow:'Uplatnit teď',demo:'Ukázka',
+ menuNfc:'Simulace NFC a QR',menuNfcSub:'Vyzkoušejte načtení tagu',menuMgmt:'Přehled pro vedení centra',menuMgmtSub:'Statistiky a report',menu3d:'Nastavit body 3D prohlídky',menu3dSub:'Pro View, jednorázově',
+ menuReport:'Nahlásit problém',menuReportSub:'Nepořádek, porucha, ztráty',menuLang:'Jazyk',menuReset:'Vymazat data testování',menuResetSub:'Parkování, razítka, kupóny',
+ scanned:'Načteno: {0}',stamp:'razítko {0}/6',welcome:'Vítejte v Chomutovce',reportTitle:'Nahlásit problém',reportSend:'Odeslat',reportThanks:'Děkujeme, předáno vedení centra.',
+ rMess:'Nepořádek',rBroken:'Porucha',rLost:'Ztráty a nálezy',rOther:'Jiné',reportNote:'Co se děje? (nepovinné)',reportWhere:'Místo',
+ nfcTitle:'Přiložte telefon k tagu',nfcSub:'V centru budou NFC tagy s QR kódem. Klepnutím simulujete načtení.',
+ lunch:'Čas na oběd',lunchSub:'Denní menu a bistra ve 2. patře',huntIntro:'Zahrajte si hledačku',huntIntroSub:'Sesbírejte 6 razítek a získejte odměnu',
+ parkWarn:'Parkování zdarma končí za {0} min',parkWarnSub:'Pak 10 Kč za druhou hodinu',dealPick:'Tip dne: {0}',copied:'Heslo zkopírováno',resetDone:'Data testování vymazána',
+ back:'Zpět',close:'Zavřít',
+ sdkConnecting:'Připojuji 3D navigaci…',sdkOk:'3D navigace připojena',sdkFail:'3D navigaci se nepodařilo připojit. Je adresa stránky povolená u SDK klíče?',
+ sdkLocal:'Plynulé provádění funguje po spuštění na adrese localhost:8000. Prohlídku si tu můžete projít ručně.',sdkNoEmbed:'Prohlídka se tady otevře v nové záložce.',
+ notMapped:'Toto místo ještě nemá přiřazený bod v prohlídce (menu → Nastavit body 3D prohlídky).',guiding:'Provádím k cíli: {0}',arrived:'Jste v cíli: {0}',tourOpen:'Otevřít 3D prohlídku'},
+de:{tabHome:'Start',tabShops:'Geschäfte',tabMap:'Plan',tabPark:'Parken',tabDeals:'Angebote',youAreHere:'Sie sind hier',
+ openNow:'Offen bis 19:00',partOpen:'Nur Tesco bis 20:00',closedNow:'Zu · ab 9:00',
+ greet:['Guten Morgen','Guten Tag','Guten Tag','Guten Abend'],whatLooking:'Was suchen Sie heute?',searchPh:'Geschäft oder Produkt: Kaffee, Batterien…',
+ forYouNow:'Jetzt für Sie',qPark:'Parken',qParkIdle:'Gratisstunde im Blick',qParkFree:'Noch {0} Min. gratis',qParkPaid:'Bisher {0} Kč',qParkWeekend:'Heute gratis',
+ qDeals:'Gutscheine',qDealsSub:'{0} aktiv',qHunt:'Schnitzeljagd',qHuntSub:'{0} von 6 Stempeln',qMap:'Centerplan',qMapSub:'35 Geschäfte · 3 Etagen',
+ dealsToday:'Angebote des Tages',seeAll:'Alle',wifi:'WLAN gratis',wifiSub:'Tippen kopiert das Passwort',toilets:'Toiletten',toiletsSub:'Weg zeigen',atm:'Geldautomaten',atmSub:'Zum nächsten',
+ transit:'ÖPNV',transitSub:'Trolleybus 340–353, Bus 306, 314',rateUs:'Gefällt es Ihnen?',rateUsSub:'Bewerten Sie uns bei Google',
+ open:'geöffnet',closed:'geschlossen',floor0:'Erdgeschoss',floor1:'1. Stock',floor2:'2. Stock',fs0:'EG',fs1:'1',fs2:'2',nearest:'Nach Entfernung sortiert',found:'{0} Treffer',
+ navigate:'Navigieren',in3d:'In 3D',reviews:'Google-Bewertungen',phone:'Telefon',hours:'Geöffnet',walkAway:'{0} m · {1} Min. zu Fuß',
+ noResults:'Das gibt es hier noch nicht.',noResultsSub:'Wir haben die Suche für das Centermanagement notiert. Versuchen Sie:',
+ plan:'Plan',tour:'3D-Rundgang',tapHint:'Tippen Sie auf ein Geschäft im Plan oder suchen Sie es unter Geschäfte.',dist:'Strecke',time:'zu Fuß',min:'Min.',
+ walkToEsc:'Gehen Sie zu den Rolltreppen im Atrium',escUp:'Rolltreppe hoch: {0}',escDown:'Rolltreppe runter: {0}',walkPast:'Weiter vorbei an: {0}',walkTo:'Gehen Sie zum Ziel',arrive:'Sie sind da: {0}',
+ continueTo:'Weiter: {0}',guide3d:'In 3D hinführen',here:'Hier stehen Sie gerade',routeTo:'Route',
+ parkTitle:'Gratisparken im Blick',parkSub:'Die erste Stunde ist gratis, am Wochenende den ganzen Tag. Wir erinnern Sie rechtzeitig.',parkedNow:'Ich habe geparkt',
+ outdoor:'Außen',underground:'Tiefgarage',spotNote:'Wo stehen Sie? (optional, z. B. Säule B3)',freeLeft:'Noch gratis',parkedFor:'Parkdauer',toPayNow:'jetzt zu zahlen',
+ nextStep:'in {0} Min. werden es',weekendFree:'Heute parken Sie gratis',toCar:'Zum Auto',leaving:'Ich fahre',remind:'10 Minuten vorher erinnern',
+ remindMsg:'In 10 Minuten endet das Gratisparken.',priceList:'Preise und Regeln',parkedSince:'seit {0}',parkTip:'Tipp: Der Tag am Parkautomaten startet die Überwachung mit einer Berührung.',
+ rules:['Erste Stunde gratis','Zweite Stunde 10 Kč, jede weitere angefangene 30 Kč','Wochenende und Feiertage gratis','Zahlung am Eingang, nur bar (bis 200 Kč)','Verlorenes Ticket 500 Kč · kein LPG in der Tiefgarage'],
+ hunt:'Schnitzeljagd im Center',huntSub:'Finden Sie 6 Tags, halten Sie das Handy dran und holen Sie sich eine Belohnung.',huntDone:'Alle 6 gefunden! Die Belohnung gehört Ihnen.',
+ rewardTxt:'Gratis Bubble Tea · Code am Stand zeigen',coupons:'Gutscheine nur über Chomutovka',redeem:'Einlösen',used:'Eingelöst',validTo:'gültig bis {0}',events:'Veranstaltungen',
+ showCashier:'Code an der Kasse zeigen',couponOnce:'Einmal gültig. Noch',redeemNow:'Jetzt einlösen',demo:'Beispiel',
+ menuNfc:'NFC- und QR-Simulation',menuNfcSub:'Tag-Scan ausprobieren',menuMgmt:'Übersicht für das Management',menuMgmtSub:'Statistiken und Report',menu3d:'3D-Punkte einrichten',menu3dSub:'Für View, einmalig',
+ menuReport:'Problem melden',menuReportSub:'Schmutz, Defekt, Fundsachen',menuLang:'Sprache',menuReset:'Testdaten löschen',menuResetSub:'Parken, Stempel, Gutscheine',
+ scanned:'Gescannt: {0}',stamp:'Stempel {0}/6',welcome:'Willkommen in der Chomutovka',reportTitle:'Problem melden',reportSend:'Senden',reportThanks:'Danke, an das Management weitergeleitet.',
+ rMess:'Schmutz',rBroken:'Defekt',rLost:'Fundsachen',rOther:'Sonstiges',reportNote:'Was ist los? (optional)',reportWhere:'Ort',
+ nfcTitle:'Handy an den Tag halten',nfcSub:'Im Center gibt es NFC-Tags mit QR-Code. Tippen simuliert den Scan.',
+ lunch:'Zeit fürs Mittagessen',lunchSub:'Tagesmenüs und Bistros im 2. Stock',huntIntro:'Spielen Sie Schnitzeljagd',huntIntroSub:'6 Stempel sammeln, Belohnung holen',
+ parkWarn:'Gratisparken endet in {0} Min.',parkWarnSub:'Danach 10 Kč für die zweite Stunde',dealPick:'Tipp des Tages: {0}',copied:'Passwort kopiert',resetDone:'Testdaten gelöscht',back:'Zurück',close:'Schließen'},
+uk:{tabHome:'Головна',tabShops:'Магазини',tabMap:'План',tabPark:'Паркінг',tabDeals:'Акції',youAreHere:'Ви тут',
+ openNow:'Відчинено до 19:00',partOpen:'Лише Tesco до 20:00',closedNow:'Зачинено · з 9:00',
+ greet:['Доброго ранку','Добрий день','Добрий день','Добрий вечір'],whatLooking:'Що шукаєте сьогодні?',searchPh:'Магазин або товар: кава, батарейки…',
+ forYouNow:'Для вас зараз',qPark:'Паркінг',qParkIdle:'Стежити за безкоштовною годиною',qParkFree:'Ще {0} хв безкоштовно',qParkPaid:'Поки {0} Kč',qParkWeekend:'Сьогодні безкоштовно',
+ qDeals:'Купони',qDealsSub:'{0} активних',qHunt:'Квест',qHuntSub:'{0} з 6 печаток',qMap:'План центру',qMapSub:'35 магазинів · 3 поверхи',
+ dealsToday:'Акції дня',seeAll:'Усі',wifi:'Безкоштовний Wi-Fi',wifiSub:'Торкніться, щоб скопіювати пароль',toilets:'Туалети',toiletsSub:'Показати шлях',atm:'Банкомати',atmSub:'До найближчого',
+ transit:'Транспорт',transitSub:'Тролейбус 340–353, автобус 306, 314',rateUs:'Вам подобається у Chomutovka?',rateUsSub:'Оцініть нас у Google',
+ open:'відчинено',closed:'зачинено',floor0:'Наземний поверх',floor1:'1-й поверх',floor2:'2-й поверх',fs0:'0',fs1:'1',fs2:'2',nearest:'За відстанню',found:'Знайдено: {0}',
+ navigate:'Маршрут',in3d:'У 3D',reviews:'Відгуки в Google',phone:'Телефон',hours:'Відчинено',walkAway:'{0} м · {1} хв пішки',
+ noResults:'Цього тут поки немає.',noResultsSub:'Ми передали ваш пошук адміністрації центру. Спробуйте:',
+ plan:'План',tour:'3D-тур',tapHint:'Торкніться магазину на плані або знайдіть його в розділі Магазини.',dist:'відстань',time:'пішки',min:'хв',
+ walkToEsc:'Дійдіть до ескалаторів в атріумі',escUp:'Підніміться ескалатором: {0}',escDown:'Спустіться ескалатором: {0}',walkPast:'Ідіть повз: {0}',walkTo:'Дійдіть до мети',arrive:'Ви на місці: {0}',
+ continueTo:'Далі: {0}',guide3d:'Провести в 3D',here:'Ви стоїте тут',routeTo:'Маршрут',
+ parkTitle:'Стежте за безкоштовним паркуванням',parkSub:'Перша година безкоштовна, у вихідні весь день. Ми нагадаємо до початку оплати.',parkedNow:'Я припаркувався',
+ outdoor:'Відкритий',underground:'Підземний',spotNote:'Де ви стоїте? (необовʼязково)',freeLeft:'Безкоштовно ще',parkedFor:'Ви паркуєтесь',toPayNow:'до сплати зараз',
+ nextStep:'за {0} хв буде',weekendFree:'Сьогодні паркування безкоштовне',toCar:'Маршрут до авто',leaving:'Я виїжджаю',remind:'Нагадати за 10 хвилин',
+ remindMsg:'Через 10 хвилин закінчиться безкоштовне паркування.',priceList:'Тарифи та правила',parkedSince:'з {0}',parkTip:'Порада: тег біля паркомата запускає відлік одним дотиком.',
+ rules:['Перша година безкоштовно','Друга година 10 Kč, кожна наступна розпочата 30 Kč','Вихідні та свята безкоштовно','Оплата біля входу, лише готівка (до 200 Kč)','Загублений квиток 500 Kč · у підземному без LPG'],
+ hunt:'Квест по центру',huntSub:'Знайдіть у центрі 6 тегів, прикладіть телефон і отримайте нагороду.',huntDone:'Усі 6 зібрано! Нагорода ваша.',
+ rewardTxt:'Bubble tea безкоштовно · покажіть код',coupons:'Купони лише через Chomutovka',redeem:'Використати',used:'Використано',validTo:'діє до {0}',events:'Події в центрі',
+ showCashier:'Покажіть код продавцю',couponOnce:'Купон одноразовий. Залишилось',redeemNow:'Використати зараз',demo:'Приклад',
+ menuNfc:'Симуляція NFC і QR',menuNfcSub:'Спробуйте зчитати тег',menuMgmt:'Огляд для адміністрації',menuMgmtSub:'Статистика і звіт',menu3d:'Налаштувати точки 3D-туру',menu3dSub:'Для View, одноразово',
+ menuReport:'Повідомити про проблему',menuReportSub:'Безлад, несправність, знахідки',menuLang:'Мова',menuReset:'Видалити тестові дані',menuResetSub:'Паркінг, печатки, купони',
+ scanned:'Зчитано: {0}',stamp:'печатка {0}/6',welcome:'Ласкаво просимо до Chomutovka',reportTitle:'Повідомити про проблему',reportSend:'Надіслати',reportThanks:'Дякуємо, передано адміністрації.',
+ rMess:'Безлад',rBroken:'Несправність',rLost:'Знахідки',rOther:'Інше',reportNote:'Що сталося? (необовʼязково)',reportWhere:'Місце',
+ nfcTitle:'Прикладіть телефон до тегу',nfcSub:'У центрі будуть NFC-теги з QR-кодом. Дотик симулює зчитування.',
+ lunch:'Час обідати',lunchSub:'Денне меню та бістро на 2-му поверсі',huntIntro:'Зіграйте у квест',huntIntroSub:'Зберіть 6 печаток і отримайте нагороду',
+ parkWarn:'Безкоштовне паркування закінчиться через {0} хв',parkWarnSub:'Далі 10 Kč за другу годину',dealPick:'Порада дня: {0}',copied:'Пароль скопійовано',resetDone:'Тестові дані видалено',back:'Назад',close:'Закрити'}
+};
+let lang = store.get('lang', 'cs'); if (!I18N[lang]) lang = 'cs';
+function t(k, ...a){ let s = (I18N[lang][k] ?? I18N.cs[k] ?? k); if (typeof s === 'string') a.forEach((v,i) => s = s.replace('{'+i+'}', v)); return s; }
+const LANGS = [['cs','Čeština','CZ'],['de','Deutsch','DE'],['uk','Українська','UA']];
+
+/* ================= IKONY ================= */
+const IP = {
+ home:'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z', bag:'M5 8h14l-1 12.5H6zM9 8V6.5a3 3 0 0 1 6 0V8',
+ map:'M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14', car:'M4 16.5h16v-4.5l-2.2-5H6.2L4 12zM4 16.5V19h3v-2.5M17 16.5V19h3v-2.5M7.5 13h.01M16.5 13h.01M5 12h14',
+ tag:'M3 12.2V4h8.2L21 13.8 13.8 21zM7.5 7.5h.01', search:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4', dots:'M5 12h.01M12 12h.01M19 12h.01',
+ pin:'M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zM12 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4z', walk:'M13.5 4.5a1.5 1.5 0 1 0 0 .01M10 21l2-6 3 3v3M8 12l3-4 3 3 3 1M11 8l-1.5 5',
+ up:'M12 19V5M6 11l6-6 6 6', down:'M12 5v14M6 13l6 6 6-6', flag:'M5 21V4h12l-2.5 4L17 12H5', phone:'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2',
+ star:'M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z', wifi:'M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01',
+ cube:'M12 3 4 7.5v9L12 21l8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9', close:'M6 6l12 12M18 6 6 18', chev:'M9 6l6 6-6 6', back:'M15 6l-6 6 6 6',
+ nfc:'M5 9a6 6 0 0 1 0 6M8.5 7a10 10 0 0 1 0 10M12 5a14 14 0 0 1 0 14M16 9h4v6h-4z', chart:'M4 20V11M10 20V5M16 20v-7M2 20h20',
+ gear:'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1',
+ alert:'M12 3 2 20h20zM12 10v4M12 17h.01', copy:'M8 8h12v12H8zM4 16V4h12', clock:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2',
+ gift:'M4 11h16v9H4zM3 7.5h18V11H3zM12 7.5V20M12 7.5c-1-3-4.5-4-5.5-2s2 2 5.5 2zm0 0c1-3 4.5-4 5.5-2s-2 2-5.5 2z', plus:'M12 5v14M5 12h14', minus:'M5 12h14',
+ fit:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5', globe:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c3.2 3.2 3.2 14.8 0 18M12 3c-3.2 3.2-3.2 14.8 0 18',
+ bus:'M5 4h14v12H5zM5 11h14M7 16v3M17 16v3M8.5 13.5h.01M15.5 13.5h.01', check:'M5 12.5l4.5 4.5L19 7', wc:'M7 5.5a1.5 1.5 0 1 0 0 .01M17 5.5a1.5 1.5 0 1 0 0 .01M5 21v-6l-1-.5V10h6v4.5l-1 .5v6M17 9l-3 7h6l-3-7zM15.5 16v5M18.5 16v5M12 3v18',
+ atm:'M3 6h18v12H3zM3 10h18M7 15h4', bell:'M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0', spark:'M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6',
+ food:'M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 2-3 4-3 7h3v11', trash:'M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13', target:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v3M12 19v3M2 12h3M19 12h3'
+};
+const ic = (n, cls='') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="${IP[n]}"/></svg>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $ = s => document.querySelector(s);
+const norm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= DATA CENTRA ================= */
+const CATS = [['all',{cs:'Vše',de:'Alle',uk:'Усе'}],['jidlo',{cs:'Občerstvení',de:'Essen',uk:'Їжа'}],['potraviny',{cs:'Potraviny',de:'Lebensmittel',uk:'Продукти'}],
+ ['moda',{cs:'Móda',de:'Mode',uk:'Одяг'}],['obuv',{cs:'Obuv',de:'Schuhe',uk:'Взуття'}],['kosmetika',{cs:'Kosmetika, zdraví',de:'Kosmetik, Gesundheit',uk:'Краса, здоровʼя'}],
+ ['darky',{cs:'Klenoty, dárky',de:'Schmuck, Geschenke',uk:'Прикраси, подарунки'}],['hracky',{cs:'Hračky, knihy, papír',de:'Spielzeug, Bücher',uk:'Іграшки, книги'}],
+ ['elektro',{cs:'Elektro, bydlení',de:'Elektro, Wohnen',uk:'Техніка, дім'}],['sport',{cs:'Sport, volný čas',de:'Sport, Freizeit',uk:'Спорт, дозвілля'}],['sluzby',{cs:'Služby',de:'Service',uk:'Послуги'}]];
+const catName = c => { const x = CATS.find(k => k[0] === c); return x ? (x[1][lang] || x[1].cs) : c; };
+
+const SLOT = { T:[110,22,140,52],
   L1:[25,28,70,44],L2:[25,78,70,44],L3:[25,128,70,44],L4:[25,178,70,44],L5:[25,228,70,44],
   R1:[265,28,70,44],R2:[265,78,70,44],R3:[265,128,70,44],R4:[265,178,70,44],R5:[265,228,70,44],
-  B1:[110,222,55,44],B2:[195,222,55,44],
-  K1:[126,104,44,22],K2:[190,104,44,22]
-};
-// [id, název, patro, slot nebo [x,y] bod v chodbě, kategorie, popis, otevírací doba, telefon, zkratka do plánku]
+  B1:[110,222,55,44],B2:[195,222,55,44],K1:[126,104,44,22],K2:[190,104,44,22] };
+// [id, název, patro, slot, kategorie, popis, otevírací doba, telefon, zkratka v plánku, klíčová slova pro hledání zboží]
 const P = [
-  ['tesco','Tesco',0,'T','potraviny','Potraviny, drogerie, průmyslové zboží a oblečení.','Po–Ne 7–20','474 336 040','TESCO'],
-  ['luxor','Knihkupectví Luxor',0,'L1','hracky','Knihy, komiksy, deskové hry a dárky. U Tesca.','Po–Ne 9–19','416 419 921','LUXOR'],
-  ['tabak','Tabák DonPealo',0,'L2','sluzby','Tabák, tisk, jízdenky, SAZKA a nápoje.','Po–Pá 7–19, So–Ne 8–19','727 953 265','TABÁK'],
-  ['tipsport','Tipsport',0,'L3','sluzby','Sázková kancelář, přenosy a losy. Prodej dárkových poukazů centra.','Po–Ne 9–19','702 012 670','TIPSPORT'],
-  ['superzoo','Super zoo',0,'L4','sport','Chovatelské potřeby, krmivo a zvířata.','Po–Ne 8–19','477 754 663','SUPER ZOO'],
-  ['vineco','Vinotéka Vineco',0,'L5','potraviny','Moravská vína lahvová i sudová, oříšky a čokolády.','Po–Ne 8–19','774 408 502','VINECO'],
-  ['drmax','Lékárna Dr. Max',0,'R1','kosmetika','Léky, doplňky stravy a dětská výživa.','Po–Ne 8–19','474 341 662','DR. MAX'],
-  ['grandoptical','GrandOptical',0,'R2','kosmetika','Brýle, kontaktní čočky, měření zraku a opravy.','Po–Ne 9–19','474 331 193','OPTIKA'],
-  ['pandora','PANDORA',0,'R3','darky','Šperky, náramky s přívěsky, prsteny a náušnice.','Po–Pá 9–19','737 325 960','PANDORA'],
-  ['quickshoes','QUICK SHOES',0,'R4','obuv','Obuv pro všechny věkové kategorie.','Po–Ne 9–19','474 650 040','QUICK SHOES'],
-  ['space','SPACE – mobilní telefony',0,'R5','elektro','Telefony, tablety, příslušenství, výkup a opravy.','Po–Ne 9–19','778 750 671','SPACE'],
-  ['lagarto','Lagarto Café',0,'B1','jidlo','Výběrová káva, sendviče, dezerty a limonády.','Po–Ne 7:30–19','774 169 629','LAGARTO'],
-  ['bluestyle','BLUE STYLE',0,'B2','sluzby','Cestovní kancelář, plánování dovolených.','Po–Ne 8–20','226 036 438','BLUE STYLE'],
-  ['bubbletea','Bubble tea',0,'K1','jidlo','Tradiční bubble tea.','Po–Ne 9–19','773 388 999','BUBBLE'],
-  ['filip','Filip radost z květin',0,'K2','darky','Řezané a hrnkové květiny a doplňky.','Po–Ne 8–19','731 435 005','KVĚTINY'],
-  ['atm0','Bankomaty Air Bank, KB a kryptomat',0,[150,90],'sluzby','U vstupu do Tesca.','','',''],
-  ['dm','dm drogerie',1,'T','kosmetika','Drogerie, kosmetika, bio produkty a fotoslužby.','Po–Ne 8–19','412 374 652','dm'],
-  ['posta','Česká pošta',1,'L1','sluzby','Pobočka Chomutov 2.','Po–Pá 8–18, So 8–12','954 243 002','POŠTA'],
-  ['kohinoor','Papírnictví KOH-I-NOOR',1,'L2','hracky','Školní, kancelářské a výtvarné potřeby.','Po–Ne 9–19','773 474 330','KOH-I-NOOR'],
-  ['horoskop','HOROSKOP',1,'L3','darky','Dárkové zboží, přírodní kosmetika a zdravá výživa.','Po–Ne 9–19','416 813 739','HOROSKOP'],
-  ['glam','360 GLAM BEAUTY & NAILS',1,'L4','kosmetika','Manikúra, pedikúra a kosmetické ošetření.','Po–Ne 8–19','774 217 925','360 GLAM'],
-  ['fann','FAnn parfumerie',1,'L5','kosmetika','Parfémy, dekorativní kosmetika a péče o pleť.','Po–Ne 9–19','705 677 771','FANN'],
-  ['orsay','ORSAY',1,'R1','moda','Dostupná dámská móda.','Po–Ne 9–19','724 012 719','ORSAY'],
-  ['exe','EXE JEANS',1,'R2','moda',"Džíny Levi's, Wrangler, Mustang a další.",'Po–Ne 9–19','724 150 694','EXE JEANS'],
-  ['takko','Takko',1,'R3','moda','Móda pro dospělé i děti.','Po–Ne 8–19','474 341 718','TAKKO'],
-  ['regatta','REGATTA',1,'R4','sport','Outdoorové oblečení a obuv pro celou rodinu.','Po–Ne 9–19','725 758 224','REGATTA'],
-  ['atm1','Bankomat ČSOB',1,[110,60],'sluzby','U vstupu na poštu.','','',''],
-  ['gastro','GASTRO zóna',2,'T','jidlo','Místo k posezení u restaurací ve 2. patře.','Po–Ne 9–19','','GASTRO ZÓNA'],
-  ['ceska','Česká kuchyně',2,'L1','jidlo','Česká jídla a denní menu, terasa.','Po–Ne 9–19','739 000 452','ČESKÁ KUCH.'],
-  ['cinske','Čínské bistro',2,'L2','jidlo','Čínská kuchyně na místě i s sebou.','Po–Ne 9–19','723 880 779','ČÍNSKÉ BISTRO'],
-  ['salade','Salade fresh & smoothie',2,'L3','jidlo','Smoothie, saláty, polévky a panini.','Po–Ne 9–19','605 308 828','SALADE'],
-  ['wc','Toalety (Euro klíč)',2,'L4','sluzby','Veřejné toalety, bezbariérové na Euro klíč.','Po–Ne 9–19','','WC'],
-  ['dracik','hračky Dráčik',2,'L5','hracky','Značkové hračky od světových výrobců.','Po–Ne 9–19','474 333 060','DRÁČIK'],
-  ['datart','DATART',2,'R1','elektro','Elektronika, spotřebiče a nářadí.','Po–Ne 9–19','577 055 773','DATART'],
-  ['sinsay','SINSAY',2,'R2','moda','Trendy móda za nízké ceny a domácnost.','Po–Ne 9–19','','SINSAY'],
-  ['pepco','Pepco',2,'R3','moda','Oblečení pro celou rodinu a domácí potřeby.','Po–Ne 9–19','228 881 508','PEPCO'],
-  ['scanquilt','SCANquilt',2,'R4','elektro','Ložní prádlo, spánkové produkty a bytové doplňky.','Po–Ne 9–19','246 058 169','SCANQUILT'],
-  ['tescoma','TESCOMA',2,'R5','elektro','Český výrobce kuchyňských potřeb.','Po–Ne 9–19','577 575 497','TESCOMA']
-].map(([id,name,floor,slot,cat,desc,hours,phone,short]) => ({id,name,floor,slot,cat,desc,hours,phone,short}));
+ ['tesco','Tesco',0,'T','potraviny','Potraviny, drogerie, průmyslové zboží a oblečení.','Po–Ne 7–20','474 336 040','TESCO','potraviny nakup jidlo pecivo maso ovoce zelenina napoje alkohol drogerie obleceni baterie krmivo'],
+ ['luxor','Knihkupectví Luxor',0,'L1','hracky','Knihy, komiksy, deskové hry a dárky. U Tesca.','Po–Ne 9–19','416 419 921','LUXOR','knihy kniha komiks deskove hry darek darky deti kalendar mapy puzzle'],
+ ['tabak','Tabák DonPealo',0,'L2','sluzby','Tabák, tisk, jízdenky, SAZKA a nápoje.','Po–Pá 7–19, So–Ne 8–19','727 953 265','TABÁK','cigarety tabak noviny casopisy jizdenky sazka loterie dobiti kredit napoje'],
+ ['tipsport','Tipsport',0,'L3','sluzby','Sázková kancelář, přenosy a losy. Prodej dárkových poukazů centra.','Po–Ne 9–19','702 012 670','TIPSPORT','sazky sazeni los losy darkovy poukaz poukazy'],
+ ['superzoo','Super zoo',0,'L4','sport','Chovatelské potřeby, krmivo a zvířata.','Po–Ne 8–19','477 754 663','SUPER ZOO','pes psi kocka krmivo granule zvirata akvarium rybicky obojek'],
+ ['vineco','Vinotéka Vineco',0,'L5','potraviny','Moravská vína lahvová i sudová, oříšky a čokolády.','Po–Ne 8–19','774 408 502','VINECO','vino vina darek alkohol cokolada orisky'],
+ ['drmax','Lékárna Dr. Max',0,'R1','kosmetika','Léky, doplňky stravy a dětská výživa.','Po–Ne 8–19','474 341 662','DR. MAX','lekarna leky vitaminy nachlazeni test teplomer naplasti detska vyziva'],
+ ['grandoptical','GrandOptical',0,'R2','kosmetika','Brýle, kontaktní čočky, měření zraku a opravy.','Po–Ne 9–19','474 331 193','OPTIKA','bryle cocky kontaktni mereni zraku slunecni oprava'],
+ ['pandora','PANDORA',0,'R3','darky','Šperky, náramky s přívěsky, prsteny a náušnice.','Po–Pá 9–19','737 325 960','PANDORA','sperky naramek prsten nausnice privesek darek'],
+ ['quickshoes','QUICK SHOES',0,'R4','obuv','Obuv pro všechny věkové kategorie.','Po–Ne 9–19','474 650 040','QUICK SHOES','boty obuv tenisky detske zimni kozacky'],
+ ['space','SPACE – mobilní telefony',0,'R5','elektro','Telefony, tablety, příslušenství, výkup a opravy.','Po–Ne 9–19','778 750 671','SPACE','telefon mobil nabijecka kabel kryt sklo oprava tablet sluchatka vykup'],
+ ['lagarto','Lagarto Café',0,'B1','jidlo','Výběrová káva, sendviče, dezerty a limonády.','Po–Ne 7:30–19','774 169 629','LAGARTO','kava kavarna dezert dort snidane sendvic limonada caj'],
+ ['bluestyle','BLUE STYLE',0,'B2','sluzby','Cestovní kancelář, plánování dovolených.','Po–Ne 8–20','226 036 438','BLUE STYLE','dovolena zajezd cestovka last minute more'],
+ ['bubbletea','Bubble tea',0,'K1','jidlo','Tradiční bubble tea.','Po–Ne 9–19','773 388 999','BUBBLE','bubble tea caj napoj'],
+ ['filip','Filip radost z květin',0,'K2','darky','Řezané a hrnkové květiny a doplňky.','Po–Ne 8–19','731 435 005','KVĚTINY','kvetiny kytice darek rostliny'],
+ ['atm0','Bankomaty Air Bank, KB a kryptomat',0,[150,88],'sluzby','U vstupu do Tesca.','','','','bankomat penize hotovost vyber'],
+ ['dm','dm drogerie',1,'T','kosmetika','Drogerie, kosmetika, bio produkty a fotoslužby.','Po–Ne 8–19','412 374 652','dm','drogerie kosmetika sampon plenky zubni pasta fotky foto tisk bio baterie baterky'],
+ ['posta','Česká pošta',1,'L1','sluzby','Pobočka Chomutov 2.','Po–Pá 8–18, So 8–12','954 243 002','POŠTA','posta balik dopis zasilka znamky slozenka'],
+ ['kohinoor','Papírnictví KOH-I-NOOR',1,'L2','hracky','Školní, kancelářské a výtvarné potřeby.','Po–Ne 9–19','773 474 330','KOH-I-NOOR','papirnictvi skola sesity pastelky kancelar vytvarne darek'],
+ ['horoskop','HOROSKOP',1,'L3','darky','Dárkové zboží, přírodní kosmetika a zdravá výživa.','Po–Ne 9–19','416 813 739','HOROSKOP','darky darek prirodni kosmetika zdrava vyziva caje'],
+ ['glam','360 GLAM BEAUTY & NAILS',1,'L4','kosmetika','Manikúra, pedikúra a kosmetické ošetření.','Po–Ne 8–19','774 217 925','360 GLAM','nehty manikura pedikura kosmetika salon'],
+ ['fann','FAnn parfumerie',1,'L5','kosmetika','Parfémy, dekorativní kosmetika a péče o pleť.','Po–Ne 9–19','705 677 771','FANN','parfem parfemy kosmetika make up plet darek'],
+ ['orsay','ORSAY',1,'R1','moda','Dostupná dámská móda.','Po–Ne 9–19','724 012 719','ORSAY','damske obleceni saty moda kalhoty halenka'],
+ ['exe','EXE JEANS',1,'R2','moda',"Džíny Levi's, Wrangler, Mustang a další.",'Po–Ne 9–19','724 150 694','EXE JEANS','dziny rifle kalhoty levis wrangler moda'],
+ ['takko','Takko',1,'R3','moda','Móda pro dospělé i děti.','Po–Ne 8–19','474 341 718','TAKKO','obleceni moda detske bunda mikina'],
+ ['regatta','REGATTA',1,'R4','sport','Outdoorové oblečení a obuv pro celou rodinu.','Po–Ne 9–19','725 758 224','REGATTA','outdoor bunda turistika sport obleceni boty'],
+ ['atm1','Bankomat ČSOB',1,[110,62],'sluzby','U vstupu na poštu.','','','','bankomat csob penize hotovost vyber'],
+ ['gastro','GASTRO zóna',2,'T','jidlo','Posezení u restaurací ve 2. patře.','Po–Ne 9–19','','GASTRO ZÓNA','jidlo obed sezeni restaurace'],
+ ['ceska','Česká kuchyně',2,'L1','jidlo','Česká jídla a denní menu, terasa.','Po–Ne 9–19','739 000 452','ČESKÁ KUCH.','obed menu ceska kuchyne restaurace jidlo terasa'],
+ ['cinske','Čínské bistro',2,'L2','jidlo','Čínská kuchyně na místě i s sebou.','Po–Ne 9–19','723 880 779','ČÍNSKÉ BISTRO','cinske jidlo obed asijske nudle ryze'],
+ ['salade','Salade fresh & smoothie',2,'L3','jidlo','Smoothie, saláty, polévky a panini.','Po–Ne 9–19','605 308 828','SALADE','salat smoothie zdrave obed polevka panini'],
+ ['wc','Toalety (Euro klíč)',2,'L4','sluzby','Veřejné toalety, bezbariérové na Euro klíč.','Po–Ne 9–19','','WC','wc toalety zachod prebalovani euro klic'],
+ ['dracik','hračky Dráčik',2,'L5','hracky','Značkové hračky od světových výrobců.','Po–Ne 9–19','474 333 060','DRÁČIK','hracky darek deti stavebnice lego panenky hry'],
+ ['datart','DATART',2,'R1','elektro','Elektronika, spotřebiče a nářadí.','Po–Ne 9–19','577 055 773','DATART','elektronika televize pracka lednice notebook telefon baterie baterky naradi'],
+ ['sinsay','SINSAY',2,'R2','moda','Trendy móda za nízké ceny a domácnost.','Po–Ne 9–19','','SINSAY','moda obleceni levne domacnost'],
+ ['pepco','Pepco',2,'R3','moda','Oblečení pro celou rodinu a domácí potřeby.','Po–Ne 9–19','228 881 508','PEPCO','obleceni deti domacnost dekorace levne'],
+ ['scanquilt','SCANquilt',2,'R4','elektro','Ložní prádlo, spánkové produkty a bytové doplňky.','Po–Ne 9–19','246 058 169','SCANQUILT','povleceni lozni pradlo polstar perina deka'],
+ ['tescoma','TESCOMA',2,'R5','elektro','Český výrobce kuchyňských potřeb.','Po–Ne 9–19','577 575 497','TESCOMA','kuchyn nadobi hrnce noze kuchynske potreby darek']
+].map(([id,name,floor,slot,cat,desc,hours,phone,short,kw]) => ({id,name,floor,slot,cat,desc,hours,phone,short,kw}));
+const byId = Object.fromEntries(P.map(p => [p.id, p]));
+const SHOPS = P.filter(p => !p.id.startsWith('atm'));
 
-/* ---------- navigační graf ---------- */
-const N = {}; const E = [];
+/* ================= NAVIGAČNÍ GRAF ================= */
+const N = {}, E = [];
 const RING = [['TL',110,90],['mT',180,90],['TR',250,90],['mR',250,150],['BR',250,205],['mB',180,205],['BL',110,205],['mL',110,150]];
-const segPts = [0,1,2].map(() => RING.map(() => []));   // body na úsecích chodby pro každé patro
-function addNode(id,x,y,f,name){ N[id] = [x,y,f,name]; }
+const segPts = [0,1,2].map(() => RING.map(() => []));
+const addNode = (id,x,y,f,name) => { N[id] = [x,y,f,name]; };
 [0,1,2].forEach(f => {
-  RING.forEach(([k,x,y]) => addNode(`${f}${k}`,x,y,f,`Chodba – ${FLOORS[f]}`));
+  RING.forEach(([k,x,y]) => addNode(`${f}${k}`,x,y,f,'Chodba'));
   addNode(`esc${f}`,180,165,f,'Eskalátory');
   ['mT','mB','mL','mR'].forEach(k => E.push([`esc${f}`,`${f}${k}`]));
 });
 addNode('vchod',180,284,0,'Hlavní vchod'); E.push(['vchod','0mB']);
-N['esc0'][3] = 'Eskalátory';
+addNode('parkoviste',180,305,0,'Parkoviště'); E.push(['vchod','parkoviste']);
 E.push(['esc0','esc1','esc'],['esc1','esc2','esc']);
 function nearestOnRing(cx,cy){
   let best = null;
   RING.forEach((a,i) => {
     const b = RING[(i+1)%RING.length], dx = b[1]-a[1], dy = b[2]-a[2];
-    let t = ((cx-a[1])*dx + (cy-a[2])*dy) / (dx*dx+dy*dy); t = Math.max(0,Math.min(1,t));
-    const x = a[1]+t*dx, y = a[2]+t*dy, dd = Math.hypot(cx-x,cy-y);
-    if (!best || dd < best.dd) best = {i,t,x,y,dd};
+    let tt = ((cx-a[1])*dx + (cy-a[2])*dy) / (dx*dx+dy*dy); tt = Math.max(0,Math.min(1,tt));
+    const x = a[1]+tt*dx, y = a[2]+tt*dy, dd = Math.hypot(cx-x,cy-y);
+    if (!best || dd < best.dd) best = {i,t:tt,x,y,dd};
   });
   return best;
 }
 P.forEach(p => {
   let cx, cy;
   if (Array.isArray(p.slot)) [cx,cy] = p.slot; else { const [x,y,w,h] = SLOT[p.slot]; cx = x+w/2; cy = y+h/2; }
-  const r = nearestOnRing(cx,cy);
-  const door = `d_${p.id}`;
-  addNode(door, r.x, r.y, p.floor, `Chodba u: ${p.name}`);
+  p.cx = cx; p.cy = cy;
+  const r = nearestOnRing(cx,cy), door = `d_${p.id}`;
+  addNode(door, r.x, r.y, p.floor, p.name);
   segPts[p.floor][r.i].push([r.t, door]);
-  if (r.dd < 2){ N[door][3] = p.name; p.node = door; }
-  else { addNode(p.id, cx, cy, p.floor, p.name); E.push([door, p.id]); p.node = p.id; }
+  if (r.dd < 2) p.node = door; else { addNode(p.id, cx, cy, p.floor, p.name); E.push([door, p.id]); p.node = p.id; }
 });
 [0,1,2].forEach(f => RING.forEach((a,i) => {
   const b = RING[(i+1)%RING.length];
   const pts = [[0,`${f}${a[0]}`], ...segPts[f][i].sort((x,y) => x[0]-y[0]), [1,`${f}${b[0]}`]];
   for (let j=1;j<pts.length;j++) E.push([pts[j-1][1], pts[j][1]]);
 }));
-const byId = Object.fromEntries(P.map(p => [p.id,p]));
-const TAGS = [['vchod','Hlavní vchod'],['d_atm0','Vstup do Tesca'],['esc0','Eskalátory přízemí'],['esc1','Eskalátory 1. patro'],['esc2','Eskalátory 2. patro'],['posta','Pošta']];
+const G = {}; Object.keys(N).forEach(k => G[k] = []);
+const dxy = (a,b) => Math.hypot(N[a][0]-N[b][0], N[a][1]-N[b][1]);
+E.forEach(([a,b,ty]) => { const w = ty === 'esc' ? 45 : dxy(a,b); G[a].push([b,w,ty]); G[b].push([a,w,ty]); });
 
-let here = 'vchod', cat = 'all', target = null;
-const $ = s => document.querySelector(s);
-const d = (a,b) => Math.hypot(N[a][0]-N[b][0], N[a][1]-N[b][1]);
-const hereLabel = () => (TAGS.find(t => t[0]===here) || [0, N[here][3]])[1];
+const SPECIAL = { parkoviste:{id:'parkoviste',name:'Parkoviště',node:'parkoviste',floor:0,cat:'sluzby',desc:'Venkovní a podzemní parkoviště, 120 míst, nonstop.',hours:'',phone:''} };
+const place = id => byId[id] || SPECIAL[id];
 
-function graph(){
-  const g = {}; Object.keys(N).forEach(k => g[k] = []);
-  E.forEach(([a,b,t]) => { const w = t === 'esc' ? 45 : d(a,b); g[a].push([b,w,t]); g[b].push([a,w,t]); });
-  return g;
+const TAGS = [
+ {id:'vchod',node:'vchod',name:'Hlavní vchod',stamp:true},
+ {id:'parkovani',node:'parkoviste',name:'Parkovací automat',parking:true},
+ {id:'atrium',node:'esc0',name:'Atrium – přízemí',stamp:true},
+ {id:'tesco',node:byId.tesco.node,name:'Vstup do Tesca'},
+ {id:'lagarto',node:byId.lagarto.node,name:'Lagarto Café',stamp:true},
+ {id:'posta',node:byId.posta.node,name:'U pošty · 1. patro',stamp:true},
+ {id:'patro1',node:'esc1',name:'Eskalátory · 1. patro'},
+ {id:'gastro',node:byId.gastro.node,name:'Gastro zóna · 2. patro',stamp:true},
+ {id:'dracik',node:byId.dracik.node,name:'U Dráčika · 2. patro',stamp:true}
+];
+
+/* ================= UKÁZKOVÉ AKCE ================= */
+const COUPONS = [
+ {id:'c1',shop:'lagarto',big:'−20 %',title:'Káva a dezert',days:6},
+ {id:'c2',shop:'bubbletea',big:'2 + 1',title:'Třetí bubble tea zdarma',days:3},
+ {id:'c3',shop:'ceska',big:'Zdarma',title:'Polévka k polednímu menu',days:4},
+ {id:'c4',shop:'dracik',big:'−15 %',title:'Stavebnice a společenské hry',days:12},
+ {id:'c5',shop:'superzoo',big:'−10 %',title:'Krmivo pro psy a kočky',days:8},
+ {id:'c6',shop:'grandoptical',big:'Zdarma',title:'Měření zraku',days:20}
+];
+const DOW = {cs:['Ne','Po','Út','St','Čt','Pá','So'],de:['So','Mo','Di','Mi','Do','Fr','Sa'],uk:['Нд','Пн','Вт','Ср','Чт','Пт','Сб']};
+const MON = {cs:['led','úno','bře','dub','kvě','čvn','čvc','srp','zář','říj','lis','pro'],de:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],uk:['січ','лют','бер','кві','тра','чер','лип','сер','вер','жов','лис','гру']};
+function nextDow(dow){ const d = new Date(); d.setHours(0,0,0,0); const diff = ((dow - d.getDay() + 7) % 7) || 7; d.setDate(d.getDate()+diff); return d; }
+function events(){
+  const ev = [
+    {d:nextDow(5),title:'Ochutnávka moravských vín',sub:'16–19 h · Vinotéka Vineco, přízemí',shop:'vineco'},
+    {d:nextDow(6),title:'Adventní tvoření pro děti',sub:'10–14 h · Gastro zóna, 2. patro',shop:'gastro'}
+  ];
+  const now = new Date(), mik = new Date(now.getFullYear(), 11, 5);
+  if (mik > now) ev.push({d:mik,title:'Mikulášská nadílka',sub:'14–17 h · atrium, přízemí',shop:null});
+  return ev.sort((a,b) => a.d - b.d);
 }
-const G = graph();
-function route(s, t){
+const validDate = days => { const d = new Date(); d.setDate(d.getDate()+days); return `${d.getDate()}. ${d.getMonth()+1}.`; };
+
+/* ================= STAV ================= */
+let tab = 'home', prevTab = 'home', target = null, mapFloor = 0, pane = 'plan', shopCat = 'all', q = '', range = '30', reportType = 'mess', parkType = 'out';
+let here = 'vchod';
+let parking = store.get('parking', null);
+const logEv = (type, data={}) => { const L = store.get('log', []); L.push({ts:Date.now(), type, ...data}); store.set('log', L.slice(-600)); };
+const unusedCoupons = () => { const u = store.get('used', {}); return COUPONS.filter(c => !u[c.id]); };
+const hereLabel = () => (TAGS.find(x => x.node === here) || {name:N[here][3]}).name;
+
+/* ================= TRASY ================= */
+let DJ = null, DJfrom = null;
+function dj(){
+  if (DJfrom === here) return DJ;
   const dist = {}, prev = {}, todo = new Set(Object.keys(N));
-  Object.keys(N).forEach(k => dist[k] = Infinity); dist[s] = 0;
+  todo.forEach(k => dist[k] = Infinity); dist[here] = 0;
   while (todo.size){
-    let u = null; todo.forEach(k => { if (u === null || dist[k] < dist[u]) u = k; });
-    if (dist[u] === Infinity || u === t) break;
-    todo.delete(u);
-    G[u].forEach(([v,w,ty]) => { if (dist[u]+w < dist[v]) { dist[v] = dist[u]+w; prev[v] = [u,ty]; } });
+    let u = null, best = Infinity; todo.forEach(k => { if (dist[k] < best){ best = dist[k]; u = k; } });
+    if (u === null) break; todo.delete(u);
+    G[u].forEach(([v,w,ty]) => { const nd = dist[u]+w; if (nd < dist[v]){ dist[v] = nd; prev[v] = [u,ty]; } });
   }
-  const path = [], types = []; let c = t;
-  while (c && c !== s){ path.unshift(c); types.unshift(prev[c] ? prev[c][1] : null); c = prev[c] && prev[c][0]; }
-  path.unshift(s);
-  return {path, types};
+  DJ = {dist, prev}; DJfrom = here; return DJ;
 }
-// pokyny: chodbové úseky slučujeme, jmenujeme jen orientační body (obchody, eskalátory)
-function steps(r){
-  const out = []; let meters = 0, acc = 0;
-  for (let i = 1; i < r.path.length; i++){
+function route(t){
+  const {prev} = dj(), path = [], types = []; let c = t;
+  while (c && c !== here){ path.unshift(c); types.unshift(prev[c] ? prev[c][1] : null); c = prev[c] && prev[c][0]; }
+  path.unshift(here); return {path, types};
+}
+function walkMeters(r){ let m = 0; for (let i=1;i<r.path.length;i++) if (r.types[i-1] !== 'esc') m += dxy(r.path[i-1], r.path[i]); return Math.max(r.path.length > 1 ? 2 : 0, Math.round(m*M_PER_UNIT)); }
+function minutes(r){ return Math.max(1, Math.round(walkMeters(r)/1.2/60 + r.types.filter(x => x === 'esc').length*0.4)); }
+function buildSteps(r, tp){
+  const out = []; let acc = 0;
+  const lastEsc = r.types.lastIndexOf('esc'), tgt = r.path[r.path.length-1];
+  for (let i=1;i<r.path.length;i++){
     const a = r.path[i-1], b = r.path[i], ty = r.types[i-1];
     if (ty === 'esc'){
       let j = i; while (j+1 < r.path.length && r.types[j] === 'esc') j++;
       const to = N[r.path[j]][2], up = to > N[a][2];
-      if (acc){ out.push(['Dojděte k eskalátorům v atriu', acc+' m']); acc = 0; }
-      out.push([`${up?'Vyjeďte':'Sjeďte'} eskalátorem do patra: ${FLOORS[to]}`, '']); i = j; continue;
+      if (acc > 0){ out.push({ic:'walk', tx:t('walkToEsc'), m:acc, f:N[a][2]}); acc = 0; }
+      out.push({ic:up?'up':'down', tx:t(up?'escUp':'escDown', t('floor'+to)), f:N[a][2]});
+      i = j; continue;
     }
-    const m = d(a,b)*M_PER_UNIT; meters += m; acc += m;
-    const last = i === r.path.length-1;
-    if (last){ out.push([`Dojděte k cíli`, Math.max(2,Math.round(acc))+' m']); acc = 0; }
+    acc += dxy(a,b)*M_PER_UNIT;
   }
-  // doplň orientační body podél cesty
-  const lastEsc = r.types.lastIndexOf('esc'), tgt = r.path[r.path.length-1];
-  const passed = r.path.slice(lastEsc+2, -1).filter(k => k.startsWith('d_') && byId[k.slice(2)] && byId[k.slice(2)].node !== tgt && k !== tgt).map(k => byId[k.slice(2)].name);
-  if (passed.length && out.length) out[out.length-1][0] = `Pokračujte kolem: ${passed.slice(-2).join(', ')}`;
-  out.forEach(o => { if (/^\d/.test(o[1])) o[1] = Math.max(2, Math.round(parseFloat(o[1])))+' m'; });
-  return {list:out, meters: Math.max(2, Math.round(meters))};
+  if (acc > 0){
+    const passed = r.path.slice(lastEsc+2, -1).filter(k => k.startsWith('d_') && byId[k.slice(2)] && byId[k.slice(2)].node !== tgt && k !== tgt && !k.startsWith('d_atm')).map(k => byId[k.slice(2)].name);
+    out.push({ic:'walk', tx: passed.length ? t('walkPast', passed.slice(-2).join(', ')) : t('walkTo'), m:acc, f:N[tgt][2]});
+  }
+  out.push({ic:'flag', tx:t('arrive', tp.name), f:N[tgt][2], end:true});
+  out.forEach(s => { if (s.m) s.m = Math.max(2, Math.round(s.m)); });
+  return out;
 }
 
-/* ---------- otevírací doba ---------- */
-const DAY = {Po:0,Út:1,St:2,Čt:3,Pá:4,So:5,Ne:6};
+/* ================= OTEVÍRACÍ DOBA ================= */
+const DAYI = {'Po':0,'Út':1,'St':2,'Čt':3,'Pá':4,'So':5,'Ne':6};
 function isOpen(hours, now = new Date()){
   if (!hours) return null;
   const wd = (now.getDay()+6)%7, h = now.getHours()+now.getMinutes()/60;
+  const tm = s => { const [hh,mm] = s.split(':'); return +hh + (mm ? +mm/60 : 0); };
   return hours.split(', ').some(part => {
     const m = part.match(/^(\S+)\s+([\d:]+)–([\d:]+)$/); if (!m) return false;
-    const [a,b] = m[1].split('–'), from = DAY[a], to = b ? DAY[b] : DAY[a];
-    const t = s => { const [hh,mm] = s.split(':'); return +hh + (mm?+mm/60:0); };
-    return wd >= from && wd <= to && h >= t(m[2]) && h < t(m[3]);
+    const [a,b] = m[1].split('–'), from = DAYI[a], to = b ? DAYI[b] : DAYI[a];
+    return wd >= from && wd <= to && h >= tm(m[2]) && h < tm(m[3]);
   });
 }
+function fmtHours(h){
+  if (!h || lang === 'cs') return h;
+  const map = {de:{Po:'Mo',Út:'Di',St:'Mi',Čt:'Do',Pá:'Fr',So:'Sa',Ne:'So'},uk:{Po:'Пн',Út:'Вт',St:'Ср',Čt:'Чт',Pá:'Пт',So:'Сб',Ne:'Нд'}}[lang];
+  return h.replace(/Po|Út|St|Čt|Pá|So|Ne/g, d => map[d]);
+}
+function centerStatus(){
+  const h = new Date().getHours() + new Date().getMinutes()/60;
+  if (h >= 9 && h < 19) return {cls:'on', text:t('openNow')};
+  if (h >= 7 && h < 20) return {cls:'part', text:t('partOpen')};
+  return {cls:'off', text:t('closedNow')};
+}
 
-/* ---------- plánek ---------- */
-function planSVG(floor, r){
-  let s = `<svg viewBox="0 0 360 300" role="img" aria-label="Plánek – ${FLOORS[floor]}">`;
-  s += `<rect class="atrium" x="122" y="100" width="116" height="94" rx="8"/><text class="alb" x="180" y="186">ATRIUM · ESKALÁTORY</text>`;
-  s += `<rect class="room" x="166" y="150" width="28" height="30" rx="3"/><text class="lbl" x="180" y="168">⇅</text>`;
-  P.filter(p => p.floor === floor && !Array.isArray(p.slot)).forEach(p => {
-    const [x,y,w,h] = SLOT[p.slot];
-    s += `<rect class="room${p.id===target?' hi':''}" x="${x}" y="${y}" width="${w}" height="${h}" rx="3"/>`;
-    s += `<text class="lbl" x="${x+w/2}" y="${y+h/2+3}">${p.short}</text>`;
+/* ================= PARKOVÁNÍ ================= */
+const isWeekend = d => [0,6].includes(d.getDay());
+function parkPrice(m){ if (m <= 60) return 0; if (m <= 120) return 10; return 10 + 30*Math.ceil((m-120)/60); }
+function parkState(){
+  if (!parking) return null;
+  const now = new Date(), m = (now - parking.start)/60000, wk = isWeekend(now);
+  const price = wk ? 0 : parkPrice(m);
+  const b = m <= 60 ? 60 : m <= 120 ? 120 : 120 + 60*Math.ceil((m-120)/60);
+  return {m, wk, price, freeLeft:Math.max(0, 60-m), nextIn:Math.max(1, Math.ceil(b-m)), nextPrice:parkPrice(b+0.01)};
+}
+const mmss = min => { const s = Math.max(0, Math.round(min*60)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+const hmm = min => { const s = Math.floor(min); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+
+/* ================= HLEDÁNÍ ================= */
+const STOP = new Set(['pro','na','a','v','do','k','s','se','z','u','the','fur','und','для','i','mi','koupit','kde','chci','hledam']);
+function search(query){
+  const toks = norm(query).split(/[^a-z0-9а-яіїєґ]+/i).filter(x => x.length >= 2 && !STOP.has(x));
+  if (!toks.length) return null;
+  return SHOPS.map(p => {
+    const nm = norm(p.name), hay = norm(p.kw + ' ' + p.desc + ' ' + catName(p.cat));
+    let sc = 0;
+    toks.forEach(tk => { const st = tk.length > 5 ? tk.slice(0, tk.length-2) : tk.length > 4 ? tk.slice(0, tk.length-1) : tk; if (nm.includes(st)) sc += 5; else if (hay.split(' ').some(w => w.startsWith(st))) sc += 2; else if (hay.includes(st)) sc += 1; });
+    return {p, sc};
+  }).filter(x => x.sc > 0).sort((a,b) => b.sc - a.sc).map(x => x.p);
+}
+
+/* ================= HORNÍ LIŠTA A ZÁLOŽKY ================= */
+function renderTop(){
+  const st = centerStatus(), lg = LANGS.find(l => l[0] === lang);
+  $('#top').innerHTML = `
+    <div class="bar">
+      <button class="logo" data-act="tab" data-arg="home" aria-label="Chomutovka">
+        <img src="https://chomutovka.cz/img/logo.svg?ts=1698921604" alt="Chomutovka" onerror="const b=this.parentNode;this.remove();b.querySelector('.word').hidden=false">
+        <span class="word" hidden>Chomutovka</span>
+      </button>
+      <div class="bar-r">
+        <button class="ibtn" data-act="langsheet" aria-label="${t('menuLang')}">${ic('globe')}${lg[2]}</button>
+        <button class="ibtn" data-act="menu" aria-label="Menu">${ic('dots')}</button>
+      </div>
+    </div>
+    <div class="sub">
+      <button class="here" data-act="nfc"><span class="pulse"></span><span class="lbl">${t('youAreHere')}:</span><b>${esc(hereLabel())}</b>${ic('chev')}</button>
+      <span class="opill ${st.cls}">${st.text}</span>
+    </div>`;
+  document.documentElement.style.setProperty('--top-h', $('#top').offsetHeight + 'px');
+}
+const TABS = [['home','home','tabHome'],['shops','bag','tabShops'],['map','map','tabMap'],['park','car','tabPark'],['deals','tag','tabDeals']];
+function renderTabs(){
+  const nc = unusedCoupons().length;
+  $('#tabs').innerHTML = TABS.map(([id,icn,k]) => {
+    let badge = '';
+    if (id === 'deals' && nc) badge = `<span class="badge">${nc}</span>`;
+    if (id === 'park' && parking) badge = `<span class="badge dot"></span>`;
+    return `<button class="tab" data-act="tab" data-arg="${id}" ${tab===id?'aria-current="page"':''}><span class="ico">${ic(icn)}</span>${t(k)}${badge}</button>`;
+  }).join('');
+}
+function goTab(id, opts={}){
+  if (id !== 'mgmt') prevTab = id;
+  tab = id;
+  document.querySelectorAll('.view').forEach(v => v.hidden = v.id !== 'v-'+id);
+  renderTabs();
+  ({home:renderHome, shops:renderShops, map:() => renderMap(opts.fit), park:renderPark, deals:renderDeals, mgmt:renderMgmt})[id]();
+  if (!opts.keepScroll) window.scrollTo(0, 0);
+}
+
+/* ================= DOMŮ ================= */
+function renderHome(){
+  const hr = new Date().getHours(), gi = hr < 10 ? 0 : hr < 12 ? 1 : hr < 18 ? 2 : 3;
+  const stamps = store.get('stamps', []), nc = unusedCoupons(), ps = parkState();
+  // chytrá karta podle situace
+  let smart;
+  if (ps && !ps.wk && ps.freeLeft > 0 && ps.freeLeft <= 15) smart = {cls:'warn', ic:'clock', b:t('parkWarn', Math.ceil(ps.freeLeft)), s:t('parkWarnSub'), act:'tab', arg:'park'};
+  else if (hr >= 11 && hr < 14) smart = {ic:'food', b:t('lunch'), s:t('lunchSub'), act:'cat', arg:'jidlo'};
+  else if (stamps.length === 0) smart = {ic:'star', b:t('huntIntro'), s:t('huntIntroSub'), act:'tab', arg:'deals'};
+  else { const c = nc[0] || COUPONS[0]; smart = {ic:'gift', b:t('dealPick', byId[c.shop].name), s:`${c.big} · ${c.title}`, act:'coupon', arg:c.id}; }
+  const parkSub = ps ? (ps.wk ? t('qParkWeekend') : ps.freeLeft > 0 ? t('qParkFree', Math.ceil(ps.freeLeft)) : t('qParkPaid', ps.price)) : t('qParkIdle');
+  $('#v-home').innerHTML = `
+    <div class="hero">
+      <span class="greet">${t('greet')[gi]} · ${esc(hereLabel())}</span>
+      <h1>${t('whatLooking')}</h1>
+      <button class="searchbtn" data-act="gosearch">${ic('search')}<span>${t('searchPh')}</span></button>
+      <div class="chips">${['Káva','Lékárna','Dárek pro dítě','Pošta','Boty','Baterky'].map(s => `<button class="chip" data-act="quick" data-arg="${s}">${s}</button>`).join('')}</div>
+    </div>
+    <div><div class="eyebrow" style="margin-bottom:8px">${t('forYouNow')}</div>
+      <button class="smart ${smart.cls||''}" data-act="${smart.act}" data-arg="${smart.arg}"><span class="si">${ic(smart.ic)}</span><span><b>${esc(smart.b)}</b><span>${esc(smart.s)}</span></span>${ic('chev')}</button></div>
+    <div class="tiles">
+      <button class="tile ${ps?'live':''}" data-act="tab" data-arg="park"><span class="ti">${ic('car')}</span><b>${t('qPark')}</b><span id="tilePark">${parkSub}</span></button>
+      <button class="tile" data-act="tab" data-arg="deals"><span class="ti">${ic('tag')}</span><b>${t('qDeals')}</b><span>${t('qDealsSub', nc.length)}</span></button>
+      <button class="tile" data-act="tab" data-arg="deals"><span class="ti">${ic('star')}</span><b>${t('qHunt')}</b><span>${t('qHuntSub', stamps.length)}</span><span class="meter"><i style="width:${stamps.length/6*100}%"></i></span></button>
+      <button class="tile" data-act="tab" data-arg="map"><span class="ti">${ic('map')}</span><b>${t('qMap')}</b><span>${t('qMapSub')}</span></button>
+    </div>
+    <div class="sec-h"><h2>${t('dealsToday')}</h2><button class="link" data-act="tab" data-arg="deals">${t('seeAll')}</button></div>
+    <div class="hscroll">${nc.slice(0,4).map(c => { const s = byId[c.shop]; return `<button class="mini-cpn c-${s.cat}" data-act="coupon" data-arg="${c.id}"><span class="off">${c.big}</span><span class="tx"><b>${esc(c.title)}</b><span>${esc(s.name)} · ${t('floor'+s.floor)}</span><span>${t('validTo', validDate(c.days))}</span></span></button>`; }).join('') || `<div class="hint">${ic('check')} ${t('used')}</div>`}</div>
+    <div class="info">
+      <button data-act="wifi">${ic('wifi')}<span><b>${t('wifi')}</b><span>${t('wifiSub')}</span></span></button>
+      <button data-act="nav" data-arg="wc">${ic('wc')}<span><b>${t('toilets')}</b><span>${t('toiletsSub')}</span></span></button>
+      <button data-act="atm">${ic('atm')}<span><b>${t('atm')}</b><span>${t('atmSub')}</span></span></button>
+      <div>${ic('bus')}<span><b>${t('transit')}</b><span>${t('transitSub')}</span></span></div>
+    </div>
+    <a class="rate" href="${GOOGLE_CENTER}" target="_blank" rel="noopener"><span class="stars">${ic('star')+ic('star')+ic('star')+ic('star')+ic('star')}</span><span><b>${t('rateUs')}</b><br><span class="muted" style="font-size:13px">${t('rateUsSub')}</span></span></a>
+    <p class="foot">Farského 4732, Chomutov · návrh View Czech · <span class="tag-demo">${t('demo')}</span></p>`;
+}
+
+/* ================= OBCHODY ================= */
+let searchTimer = null, lastLogged = '';
+function buildShopsSkeleton(){
+  $('#v-shops').innerHTML = `
+    <div class="search-wrap">
+      <div class="sfield">${ic('search')}<input id="q" class="input" type="search" placeholder="${t('searchPh')}" autocomplete="off" value="${esc(q)}"><button class="clr" data-act="clearq" aria-label="${t('close')}" ${q?'':'hidden'}>${ic('close')}</button></div>
+      <div class="chips" id="shopChips"></div>
+    </div>
+    <div id="shopList" style="display:flex;flex-direction:column;gap:10px"></div>`;
+  $('#q').addEventListener('input', e => {
+    q = e.target.value; $('.clr').hidden = !q; renderShopList();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { const v = q.trim(); if (v.length >= 3 && v !== lastLogged){ lastLogged = v; const r = search(v); logEv('search', {q:v, found:!!(r && r.length)}); } }, 1300);
   });
-  s += `<rect class="wall" x="20" y="18" width="320" height="266" rx="4"/>`;
-  if (floor === 0) s += `<line class="door" x1="168" y1="284" x2="192" y2="284"/><text class="lbl" x="180" y="278">VCHOD</text>`;
-  const segs = []; let cur = [];
-  r.path.forEach(k => { if (N[k][2] === floor) cur.push(k); else { if (cur.length) segs.push(cur); cur = []; } });
-  if (cur.length) segs.push(cur);
-  segs.filter(sg => sg.length > 1).forEach(sg => {
-    let len = 0; for (let i=1;i<sg.length;i++) len += d(sg[i-1],sg[i]);
-    s += `<polyline class="route" style="--len:${Math.ceil(len)}" points="${sg.map(k => N[k][0]+','+N[k][1]).join(' ')}"/>`;
+}
+function renderShops(){ if (!$('#q')) buildShopsSkeleton(); renderShopChips(); renderShopList(); }
+function renderShopChips(){
+  $('#shopChips').innerHTML = CATS.map(([k]) => `<button class="chip" aria-pressed="${k===shopCat}" data-act="cat" data-arg="${k}">${k==='all'?'':`<span class="sw c-${k}" style="background:var(--ci)"></span>`}${esc(catName(k))}</button>`).join('');
+}
+function shopRow(p){
+  const r = route(p.node), o = isOpen(p.hours);
+  const dist = p.node === here ? t('here') : `${walkMeters(r)} m`;
+  return `<button class="item" data-act="shop" data-arg="${p.id}"><span class="cat-badge c-${p.cat}">${esc(initials(p.name))}</span>
+    <span style="min-width:0"><span class="nm">${esc(p.name)}</span><span class="ds">${esc(p.desc)}</span></span>
+    <span class="rt"><span class="ln"><span class="fl">${t('fs'+p.floor)}</span></span><span>${dist}</span>${o===null?'':`<span class="st ${o?'on':'off'}">${o?t('open'):t('closed')}</span>`}</span></button>`;
+}
+const initials = n => { const w = n.replace(/[^\p{L}\p{N} ]/gu,' ').trim().split(/\s+/); return (w.length > 1 && w[0].length < 4 && /\d/.test(w[0]) ? w[0] : (w[0][0] + (w[1] ? w[1][0] : w[0][1] || ''))).toUpperCase().slice(0,3); };
+function renderShopList(){
+  const el = $('#shopList'); if (!el) return;
+  const res = q.trim() ? search(q) : null;
+  let items = res || SHOPS.slice();
+  if (shopCat !== 'all') items = items.filter(p => p.cat === shopCat);
+  if (!res) { const {dist} = dj(); items.sort((a,b) => dist[a.node] - dist[b.node]); }
+  if (res && !items.length){
+    el.innerHTML = `<div class="card empty"><b>${t('noResults')}</b><span class="muted">${t('noResultsSub')}</span><div class="row">${['Káva','Dárek','Oběd'].map(s => `<button class="chip" data-act="quick" data-arg="${s}">${s}</button>`).join('')}</div></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="res-h">${res ? t('found', items.length) : t('nearest')}</div><div class="list">${items.map(shopRow).join('')}</div>`;
+}
+
+function openShop(id){
+  const p = place(id); if (!p) return;
+  const o = isOpen(p.hours), r = route(p.node), atHere = p.node === here;
+  const cp = COUPONS.find(c => c.shop === id), used = store.get('used', {});
+  const gUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' Chomutovka Chomutov')}`;
+  openSheet(`
+    <div class="sh-head"><span class="cat-badge c-${p.cat}">${esc(initials(p.name))}</span><div style="min-width:0"><h2>${esc(p.name)}</h2><div class="meta">${esc(catName(p.cat))} · ${t('floor'+p.floor)}</div></div><button class="xbtn" data-act="close" aria-label="${t('close')}">${ic('close')}</button></div>
+    ${o===null?'':`<div><span class="st ${o?'on':'off'}">${o?t('open'):t('closed')}</span> <span class="muted" style="font-size:13px">· ${esc(fmtHours(p.hours))}</span></div>`}
+    <p style="margin:0">${esc(p.desc)}</p>
+    <div class="hint" style="border-style:solid">${ic('walk')} ${atHere ? t('here') : t('walkAway', walkMeters(r), minutes(r))}</div>
+    ${cp ? `<div class="cpn c-${p.cat} ${used[cp.id]?'used':''}"><div class="off">${cp.big}</div><div class="tx"><b>${esc(cp.title)}</b><span>${t('validTo', validDate(cp.days))}</span><button class="btn accent" data-act="coupon" data-arg="${cp.id}" ${used[cp.id]?'disabled':''}>${used[cp.id]?t('used'):t('redeem')}</button></div></div>` : ''}
+    ${p.hours || p.phone ? `<div class="kv">${p.hours?`<div><span>${t('hours')}</span><b>${esc(fmtHours(p.hours))}</b></div>`:''}${p.phone?`<div><span>${t('phone')}</span><b>${esc(p.phone)}</b></div>`:''}</div>` : ''}
+    <div class="row">
+      <button class="btn primary big" data-act="nav" data-arg="${id}">${ic('pin')}${t('navigate')}</button>
+      <button class="btn soft big" data-act="nav3d" data-arg="${id}">${ic('cube')}${t('in3d')}</button>
+    </div>
+    ${SPECIAL[id] ? '' : `<a class="btn ghost" href="${gUrl}" target="_blank" rel="noopener">${ic('star')}${t('reviews')}</a>`}`);
+  logEv('view', {shop:id});
+}
+
+/* ================= PLÁNEK ================= */
+const BASE = {x:0, y:0, w:360, h:320};
+let vb = {...BASE};
+function buildMapSkeleton(){
+  $('#v-map').innerHTML = `
+    <div class="seg" id="paneSeg"></div>
+    <div id="routeCard"></div>
+    <div id="planPane" style="display:flex;flex-direction:column;gap:10px">
+      <div class="planbox" id="planBox">
+        <div id="planSvg"></div>
+        <div class="floors" id="floorBtns"></div>
+        <span class="floorname" id="floorName"></span>
+        <div class="zoom"><button data-act="zin" aria-label="Přiblížit">${ic('plus')}</button><button data-act="zout" aria-label="Oddálit">${ic('minus')}</button><button data-act="zfit" aria-label="Celé patro">${ic('fit')}</button></div>
+        <button class="nextfloor" id="nextFloor" hidden></button>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div id="tourPane" hidden><div class="tourbox" id="tourBox"></div><div class="tstat" id="tourStatus"></div></div>
+    <div id="stepsBox"></div>`;
+  bindPlan();
+}
+function planSVG(f, r){
+  let s = `<svg viewBox="${vb.x} ${vb.y} ${vb.w} ${vb.h}" role="img" aria-label="${t('floor'+f)}">`;
+  s += `<rect class="bld" x="20" y="18" width="320" height="266" rx="12"/>`;
+  s += `<rect class="atr" x="122" y="100" width="116" height="94" rx="10"/><text class="atl" x="180" y="139">ATRIUM</text>`;
+  s += `<g class="esc"><rect x="163" y="146" width="15" height="36" rx="3"/><rect x="182" y="146" width="15" height="36" rx="3"/><path d="M170.5 174v-20M167 158l3.5-4 3.5 4M189.5 154v20M186 170l3.5 4 3.5-4"/></g>`;
+  const pathSet = new Set(r ? r.path : []);
+  P.filter(p => p.floor === f && !Array.isArray(p.slot)).forEach(p => {
+    const [x,y,w,h] = SLOT[p.slot], hi = target === p.id;
+    const dim = shopCat !== 'all' && tab === 'map' && p.cat !== shopCat && !hi;
+    s += `<g class="room c-${p.cat}${hi?' hi':''}${dim?' dim':''}" data-p="${p.id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5"/><text x="${x+w/2}" y="${y+h/2+2.4}">${esc(p.short)}</text></g>`;
   });
-  if (N[here][2] === floor) s += `<circle class="mering" cx="${N[here][0]}" cy="${N[here][1]}" r="12"/><circle class="me" cx="${N[here][0]}" cy="${N[here][1]}" r="6.5"/>`;
-  if (target){ const tn = byId[target].node; if (N[tn][2] === floor){ const [x,y] = N[tn]; s += `<path class="pin" d="M${x} ${y} l-7 -12 a8 8 0 1 1 14 0 z"/>`; } }
+  P.filter(p => p.floor === f && Array.isArray(p.slot)).forEach(p => { s += `<g class="poi" data-p="${p.id}"><circle cx="${p.cx}" cy="${p.cy}" r="8"/><text x="${p.cx}" y="${p.cy+2}">ATM</text></g>`; });
+  if (f === 0){
+    s += `<line class="door" x1="166" y1="284" x2="194" y2="284"/><text class="dlbl" x="180" y="278">VCHOD</text>`;
+    s += `<g class="park" data-p="parkoviste"><rect x="110" y="294" width="140" height="22" rx="7"/><text x="180" y="308">P · PARKOVIŠTĚ</text></g>`;
+  }
+  // trasa končí u vchodu do obchodu, aby název jednotky zůstal čitelný
+  const tpn = target ? place(target).node : null;
+  const endAtDoor = r && tpn && byId[tpn] && N['d_'+tpn] && r.path[r.path.length-1] === tpn;
+  const drawPath = r ? (endAtDoor ? r.path.slice(0,-1) : r.path) : [];
+  if (r){
+    const segs = []; let cur = [];
+    drawPath.forEach(k => { if (N[k][2] === f) cur.push(k); else { if (cur.length) segs.push(cur); cur = []; } });
+    if (cur.length) segs.push(cur);
+    segs.filter(g => g.length > 1).forEach(g => {
+      const pts = g.map(k => N[k][0]+','+N[k][1]).join(' ');
+      s += `<polyline class="rt-halo" points="${pts}"/><polyline class="rt" points="${pts}"/><polyline class="rt-dots" points="${pts}"/>`;
+    });
+    // odznak u eskalátoru: kam trasa pokračuje
+    for (let i=0;i<r.path.length-1;i++){
+      if (N[r.path[i]][2] === f && r.types[i] === 'esc'){
+        let j = i; while (j < r.types.length && r.types[j] === 'esc') j++;
+        const to = N[r.path[j]][2], lbl = (to > f ? '↑ ' : '↓ ') + t('floor'+to);
+        const w = lbl.length*4 + 12;
+        s += `<g class="escb"><rect x="${180-w/2}" y="186" width="${w}" height="14" rx="7"/><text x="180" y="195.5">${esc(lbl)}</text></g>`;
+        break;
+      }
+    }
+  }
+  if (target){
+    const tp = place(target), [x,y,tf] = N[endAtDoor ? 'd_'+tp.node : tp.node];
+    if (tf === f) s += `<g class="pin" transform="translate(${x} ${y})"><path d="M0 0c-5-6-9-9.5-9-14.5a9 9 0 0 1 18 0c0 5-4 8.5-9 14.5z"/><circle cy="-14.5" r="3.6"/></g>`;
+  }
+  if (N[here][2] === f){ const [x,y] = N[here]; s += `<g transform="translate(${x} ${y})"><circle class="me-pulse" r="11"/><circle class="me-dot" r="6.5"/></g>`; }
   return s + '</svg>';
 }
-
-/* ---------- vykreslení ---------- */
-/* ---------- Matterport SDK ---------- */
-let sdk = null, curSweep = null, sweepGraph = null, guiding = false;
-let map = Object.assign({}, SWEEPS);
-try { Object.assign(map, JSON.parse(localStorage.getItem('chomutovka-sweeps') || '{}')); } catch(e) {}
-const saveMap = () => { try { localStorage.setItem('chomutovka-sweeps', JSON.stringify(map)); } catch(e) {} };
-const sweepOf = node => map[node] || (node.startsWith('d_') ? map[node.slice(2)] : map['d_'+node]);
-function setTourStatus(t){ const el = $('#tourStatus'); if (el) el.textContent = t; }
-function connectSdk(){
-  const s = document.createElement('script');
-  s.src = 'https://static.matterport.com/showcase-sdk/latest.js';
-  s.onload = async () => {
-    try {
-      sdk = await window.MP_SDK.connect($('#mp'), SDK_KEY, '');
-      setTourStatus('3D navigace připojena');
-      sdk.Sweep.current.subscribe(c => { curSweep = c && c.sid ? c.sid : null; const el = $('#curSweep'); if (el) el.textContent = curSweep || '—'; });
-      try { sweepGraph = await sdk.Sweep.createGraph(); } catch(e) { sweepGraph = null; }
-      renderDetail(false);
-    } catch(e) {
-      setTourStatus('3D navigaci se nepodařilo připojit. Zkontrolujte, že je doména stránky povolená u SDK klíče.');
+function routeFloors(r){ return [...new Set(r.path.map(k => N[k][2]))]; }
+function renderMap(fit){
+  if (!$('#planBox')) buildMapSkeleton();
+  const tp = target ? place(target) : null, r = tp ? route(tp.node) : null;
+  $('#paneSeg').innerHTML = `<button data-act="pane" data-arg="plan" aria-pressed="${pane==='plan'}">${ic('map')}${t('plan')}</button><button data-act="pane" data-arg="tour" aria-pressed="${pane==='tour'}">${ic('cube')}${t('tour')}</button>`;
+  $('#routeCard').innerHTML = tp ? `
+    <div class="rcard">
+      <div class="rhead"><span class="cat-badge c-${tp.cat}">${esc(initials(tp.name))}</span><span style="min-width:0"><b>${esc(tp.name)}</b><span>${t('routeTo')} · ${t('floor'+tp.floor)}</span></span><button class="xbtn" data-act="cancelroute" aria-label="${t('close')}">${ic('close')}</button></div>
+      ${tp.node === here ? `<div class="hint">${ic('pin')} ${t('here')}</div>` : `<div class="rnums"><div><b>${walkMeters(r)} m</b><span>${t('dist')}</span></div><div><b>${minutes(r)} ${t('min')}</b><span>${t('time')}</span></div></div>`}
+      <button class="btn accent block" data-act="guide">${ic('cube')}${t('guide3d')}</button>
+    </div>` : `<div class="hint">${ic('target')} ${t('tapHint')}</div>`;
+  const rf = r ? routeFloors(r) : [];
+  $('#floorBtns').innerHTML = [2,1,0].map(f => `<button data-act="floor" data-arg="${f}" aria-pressed="${mapFloor===f}" aria-label="${t('floor'+f)}">${t('fs'+f)}${rf.includes(f) && rf.length > 1 ? '<span class="rdot"></span>' : ''}</button>`).join('');
+  $('#floorName').textContent = t('floor'+mapFloor);
+  $('#planSvg').innerHTML = planSVG(mapFloor, r);
+  // tlačítko "pokračujte do patra"
+  const nf = $('#nextFloor'); nf.hidden = true;
+  if (r){
+    for (let i=0;i<r.path.length-1;i++){
+      if (N[r.path[i]][2] === mapFloor && r.types[i] === 'esc'){
+        let j = i; while (j < r.types.length && r.types[j] === 'esc') j++;
+        const to = N[r.path[j]][2];
+        nf.hidden = false; nf.dataset.act = 'floor'; nf.dataset.arg = to; nf.innerHTML = `${t('continueTo', t('floor'+to))} ${ic(to > mapFloor ? 'up' : 'down')}`;
+        break;
+      }
+    }
+  }
+  const cats = [...new Set(P.filter(p => p.floor === mapFloor && !Array.isArray(p.slot)).map(p => p.cat))];
+  $('#legend').innerHTML = cats.map(c => `<span class="c-${c}"><i></i>${esc(catName(c))}</span>`).join('');
+  $('#planPane').hidden = pane !== 'plan';
+  $('#tourPane').hidden = pane !== 'tour';
+  if (pane === 'tour') ensureTour();
+  $('#stepsBox').innerHTML = r && tp.node !== here ? `<div class="card" style="gap:4px"><div class="eyebrow">${t('routeTo')}</div><ol class="steps">${buildSteps(r, tp).map(st => `<li class="${st.f===mapFloor?'on':''} ${st.end?'end':''}"><span class="si">${ic(st.ic)}</span><button data-act="floor" data-arg="${st.f}">${esc(st.tx)}</button><span class="m">${st.m ? st.m+' m' : `<span class="fl">${t('fs'+st.f)}</span>`}</span></li>`).join('')}</ol></div>` : '';
+  if (fit) fitView(r);
+}
+function fitView(r){
+  let pts = [];
+  if (r) pts = r.path.filter(k => N[k][2] === mapFloor).map(k => N[k]);
+  if (!pts.length && N[here][2] === mapFloor) pts = [N[here]];
+  if (pts.length < 2){ animateVB({...BASE}); return; }
+  let x0 = Math.min(...pts.map(p => p[0])), x1 = Math.max(...pts.map(p => p[0])), y0 = Math.min(...pts.map(p => p[1])), y1 = Math.max(...pts.map(p => p[1]));
+  const pad = 40; x0 -= pad; x1 += pad; y0 -= pad; y1 += pad;
+  let w = Math.max(x1-x0, 230), h = Math.max(y1-y0, w*BASE.h/BASE.w); w = Math.max(w, h*BASE.w/BASE.h);
+  animateVB({x:(x0+x1)/2 - w/2, y:(y0+y1)/2 - w*BASE.h/BASE.w/2, w});
+}
+function setVB(n){
+  n.w = Math.min(BASE.w*1.1, Math.max(90, n.w)); n.h = n.w*BASE.h/BASE.w;
+  const mx = 30; n.x = Math.min(BASE.w+mx-n.w, Math.max(-mx, n.x)); n.y = Math.min(BASE.h+mx-n.h, Math.max(-mx, n.y));
+  vb = n; const s = $('#planSvg svg'); if (s) s.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+}
+function animateVB(to){
+  const from = {...vb}, t0 = performance.now(), dur = reduced ? 0 : 380;
+  const step = now => { const p = dur ? Math.min(1, (now-t0)/dur) : 1, e = 1 - Math.pow(1-p, 3);
+    setVB({x:from.x+(to.x-from.x)*e, y:from.y+(to.y-from.y)*e, w:from.w+(to.w-from.w)*e}); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function toSvg(cx, cy){ const r = $('#planBox').getBoundingClientRect(); return [vb.x + (cx-r.left)/r.width*vb.w, vb.y + (cy-r.top)/r.height*vb.h]; }
+function zoomAt(f, cx, cy){ const nw = Math.min(BASE.w*1.1, Math.max(90, vb.w*f)), k = nw/vb.w; setVB({x:cx-(cx-vb.x)*k, y:cy-(cy-vb.y)*k, w:nw}); }
+function bindPlan(){
+  const box = $('#planBox'), ptrs = new Map(); let down = null;
+  box.addEventListener('pointerdown', e => {
+    if (e.target.closest('button')) return;
+    try { box.setPointerCapture(e.pointerId); } catch(err){}
+    ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+    if (ptrs.size === 1) down = {x:e.clientX, y:e.clientY, el:e.target, moved:false}; else if (down) down.moved = true;
+  });
+  box.addEventListener('pointermove', e => {
+    if (!ptrs.has(e.pointerId)) return;
+    const prev = ptrs.get(e.pointerId), cur = [e.clientX, e.clientY];
+    if (ptrs.size === 1){
+      const r = box.getBoundingClientRect(), k = vb.w/r.width;
+      setVB({x:vb.x-(cur[0]-prev[0])*k, y:vb.y-(cur[1]-prev[1])*k, w:vb.w});
+      if (down && Math.hypot(cur[0]-down.x, cur[1]-down.y) > 6) down.moved = true;
+    } else if (ptrs.size === 2){
+      const other = [...ptrs.entries()].find(([id]) => id !== e.pointerId)[1];
+      const d0 = Math.hypot(prev[0]-other[0], prev[1]-other[1]), d1 = Math.hypot(cur[0]-other[0], cur[1]-other[1]);
+      if (d0 > 0 && d1 > 0){ const [cx,cy] = toSvg((cur[0]+other[0])/2, (cur[1]+other[1])/2); zoomAt(d0/d1, cx, cy); }
+    }
+    ptrs.set(e.pointerId, cur);
+  });
+  const up = e => {
+    if (!ptrs.has(e.pointerId)) return;
+    ptrs.delete(e.pointerId);
+    if (ptrs.size === 0){
+      if (e.type === 'pointerup' && down && !down.moved){ const g = down.el.closest && down.el.closest('[data-p]'); if (g) openShop(g.dataset.p); }
+      down = null;
     }
   };
-  s.onerror = () => setTourStatus('Knihovnu Matterport SDK se nepodařilo načíst.');
-  document.head.appendChild(s);
+  box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
+  box.addEventListener('wheel', e => { e.preventDefault(); const [cx,cy] = toSvg(e.clientX, e.clientY); zoomAt(e.deltaY > 0 ? 1.15 : 1/1.15, cx, cy); }, {passive:false});
+}
+function navigateTo(id, opts={}){
+  const p = place(id); if (!p) return;
+  target = id; mapFloor = N[here][2]; pane = opts.pane || 'plan';
+  logEv('nav', {shop:id});
+  closeSheet(); goTab('map', {fit:true});
+  if (opts.guide) guide();
+}
+
+/* ================= 3D PROHLÍDKA (Matterport SDK) ================= */
+let sdk = null, curSweep = null, sweepGraph = null, guiding = false, tourMade = false;
+let sweepMap = Object.assign({}, SWEEPS, store.get('sweeps', {}));
+const canEmbed = () => location.protocol === 'file:' || (/^https?:$/.test(location.protocol) && !/claude|anthropic/i.test(location.hostname));
+const setTourStatus = s => { const el = $('#tourStatus'); if (el) el.textContent = s; };
+function ensureTour(){
+  if (tourMade) return; tourMade = true;
+  const box = $('#tourBox');
+  if (!canEmbed()){
+    box.innerHTML = `<div class="tour-fb"><div class="eyebrow" style="color:#cfe4ec">Matterport 3D</div><h3>${t('tour')}</h3><p>${t('sdkNoEmbed')}</p><a class="btn accent" href="${TOUR_URL}" target="_blank" rel="noopener">${ic('cube')}${t('tourOpen')}</a></div>`;
+    return;
+  }
+  box.innerHTML = `<iframe id="mp" src="${SDK_URL}" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="3D prohlídka Chomutovky"></iframe>`;
+  if (location.protocol === 'file:'){ setTourStatus(t('sdkLocal')); return; }
+  setTourStatus(t('sdkConnecting'));
+  const sc = document.createElement('script');
+  sc.src = 'https://static.matterport.com/showcase-sdk/latest.js';
+  sc.onload = async () => {
+    try {
+      sdk = await window.MP_SDK.connect($('#mp'), SDK_KEY, '');
+      setTourStatus(t('sdkOk'));
+      sdk.Sweep.current.subscribe(c => { curSweep = c && c.sid ? c.sid : null; const el = $('#curSweep'); if (el) el.textContent = curSweep || '—'; });
+      try { sweepGraph = await sdk.Sweep.createGraph(); } catch(e){ sweepGraph = null; }
+    } catch(e){ setTourStatus(t('sdkFail')); }
+  };
+  sc.onerror = () => setTourStatus(t('sdkFail'));
+  document.head.appendChild(sc);
 }
 const wait = ms => new Promise(r => setTimeout(r, ms));
 async function guide(){
-  if (!sdk || guiding || !target) return;
-  const to = sweepOf(byId[target].node), from = sweepOf(here) || curSweep;
-  if (!to){ setTourStatus('Toto místo ještě není v prohlídce přiřazené. Přiřadíte ho v režimu Nastavit body prohlídky.'); return; }
-  guiding = true; $('#tour').scrollIntoView({behavior:'smooth', block:'start'});
+  pane = 'tour'; renderMap(false);
+  $('#tourPane').scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'});
+  if (!target) return;
+  const tp = place(target);
+  if (!sdk){ if (!canEmbed() || location.protocol === 'file:') toast(t('sdkLocal'), 'cube'); return; }
+  if (guiding) return;
+  const to = sweepMap[tp.node], from = sweepMap[here] || curSweep;
+  if (!to){ setTourStatus(t('notMapped')); return; }
+  guiding = true;
   try {
-    if (from && from !== curSweep) { await sdk.Sweep.moveTo(from, {transition: sdk.Sweep.Transition.INSTANT}); await wait(400); }
+    if (from && from !== curSweep){ await sdk.Sweep.moveTo(from, {transition: sdk.Sweep.Transition.INSTANT}); await wait(400); }
     let path = [to];
     if (sweepGraph && from){
       const res = await sdk.Graph.createAStarRunner(sweepGraph, sweepGraph.vertex(from), sweepGraph.vertex(to)).exec();
       if (res && res.path && res.path.length) path = res.path.map(v => v.id);
     }
-    setTourStatus(`Provádím k cíli: ${byId[target].name}`);
-    for (let i = 0; i < path.length; i++){
-      if (path[i] === curSweep) continue;
-      await sdk.Sweep.moveTo(path[i], {transition: sdk.Sweep.Transition.FLY, transitionTime: 900});
-      await wait(250);
-    }
-    setTourStatus(`Jste v cíli: ${byId[target].name}`);
-  } catch(e) {
-    try { await sdk.Sweep.moveTo(to, {transition: sdk.Sweep.Transition.FLY}); setTourStatus(`Jste v cíli: ${byId[target].name}`); }
-    catch(e2) { setTourStatus('Přesun v prohlídce se nepodařil.'); }
+    setTourStatus(t('guiding', tp.name));
+    for (const sid of path){ if (sid === curSweep) continue; await sdk.Sweep.moveTo(sid, {transition: sdk.Sweep.Transition.FLY, transitionTime: 900}); await wait(250); }
+    setTourStatus(t('arrived', tp.name));
+  } catch(e){
+    try { await sdk.Sweep.moveTo(to, {transition: sdk.Sweep.Transition.FLY}); setTourStatus(t('arrived', tp.name)); } catch(e2){ setTourStatus(t('sdkFail')); }
   }
   guiding = false;
 }
 
-function renderTour(){
-  const embed = location.protocol === 'file:' || (location.protocol.startsWith('http') && !/claude|anthropic/i.test(location.hostname));
-  $('#tour').innerHTML = embed
-    ? `<iframe id="mp" src="${SDK_URL}" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="3D prohlídka Chomutovky"></iframe><div class="tstat" id="tourStatus">Připojuji 3D navigaci…</div>`
-    : `<div class="inner"><div class="eyebrow" style="color:#cfe3ea">3D prohlídka</div>
-        <h2>Projděte si Chomutovku ve 3D</h2>
-        <p>Na webu centra se prohlídka zobrazí přímo zde. Po výběru obchodu vás provede trasou krok za krokem.</p>
-        <a class="btn accent" href="${TOUR_URL}" target="_blank" rel="noopener">Spustit 3D prohlídku</a></div>`;
-  if (embed) connectSdk();
-}
-function renderOpen(){
-  const now = new Date(), h = now.getHours()+now.getMinutes()/60, el = $('#open'), open = h >= 9 && h < 19;
-  el.textContent = open ? 'Otevřeno · zavírá v 19:00' : (h >= 7 && h < 20 ? 'Centrum zavřeno · Tesco otevřeno' : 'Zavřeno · otevírá v 9:00');
-  el.classList.toggle('closed', !open);
-}
-function renderChips(){ $('#chips').innerHTML = CATS.map(([k,l]) => `<button class="chip" aria-pressed="${k===cat}" data-c="${k}">${l}</button>`).join(''); }
-function renderList(){
-  const q = $('#q').value.trim().toLowerCase();
-  const items = P.filter(p => (cat==='all' || p.cat===cat) && (!q || (p.name+' '+p.desc).toLowerCase().includes(q)));
-  $('#list').innerHTML = items.length ? items.map(p => {
-    const st = steps(route(here, p.node)), o = isOpen(p.hours);
-    const dist = p.node === here ? 'jste zde' : `${st.meters} m · ${FLOORS[p.floor]}`;
-    const pill = o === null ? '' : `<span class="pill ${o?'on':'off'}">${o?'otevřeno':'zavřeno'}</span>`;
-    return `<button class="item" data-p="${p.id}"><span class="ico">${p.name.replace(/[^A-Za-zÁ-ž0-9]/g,'').slice(0,2).toUpperCase()}</span>
-      <span style="min-width:0"><span class="t">${p.name}</span><br><span class="s">${p.desc}</span></span>
-      <span class="meta">${dist}${pill}</span></button>`;
-  }).join('') : `<div class="empty">Nic jsme nenašli. Zkuste jiné slovo, třeba „káva“ nebo „boty“.</div>`;
-}
-function renderDetail(scroll){
-  const el = $('#detail');
-  if (!target){ el.hidden = true; return; }
-  const p = byId[target], r = route(here, p.node), st = steps(r), o = isOpen(p.hours);
-  const min = Math.max(1, Math.round(st.meters/1.1/60 + r.types.filter(t => t==='esc').length*0.5));
-  const floors = [...new Set(r.path.map(k => N[k][2]))].sort();
-  const atTarget = p.node === here;
-  el.hidden = false;
-  el.innerHTML = `
-    <div><div class="eyebrow">${FLOORS[p.floor]}${o===null?'':` · <span class="pill ${o?'on':'off'}">${o?'právě otevřeno':'právě zavřeno'}</span>`}</div><h2>${p.name}</h2></div>
-    <p class="desc">${p.desc}</p>
-    ${p.hours || p.phone ? `<div class="kv">${p.hours?`<div><span>Otevřeno </span>${p.hours}</div>`:''}${p.phone?`<div><span>Telefon </span>${p.phone}</div>`:''}</div>` : ''}
-    ${atTarget ? `<p><b>Tady právě stojíte.</b></p>` : `
-    <div class="sum"><div><b>${st.meters} m</b><span class="eyebrow">vzdálenost</span></div>
-      <div><b>${min} min</b><span class="eyebrow">chůzí</span></div>
-      <div><b>${floors.length > 1 ? FLOORS[p.floor] : 'stejné patro'}</b><span class="eyebrow">cíl</span></div></div>`}
-    <div class="plans">${floors.map(f => `<div class="plan"><span class="eyebrow">${FLOORS[f]}</span>${planSVG(f, r)}</div>`).join('')}</div>
-    ${atTarget ? '' : `<ol class="steps">${st.list.map(([t,m]) => `<li><span>${t}</span><span>${m}</span></li>`).join('')}<li><span>Jste v cíli: ${p.name}</span><span></span></li></ol>`}
-    <div class="actions">
-      ${sdk ? `<button class="btn primary" id="guide">Provést mě ve 3D</button>` : `<a class="btn primary" href="${TOUR_URL}" target="_blank" rel="noopener">Otevřít 3D prohlídku</a>`}
-      <button class="btn ghost" id="back">Zpět na seznam</button>
-    </div>
-    <p class="note">${sdk ? (sweepOf(p.node) ? 'Prohlídka vás plynule provede po trase až k cíli.' : 'Místo zatím není v prohlídce přiřazené, přiřadíte ho v režimu Nastavit body prohlídky.') : 'Plynulé provedení prohlídkou funguje, když je stránka na povolené webové adrese.'}</p>`;
-  if (scroll) el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'});
-}
-function renderTags(){ $('#tags').innerHTML = TAGS.map(([id,l]) => `<button class="chip" aria-pressed="${id===here}" data-t="${id}">${l}</button>`).join(''); }
-function setHere(id){
-  if (!N[id]) { const p = byId[id]; if (!p) return; id = p.node; }
-  here = id; $('#hereName').textContent = hereLabel();
-  renderTags(); renderList(); renderDetail(false);
-}
-
-document.addEventListener('click', e => {
-  const c = e.target.closest('[data-c]'); if (c){ cat = c.dataset.c; renderChips(); renderList(); return; }
-  const p = e.target.closest('[data-p]'); if (p){ target = p.dataset.p; renderDetail(true); return; }
-  const t = e.target.closest('[data-t]'); if (t){ setHere(t.dataset.t); window.scrollTo({top:0,behavior:'smooth'}); return; }
-  if (e.target.id === 'where'){ $('#nfcbox').scrollIntoView({behavior:'smooth',block:'center'}); return; }
-  if (e.target.id === 'back'){ target = null; renderDetail(false); $('#menu').scrollIntoView({block:'start'}); return; }
-  if (e.target.id === 'guide'){ guide(); return; }
-  if (e.target.id === 'toggleAdmin'){ const a = $('#admin'); a.hidden = !a.hidden; if (!a.hidden){ renderAdmin(); a.scrollIntoView({behavior:'smooth'}); } return; }
-  if (e.target.id === 'assign'){
-    if (!curSweep){ adminMsg('Prohlídka není připojená nebo v ní ještě nestojíte na žádném bodě.'); return; }
-    map[$('#mapSel').value] = curSweep; saveMap(); renderAdmin(); adminMsg(`Přiřazeno: ${$('#mapSel').selectedOptions[0].text}`); renderDetail(false); return;
-  }
-  if (e.target.id === 'jump'){
-    const s = map[$('#mapSel').value];
-    if (!s || !sdk){ adminMsg('Tohle místo ještě nemá přiřazený bod.'); return; }
-    sdk.Sweep.moveTo(s, {transition: sdk.Sweep.Transition.FLY}).catch(() => adminMsg('Přesun se nepodařil.')); return;
-  }
-  if (e.target.id === 'copyMap'){
-    const txt = JSON.stringify(map); $('#mapJson').value = txt;
-    const done = () => adminMsg('Nastavení je zkopírované. Pošlete ho do vývoje.');
-    try { navigator.clipboard.writeText(txt).then(done, () => { $('#mapJson').select(); adminMsg('Nastavení je v poli níže, označte ho a zkopírujte.'); }); }
-    catch(err) { $('#mapJson').select(); adminMsg('Nastavení je v poli níže, označte ho a zkopírujte.'); }
+/* ================= PARKOVÁNÍ – OBRAZOVKA ================= */
+function renderPark(){
+  const rules = `<div class="card"><h3 style="font-size:16px">${t('priceList')}</h3><ul class="rules">${t('rules').map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  if (!parking){
+    $('#v-park').innerHTML = `
+      <div class="park-hero">
+        <span class="pi">${ic('car')}</span>
+        <h2>${t('parkTitle')}</h2><p>${t('parkSub')}</p>
+        <div class="seg"><button data-act="parktype" data-arg="out" aria-pressed="${parkType==='out'}">${t('outdoor')}</button><button data-act="parktype" data-arg="under" aria-pressed="${parkType==='under'}">${t('underground')}</button></div>
+        <input id="spot" class="input" placeholder="${t('spotNote')}" autocomplete="off">
+        <button class="btn primary big block" data-act="parkstart">${ic('check')}${t('parkedNow')}</button>
+      </div>
+      ${rules}<p class="foot">${t('parkTip')}</p>`;
     return;
   }
-  if (e.target.id === 'loadMap'){
-    try { Object.assign(map, JSON.parse($('#mapJson').value)); saveMap(); renderAdmin(); adminMsg('Nastavení načteno.'); }
-    catch(err) { adminMsg('Text v poli není platné nastavení. Vložte celý zkopírovaný text.'); }
+  const st = new Date(parking.start);
+  $('#v-park').innerHTML = `
+    <div class="park-hero" style="align-items:stretch">
+      <div class="ring" id="ring"><svg viewBox="0 0 160 160"><circle class="bg" cx="80" cy="80" r="66"/><circle class="fg" id="ringFg" cx="80" cy="80" r="66" stroke-dasharray="414.7" stroke-dashoffset="414.7"/></svg>
+        <div class="ctr"><span id="ringLbl"></span><b id="ringClock">–</b></div></div>
+      <div class="pay"><div><b id="payNow">0 Kč</b><span>${t('toPayNow')}</span></div><div><b id="payNext">–</b><span id="payNextL"></span></div></div>
+      <div class="spot">${ic('pin')} ${parking.type==='under'?t('underground'):t('outdoor')}${parking.note?' · '+esc(parking.note):''} · ${t('parkedSince', st.getHours()+':'+String(st.getMinutes()).padStart(2,'0'))}</div>
+      <button class="switch" role="switch" aria-checked="${!!parking.remind}" data-act="remind"><span>${ic('bell')} ${t('remind')}</span><span class="tg"></span></button>
+      <div class="row"><button class="btn primary big" data-act="nav" data-arg="parkoviste">${ic('pin')}${t('toCar')}</button><button class="btn ghost big" data-act="parkstop">${t('leaving')}</button></div>
+    </div>${rules}`;
+  updatePark();
+}
+function updatePark(){
+  const ps = parkState(); if (!ps || !$('#ringFg')) return;
+  const C = 414.7, ring = $('#ring');
+  ring.classList.toggle('warn', !ps.wk && ps.freeLeft > 0 && ps.freeLeft <= 10);
+  ring.classList.toggle('paid', !ps.wk && ps.freeLeft <= 0);
+  if (ps.wk){ $('#ringLbl').textContent = t('weekendFree'); $('#ringClock').textContent = hmm(ps.m); $('#ringFg').style.strokeDashoffset = 0; }
+  else if (ps.freeLeft > 0){ $('#ringLbl').textContent = t('freeLeft'); $('#ringClock').textContent = mmss(ps.freeLeft); $('#ringFg').style.strokeDashoffset = C*(1 - ps.freeLeft/60); }
+  else { $('#ringLbl').textContent = t('parkedFor'); $('#ringClock').textContent = hmm(ps.m); $('#ringFg').style.strokeDashoffset = 0; }
+  $('#payNow').textContent = ps.price + ' Kč';
+  $('#payNext').textContent = ps.wk ? '0 Kč' : ps.nextPrice + ' Kč';
+  $('#payNextL').textContent = ps.wk ? t('weekendFree') : t('nextStep', ps.nextIn);
+}
+
+/* ================= AKCE ================= */
+function renderDeals(){
+  const stamps = store.get('stamps', []), used = store.get('used', {});
+  const stampTags = TAGS.filter(x => x.stamp);
+  $('#v-deals').innerHTML = `
+    <div class="hunt">
+      <div class="sec-h"><h2>${t('hunt')}</h2><span class="tag-demo" style="background:rgba(255,255,255,.14);color:#ffd88a">${stamps.length}/6</span></div>
+      <p>${stamps.length >= 6 ? t('huntDone') : t('huntSub')}</p>
+      <div class="stamps">${stampTags.map(x => `<span class="stamp ${stamps.includes(x.id)?'got':''}" title="${esc(x.name)}">${ic(stamps.includes(x.id)?'star':'nfc')}</span>`).join('')}</div>
+      ${stamps.length >= 6 ? `<div class="reward"><span class="eyebrow">${t('demo')}</span><code>CHM-6Z6</code><span>${t('rewardTxt')}</span></div>` : `<button class="btn accent" data-act="nfc">${ic('nfc')}${t('menuNfc')}</button>`}
+    </div>
+    <div class="sec-h"><h2>${t('coupons')}</h2><span class="tag-demo">${t('demo')}</span></div>
+    ${COUPONS.map(c => { const s = byId[c.shop], u = used[c.id]; return `
+      <div class="cpn c-${s.cat} ${u?'used':''}"><div class="off">${c.big}<small>${esc(s.short)}</small></div>
+      <div class="tx"><b>${esc(c.title)}</b><span>${esc(s.name)} · ${t('floor'+s.floor)} · ${t('validTo', validDate(c.days))}</span>
+      <div class="row" style="gap:8px"><button class="btn accent" data-act="coupon" data-arg="${c.id}" ${u?'disabled':''}>${u?ic('check')+t('used'):t('redeem')}</button><button class="btn ghost" style="min-height:38px;padding:8px 12px;font-size:13.5px;flex:0 0 auto" data-act="nav" data-arg="${c.shop}">${ic('pin')}</button></div></div></div>`; }).join('')}
+    <div class="sec-h"><h2>${t('events')}</h2><span class="tag-demo">${t('demo')}</span></div>
+    ${events().map(ev => `<div class="evt"><div class="dt"><span>${DOW[lang][ev.d.getDay()]}</span><b>${ev.d.getDate()}</b><span>${MON[lang][ev.d.getMonth()]}</span></div><div><b class="t">${esc(ev.title)}</b><span class="s">${esc(ev.sub)}</span>${ev.shop?`<div><button class="link" data-act="nav" data-arg="${ev.shop}">${t('navigate')} →</button></div>`:''}</div></div>`).join('')}`;
+}
+let cpnTimer = null;
+function openCoupon(id){
+  const c = COUPONS.find(x => x.id === id), s = byId[c.shop], used = store.get('used', {});
+  if (used[id]) { showCode(id); return; }
+  openSheet(`
+    <div class="sh-head"><span class="cat-badge c-${s.cat}">${ic('tag')}</span><div><h2>${c.big} · ${esc(c.title)}</h2><div class="meta">${esc(s.name)} · ${t('floor'+s.floor)}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <p class="muted" style="margin:0">${t('validTo', validDate(c.days))} · <span class="tag-demo">${t('demo')}</span></p>
+    <button class="btn accent big" data-act="redeem" data-arg="${id}">${ic('check')}${t('redeemNow')}</button>
+    <button class="btn ghost" data-act="nav" data-arg="${c.shop}">${ic('pin')}${t('navigate')}</button>`);
+}
+function showCode(id){
+  const c = COUPONS.find(x => x.id === id), s = byId[c.shop], used = store.get('used', {});
+  const code = 'CHM-' + (id.toUpperCase() + String(used[id] % 9973).padStart(4,'0')).slice(0,6);
+  openSheet(`
+    <div class="sh-head"><span class="cat-badge c-${s.cat}">${ic('check')}</span><div><h2>${esc(c.title)}</h2><div class="meta">${esc(s.name)}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <div class="eyebrow" style="text-align:center">${t('showCashier')}</div>
+    <div class="code">${code}</div>
+    <div class="timer">${t('couponOnce')} <span id="cpnLeft">10:00</span></div>`);
+  clearInterval(cpnTimer);
+  const tick = () => { const left = 10 - (Date.now() - used[id])/60000; const el = $('#cpnLeft'); if (!el){ clearInterval(cpnTimer); return; } el.textContent = left > 0 ? mmss(left) : '0:00'; };
+  tick(); cpnTimer = setInterval(tick, 1000);
+}
+
+/* ================= PŘEHLED PRO VEDENÍ ================= */
+const SAMPLE = {
+  kpi:{scans:4812, visitors:2960, coupons:642, navs:1377}, trend:{scans:'+18 %', visitors:'+12 %', coupons:'+31 %', navs:'+9 %'},
+  hours:[140,230,350,560,620,430,390,480,590,540,460],
+  tags:[['Parkovací automat',1480],['Hlavní vchod',1105],['Gastro zóna – stoly',804],['Vstup do Tesca',611],['Atrium – přízemí',402],['U pošty · 1. patro',248],['Eskalátory · 1. patro',162]],
+  missing:[['Oprava obuvi a klíčů',214],['Výměna baterie v hodinkách',181],['Sportovní obuv',152],['Sushi',133],['Dětský koutek uvnitř',97],['Nabíjení elektroauta',64]],
+  nav:[['dm drogerie',212],['Česká pošta',188],['Lékárna Dr. Max',164],['DATART',131],['Česká kuchyně',118],['Toalety (Euro klíč)',109]],
+  cpn:{c1:[1240,212],c2:[860,151],c3:[702,118],c4:[520,74],c5:[410,52],c6:[300,35]},
+  park:{saved:1120, avg:74, free:38}, langs:[['Čeština',86],['Deutsch',9],['Українська',5]],
+  probs:[['Rozlitý nápoj u eskalátorů, 2. patro','před 2 dny'],['Nefunguje osoušeč rukou na WC','před 5 dny']]
+};
+function renderMgmt(){
+  const k = {'7':0.24,'30':1,'90':2.85}[range], n = v => Math.round(v*k), fmt = v => v.toLocaleString('cs-CZ');
+  const L = store.get('log', []), cnt = ty => L.filter(e => e.type === ty).length;
+  const dev = {scans:cnt('scan'), navs:cnt('nav'), coupons:cnt('redeem'), searches:cnt('search')};
+  const devTotal = L.length;
+  // co hledali a nenašli: z testování nahoru
+  const devMiss = {}; L.filter(e => e.type === 'search' && !e.found).forEach(e => devMiss[e.q] = (devMiss[e.q]||0) + 1);
+  const miss = [...Object.entries(devMiss).map(([q,c]) => [q,c,true]), ...SAMPLE.missing.map(([q,c]) => [q,n(c),false])];
+  const maxMiss = Math.max(...miss.map(m => m[1]));
+  const devNav = {}; L.filter(e => e.type === 'nav').forEach(e => { const p = place(e.shop); if (p) devNav[p.name] = (devNav[p.name]||0) + 1; });
+  const navs = SAMPLE.nav.map(([nm,c]) => [nm, n(c) + (devNav[nm]||0)]).sort((a,b) => b[1]-a[1]);
+  const maxNav = navs[0][1], maxTag = n(SAMPLE.tags[0][1]);
+  const hrs = SAMPLE.hours.map(v => n(v)), maxH = Math.max(...hrs), pk = hrs.indexOf(maxH);
+  const used = store.get('used', {});
+  const probs = store.get('problems', []);
+  const bar = (lbl, v, max, cls='', extra='') => `<div class="hbar ${cls}"><span>${esc(lbl)}${extra}</span><b>${fmt(v)}</b><span class="tr"><i style="width:${Math.max(3, v/max*100)}%"></i></span></div>`;
+  $('#v-mgmt').innerHTML = `
+    <div class="mg-head"><button class="xbtn" data-act="mgmtback" aria-label="${t('back')}">${ic('back')}</button><div><div class="eyebrow">OC Chomutovka · pro vedení</div><h1>Jak lidé používají průvodce</h1></div></div>
+    <div class="seg" style="grid-template-columns:repeat(3,1fr)">${[['7','7 dní'],['30','30 dní'],['90','3 měsíce']].map(([v,l]) => `<button data-act="range" data-arg="${v}" aria-pressed="${range===v}">${l}</button>`).join('')}</div>
+    <p class="muted" style="margin:0;font-size:12.5px"><span class="tag-demo">Ukázková data</span> ${devTotal ? `+ ${devTotal} akcí z vašeho testování v tomto telefonu` : 'Až budete aplikaci zkoušet, vaše akce se sem přičtou.'}</p>
+    <div class="kpis">
+      <div class="kpi"><span>Načtení tagů</span><b>${fmt(n(SAMPLE.kpi.scans)+dev.scans)}</b><em>${SAMPLE.trend.scans} proti minulému období</em></div>
+      <div class="kpi"><span>Návštěvníků</span><b>${fmt(n(SAMPLE.kpi.visitors))}</b><em>${SAMPLE.trend.visitors}</em></div>
+      <div class="kpi"><span>Navigací k obchodu</span><b>${fmt(n(SAMPLE.kpi.navs)+dev.navs)}</b><em>${SAMPLE.trend.navs}</em></div>
+      <div class="kpi"><span>Uplatněné kupóny</span><b>${fmt(n(SAMPLE.kpi.coupons)+dev.coupons)}</b><em>${SAMPLE.trend.coupons}</em></div>
+    </div>
+    <div class="card"><div class="sec-h"><h2 style="font-size:16px">Kdy lidé průvodce používají</h2><span class="muted" style="font-size:12px">načtení podle hodiny</span></div>
+      <div class="hours">${hrs.map((v,i) => `<div class="${i===pk?'pk':''}">${i===pk?`<b>${fmt(v)}</b>`:''}<i style="height:${v/maxH*100}%"></i><small>${9+i}</small></div>`).join('')}</div>
+      <span class="muted" style="font-size:13px">Nejsilnější čas je ${9+pk}–${10+pk} h. Vhodné pro časově omezené kupóny.</span></div>
+    <div class="card"><h2 style="font-size:16px">Co lidé hledali a nenašli</h2>
+      <div class="hbars">${miss.slice(0,7).map(([q,c,d]) => bar(q, c, maxMiss, 'miss', d ? '<span class="new">z testování</span>' : '')).join('')}</div>
+      <div class="insight">${ic('spark')}<span><b>Tip pro pronájem:</b> nejvíc chybí ${esc(SAMPLE.missing[0][0].toLowerCase())} a ${esc(SAMPLE.missing[1][0].toLowerCase())}. To je konkrétní argument při hledání nájemce do volné jednotky.</span></div></div>
+    <div class="card"><h2 style="font-size:16px">Kde lidé načítají tagy</h2><div class="hbars">${SAMPLE.tags.map(([l,v]) => bar(l, n(v), maxTag)).join('')}</div></div>
+    <div class="card"><h2 style="font-size:16px">Kam lidé nejčastěji navigují</h2><div class="hbars">${navs.map(([l,v]) => bar(l, v, maxNav)).join('')}</div></div>
+    <div class="card"><h2 style="font-size:16px">Kupóny nájemců</h2><div class="tblwrap"><table class="tbl"><thead><tr><th>Obchod</th><th>Zobrazení</th><th>Uplatnění</th><th>Konverze</th></tr></thead><tbody>
+      ${COUPONS.map(c => { const [sh,rd] = SAMPLE.cpn[c.id], s = n(sh), r = n(rd) + (used[c.id]?1:0); return `<tr><td>${esc(byId[c.shop].name)}</td><td>${fmt(s)}</td><td>${fmt(r)}</td><td>${Math.round(r/s*100)} %</td></tr>`; }).join('')}
+      </tbody></table></div><span class="muted" style="font-size:13px">Data, která může centrum ukázat nájemcům. Zvýhodněnou pozici kupónu si mohou nájemci připlatit.</span></div>
+    <div class="card"><h2 style="font-size:16px">Parkování</h2><div class="trio"><div><b>${fmt(n(SAMPLE.park.saved))}</b><span>uložených parkování</span></div><div><b>${SAMPLE.park.avg} min</b><span>průměrná doba</span></div><div><b>${SAMPLE.park.free} %</b><span>odjede do hodiny zdarma</span></div></div></div>
+    <div class="card"><h2 style="font-size:16px">Jazyky návštěvníků</h2><div class="hbars">${SAMPLE.langs.map(([l,v]) => `<div class="hbar"><span>${l}</span><b>${v} %</b><span class="tr"><i style="width:${v}%"></i></span></div>`).join('')}</div></div>
+    <div class="card"><h2 style="font-size:16px">Hlášení od návštěvníků</h2><div>
+      ${probs.slice().reverse().map(p => `<div class="prob"><span>${esc(p.typeLbl)}${p.note?': '+esc(p.note):''}<span class="pill new">Nové</span></span><small>${esc(p.where)} · ${new Date(p.ts).toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})}</small></div>`).join('')}
+      ${SAMPLE.probs.map(([tx,when]) => `<div class="prob"><span>${esc(tx)}<span class="pill ok">Vyřešeno</span></span><small>${when}</small></div>`).join('')}</div></div>
+    <p class="foot">V ostrém provozu se data sbírají anonymně, bez osobních údajů. Report chodí vedení každý měsíc e-mailem.</p>`;
+}
+
+/* ================= SPODNÍ PANELY ================= */
+let lastFocus = null;
+function openSheet(html, cls=''){
+  lastFocus = document.activeElement;
+  const sh = $('#sheet'); sh.className = 'sheet ' + cls; sh.innerHTML = `<div class="grab"></div>` + html;
+  $('#sheetWrap').hidden = false;
+  const f = sh.querySelector('button, a, input, textarea'); if (f) f.focus({preventScroll:true});
+}
+function closeSheet(){ $('#sheetWrap').hidden = true; clearInterval(cpnTimer); if (lastFocus && lastFocus.focus) try { lastFocus.focus({preventScroll:true}); } catch(e){} }
+let toastTimer = null;
+function toast(msg, icn='check', ms=2600){
+  const el = $('#toast'); el.innerHTML = ic(icn) + `<span>${esc(msg)}</span>`; el.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.hidden = true, ms);
+}
+function menuSheet(){
+  openSheet(`<div class="sh-head"><span></span><h2>Menu</h2><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <div class="menu">
+      <button data-act="nfc"><span class="mi">${ic('nfc')}</span><span>${t('menuNfc')}<small>${t('menuNfcSub')}</small></span></button>
+      <button data-act="report"><span class="mi">${ic('alert')}</span><span>${t('menuReport')}<small>${t('menuReportSub')}</small></span></button>
+      <button data-act="langsheet"><span class="mi">${ic('globe')}</span><span>${t('menuLang')}<small>${LANGS.find(l => l[0]===lang)[1]}</small></span></button>
+      <button data-act="mgmt"><span class="mi">${ic('chart')}</span><span>${t('menuMgmt')}<small>${t('menuMgmtSub')}</small></span></button>
+      <button data-act="admin"><span class="mi">${ic('gear')}</span><span>${t('menu3d')}<small>${t('menu3dSub')}</small></span></button>
+      <button data-act="reset"><span class="mi">${ic('trash')}</span><span>${t('menuReset')}<small>${t('menuResetSub')}</small></span></button>
+    </div>`);
+}
+function nfcSheet(){
+  const stamps = store.get('stamps', []);
+  openSheet(`<div class="sh-head"><span class="cat-badge" style="background:var(--brand-soft);color:var(--brand)">${ic('nfc')}</span><div><h2>${t('nfcTitle')}</h2><div class="meta">${t('nfcSub')}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <div class="tags">${TAGS.map(x => `<button class="tagbtn ${x.node===here?'cur':''}" data-act="scan" data-arg="${x.id}">${ic(x.parking?'car':x.stamp?'star':'nfc')}<span>${esc(x.name)}${x.stamp?`<small>${stamps.includes(x.id)?'✓ ':''}${t('qHunt')}</small>`:''}</span></button>`).join('')}</div>`);
+}
+function langSheet(){
+  openSheet(`<div class="sh-head"><span></span><h2>${t('menuLang')}</h2><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <div class="menu">${LANGS.map(([c,nm,code]) => `<button data-act="setlang" data-arg="${c}"><span class="mi">${code}</span><span>${nm}</span>${c===lang?ic('check'):''}</button>`).join('')}</div>`);
+}
+function reportSheet(){
+  const types = [['mess','rMess'],['broken','rBroken'],['lost','rLost'],['other','rOther']];
+  openSheet(`<div class="sh-head"><span class="cat-badge" style="background:var(--warn-soft);color:var(--warn)">${ic('alert')}</span><div><h2>${t('reportTitle')}</h2><div class="meta">${t('reportWhere')}: ${esc(hereLabel())}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <form id="repForm" style="display:flex;flex-direction:column;gap:12px">
+      <div class="row" style="gap:8px">${types.map(([k,l]) => `<button type="button" class="chip" aria-pressed="${reportType===k}" data-act="rtype" data-arg="${k}">${t(l)}</button>`).join('')}</div>
+      <textarea id="repNote" class="input" placeholder="${t('reportNote')}"></textarea>
+      <button class="btn primary big" type="submit">${t('reportSend')}</button>
+    </form>`);
+  $('#repForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const pr = store.get('problems', []); const lbl = I18N.cs[{mess:'rMess',broken:'rBroken',lost:'rLost',other:'rOther'}[reportType]];
+    pr.push({ts:Date.now(), type:reportType, typeLbl:lbl, note:$('#repNote').value.trim().slice(0,200), where:hereLabel()});
+    store.set('problems', pr); logEv('report'); closeSheet(); toast(t('reportThanks'));
+  });
+}
+function adminSheet(){
+  const targets = [...TAGS.map(x => [x.node, 'Tag: ' + x.name]), ...SHOPS.map(p => [p.node, `${p.name} (${t('floor'+p.floor)})`])].filter((x,i,a) => a.findIndex(y => y[0]===x[0]) === i);
+  const done = targets.filter(([id]) => sweepMap[id]).length;
+  openSheet(`<div class="sh-head"><span class="cat-badge" style="background:var(--brand-soft);color:var(--brand)">${ic('gear')}</span><div><h2>${t('menu3d')}</h2><div class="meta">Přiřazeno ${done} z ${targets.length}</div></div><button class="xbtn" data-act="close">${ic('close')}</button></div>
+    <p class="muted" style="margin:0;font-size:13.5px">V prohlídce nahoře se postavte ke vchodu do obchodu, vyberte ho a klepněte na Přiřadit. Hotové nastavení zkopírujte a pošlete do vývoje.</p>
+    <div class="kv"><div><span>Aktuální bod</span><b id="curSweep">${curSweep || '—'}</b></div></div>
+    <select id="mapSel" class="input">${targets.map(([id,l]) => `<option value="${id}">${sweepMap[id]?'✓ ':''}${esc(l)}</option>`).join('')}</select>
+    <div class="row"><button class="btn primary" data-act="assign">Přiřadit aktuální bod</button><button class="btn ghost" data-act="jump">Přejít na bod</button></div>
+    <button class="btn ghost" data-act="copymap">${ic('copy')}Kopírovat nastavení</button>
+    <textarea id="mapJson" class="input" rows="3" placeholder="Sem vložte dříve uložené nastavení"></textarea>
+    <button class="btn ghost" data-act="loadmap">Načíst nastavení</button>`, 'half');
+}
+function copyText(txt, okMsg, fallbackEl){
+  const fb = () => { if (fallbackEl){ fallbackEl.value = txt; fallbackEl.select(); } toast(txt, 'copy', 4000); };
+  try { navigator.clipboard.writeText(txt).then(() => toast(okMsg, 'copy'), fb); } catch(e){ fb(); }
+}
+
+/* ================= AKCE NÁVŠTĚVNÍKA ================= */
+function scan(id){
+  const tg = TAGS.find(x => x.id === id); if (!tg) return;
+  here = tg.node; logEv('scan', {tag:id}); closeSheet();
+  let msg = t('scanned', tg.name);
+  if (tg.stamp){ const st = store.get('stamps', []); if (!st.includes(id)){ st.push(id); store.set('stamps', st); msg += ' · ' + t('stamp', st.length); } }
+  toast(msg, tg.stamp ? 'star' : 'nfc');
+  renderTop();
+  mapFloor = N[here][2];
+  if (tg.parking){ goTab('park'); return; }
+  goTab(tab === 'mgmt' ? 'home' : tab, {fit:true, keepScroll:true});
+}
+function nearestAtm(){ const {dist} = dj(); return ['atm0','atm1'].sort((a,b) => dist[byId[a].node] - dist[byId[b].node])[0]; }
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el || el.disabled) return;
+  const a = el.dataset.act, arg = el.dataset.arg;
+  switch (a){
+    case 'tab': closeSheet(); if (arg === 'map' && !target) mapFloor = N[here][2]; goTab(arg, {fit: arg === 'map'}); break;
+    case 'close': closeSheet(); break;
+    case 'gosearch': goTab('shops'); setTimeout(() => $('#q') && $('#q').focus(), 50); break;
+    case 'quick': q = arg; shopCat = 'all'; if ($('#q')) $('#q').value = q; goTab('shops'); if ($('#q')){ $('#q').value = q; $('.clr').hidden = false; } { const r = search(q); logEv('search', {q, found:!!(r && r.length)}); } break;
+    case 'clearq': q = ''; $('#q').value = ''; el.hidden = true; renderShopList(); $('#q').focus(); break;
+    case 'cat': shopCat = arg; if (tab !== 'shops') goTab('shops'); else { renderShopChips(); renderShopList(); } break;
+    case 'shop': openShop(arg); break;
+    case 'nav': navigateTo(arg); break;
+    case 'nav3d': navigateTo(arg, {guide:true}); break;
+    case 'atm': navigateTo(nearestAtm()); break;
+    case 'floor': mapFloor = +arg; renderMap(true); break;
+    case 'pane': pane = arg; renderMap(false); break;
+    case 'zin': zoomAt(1/1.35, vb.x+vb.w/2, vb.y+vb.h/2); break;
+    case 'zout': zoomAt(1.35, vb.x+vb.w/2, vb.y+vb.h/2); break;
+    case 'zfit': animateVB({...BASE}); break;
+    case 'cancelroute': target = null; renderMap(true); break;
+    case 'guide': guide(); break;
+    case 'wifi': copyText(WIFI_PASS, t('copied') + ': ' + WIFI_PASS); break;
+    case 'parktype': parkType = arg; el.parentNode.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === el)); break;
+    case 'parkstart': parking = {start:Date.now(), type:parkType, note:($('#spot').value||'').trim().slice(0,60), remind:true, warned:false}; store.set('parking', parking); logEv('park'); renderTabs(); renderPark(); break;
+    case 'parkstop': parking = null; store.set('parking', null); renderTabs(); renderPark(); break;
+    case 'remind': parking.remind = !parking.remind; store.set('parking', parking); el.setAttribute('aria-checked', parking.remind); break;
+    case 'coupon': openCoupon(arg); break;
+    case 'redeem': { const u = store.get('used', {}); u[arg] = Date.now(); store.set('used', u); logEv('redeem', {coupon:arg}); renderTabs(); if (tab === 'deals') renderDeals(); if (tab === 'home') renderHome(); showCode(arg); break; }
+    case 'menu': menuSheet(); break;
+    case 'nfc': nfcSheet(); break;
+    case 'scan': scan(arg); break;
+    case 'langsheet': langSheet(); break;
+    case 'setlang': lang = arg; store.set('lang', lang); document.documentElement.lang = lang === 'uk' ? 'uk' : lang; closeSheet(); renderTop(); if ($('#q')) buildShopsSkeleton(); goTab(tab, {keepScroll:true}); break;
+    case 'report': reportSheet(); break;
+    case 'rtype': reportType = arg; el.parentNode.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b === el)); break;
+    case 'mgmt': closeSheet(); goTab('mgmt'); break;
+    case 'mgmtback': goTab(prevTab); break;
+    case 'range': range = arg; renderMgmt(); break;
+    case 'reset': store.clear(); store.set('lang', lang); parking = null; here = 'vchod'; target = null; closeSheet(); renderTop(); goTab('home'); toast(t('resetDone')); break;
+    case 'admin': closeSheet(); pane = 'tour'; goTab('map'); adminSheet(); break;
+    case 'assign': {
+      if (!curSweep){ toast('Prohlídka není připojená nebo v ní nestojíte na bodě.', 'alert'); break; }
+      sweepMap[$('#mapSel').value] = curSweep; store.set('sweeps', sweepMap); const v = $('#mapSel').value; adminSheet(); $('#mapSel').value = v; toast('Přiřazeno'); break; }
+    case 'jump': { const s = sweepMap[$('#mapSel').value]; if (!s || !sdk){ toast('Tohle místo ještě nemá přiřazený bod.', 'alert'); break; } sdk.Sweep.moveTo(s, {transition: sdk.Sweep.Transition.FLY}).catch(() => toast('Přesun se nepodařil.', 'alert')); break; }
+    case 'copymap': copyText(JSON.stringify(sweepMap), 'Nastavení zkopírováno', $('#mapJson')); break;
+    case 'loadmap': try { Object.assign(sweepMap, JSON.parse($('#mapJson').value)); store.set('sweeps', sweepMap); adminSheet(); toast('Nastavení načteno'); } catch(err){ toast('Text není platné nastavení. Vložte celý zkopírovaný text.', 'alert'); } break;
   }
 });
-function adminMsg(t){ $('#adminMsg').textContent = t; }
-const MAP_TARGETS = () => [...TAGS.filter(([id]) => !id.startsWith('d_') && !byId[id]).map(([id,l]) => [id,l]), ...P.map(p => [p.node, `${p.name} (${FLOORS[p.floor]})`])];
-function renderAdmin(){
-  const sel = $('#mapSel'), v = sel.value;
-  sel.innerHTML = MAP_TARGETS().map(([id,l]) => `<option value="${id}">${map[id] ? '✓ ' : ''}${l}</option>`).join('');
-  if (v) sel.value = v;
-  $('#mapCount').textContent = `${MAP_TARGETS().filter(([id]) => map[id]).length} z ${MAP_TARGETS().length}`;
-}
-$('#q').addEventListener('input', renderList);
-window.addEventListener('hashchange', () => setHere(location.hash.slice(1)));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheetWrap').hidden) closeSheet(); });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (TAGS.some(x => x.id === h)) scan(h); });
+window.addEventListener('resize', () => document.documentElement.style.setProperty('--top-h', $('#top').offsetHeight + 'px'));
 
-renderTour(); renderOpen(); setInterval(renderOpen, 60000); renderChips();
-const h0 = location.hash.slice(1); if (h0) setHere(h0);
-$('#hereName').textContent = hereLabel();
-renderTags(); renderList();
-target = 'dm'; renderDetail(false);
+/* ================= ČASOVAČ ================= */
+setInterval(() => {
+  const ps = parkState();
+  if (ps){
+    if (tab === 'park') updatePark();
+    if (tab === 'home' && $('#tilePark')) $('#tilePark').textContent = ps.wk ? t('qParkWeekend') : ps.freeLeft > 0 ? t('qParkFree', Math.ceil(ps.freeLeft)) : t('qParkPaid', ps.price);
+    if (parking.remind && !parking.warned && !ps.wk && ps.freeLeft > 0 && ps.freeLeft <= 10){
+      parking.warned = true; store.set('parking', parking); toast(t('remindMsg'), 'bell', 6000);
+      try { navigator.vibrate && navigator.vibrate([200,100,200]); } catch(e){}
+    }
+  }
+}, 1000);
+setInterval(() => { renderTop(); }, 60000);
+
+/* ================= START ================= */
+(function boot(){
+  document.documentElement.lang = lang;
+  const h = location.hash.slice(1), tg = TAGS.find(x => x.id === h);
+  if (tg) here = tg.node;
+  mapFloor = N[here][2];
+  renderTop(); goTab('home');
+  if (tg){ scan(h); toast(t('welcome') + ' · ' + tg.name, 'nfc'); }
+})();
 </script>
 </body>
 </html>
