@@ -460,6 +460,8 @@ const SDK_KEY = '25637u49gkrstz3189402x35c';
 const MODEL = 'fgFYkGk9j2A';
 const TOUR_URL = `https://my.matterport.com/show/?m=${MODEL}&play=1&qs=1`;
 const SDK_URL = `${TOUR_URL}&applicationKey=${SDK_KEY}`;
+// Domény povolené u SDK klíče. Po schválení licence Matterportem sem přidejte svou doménu, např. 'viewczech.github.io'.
+const SDK_DOMAINS = ['localhost', '127.0.0.1'];
 const SWEEPS = {};   // body 3D prohlídky vložené natrvalo (z režimu Nastavit body prohlídky)
 const WIFI_PASS = 'chomutovka';
 const GOOGLE_CENTER = 'https://www.google.com/maps/search/?api=1&query=OC%20Chomutovka%20Farsk%C3%A9ho%204732%20Chomutov';
@@ -1207,8 +1209,11 @@ function ensureTour(){
     box.innerHTML = `<div class="tour-fb"><div class="eyebrow" style="color:#cfe4ec">Matterport 3D</div><h3>${t('tour')}</h3><p>${t('sdkNoEmbed')}</p><a class="btn accent" href="${TOUR_URL}" target="_blank" rel="noopener">${ic('cube')}${t('tourOpen')}</a></div>`;
     return;
   }
-  box.innerHTML = `<iframe id="mp" src="${SDK_URL}" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="3D prohlídka Chomutovky"></iframe>`;
+  const sdkOk = SDK_DOMAINS.includes(location.hostname);
+  // Na nepovolené doméně se klíč do prohlídky nepřidává, jinak ji Matterport zablokuje a jen se načítá.
+  box.innerHTML = `<iframe id="mp" src="${sdkOk ? SDK_URL : TOUR_URL}" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="3D prohlídka Chomutovky"></iframe>`;
   if (location.protocol === 'file:'){ setTourStatus(t('sdkLocal')); return; }
+  if (!sdkOk){ setTourStatus(t('sdkFail')); return; }
   setTourStatus('');
   const sc = document.createElement('script');
   sc.src = 'https://static.matterport.com/showcase-sdk/latest.js';
