@@ -503,7 +503,7 @@ cs:{tabHome:'Domů',tabShops:'Obchody',tabMap:'Plánek',tabPark:'Parkování',ta
  lunch:'Čas na oběd',lunchSub:'Denní menu a bistra ve 2. patře',huntIntro:'Zahrajte si hledačku',huntIntroSub:'Sesbírejte 6 razítek a získejte odměnu',
  parkWarn:'Parkování zdarma končí za {0} min',parkWarnSub:'Pak 10 Kč za druhou hodinu',dealPick:'Tip dne: {0}',copied:'Heslo zkopírováno',resetDone:'Data testování vymazána',
  back:'Zpět',close:'Zavřít',
- sdkConnecting:'Připojuji 3D navigaci…',sdkOk:'3D navigace připojena',sdkFail:'3D navigaci se nepodařilo připojit. Je adresa stránky povolená u SDK klíče?',
+ sdkConnecting:'Připojuji 3D navigaci…',sdkOk:'3D navigace připojena',sdkFail:'Prohlídkou se pohybujte ručně. Automatické provedení po trase je součástí plné verze.',
  sdkLocal:'Plynulé provádění funguje po spuštění na adrese localhost:8000. Prohlídku si tu můžete projít ručně.',sdkNoEmbed:'Prohlídka se tady otevře v nové záložce.',
  notMapped:'Toto místo ještě nemá přiřazený bod v prohlídce (menu → Nastavit body 3D prohlídky).',guiding:'Provádím k cíli: {0}',arrived:'Jste v cíli: {0}',tourOpen:'Otevřít 3D prohlídku'},
 de:{tabHome:'Start',tabShops:'Geschäfte',tabMap:'Plan',tabPark:'Parken',tabDeals:'Angebote',youAreHere:'Sie sind hier',
@@ -1209,7 +1209,7 @@ function ensureTour(){
   }
   box.innerHTML = `<iframe id="mp" src="${SDK_URL}" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="3D prohlídka Chomutovky"></iframe>`;
   if (location.protocol === 'file:'){ setTourStatus(t('sdkLocal')); return; }
-  setTourStatus(t('sdkConnecting'));
+  setTourStatus('');
   const sc = document.createElement('script');
   sc.src = 'https://static.matterport.com/showcase-sdk/latest.js';
   sc.onload = async () => {
@@ -1229,7 +1229,7 @@ async function guide(){
   $('#tourPane').scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'});
   if (!target) return;
   const tp = place(target);
-  if (!sdk){ if (!canEmbed() || location.protocol === 'file:') toast(t('sdkLocal'), 'cube'); return; }
+  if (!sdk){ toast(location.protocol === 'file:' ? t('sdkLocal') : t('sdkFail'), 'cube', 4000); return; }
   if (guiding) return;
   const to = sweepMap[tp.node], from = sweepMap[here] || curSweep;
   if (!to){ setTourStatus(t('notMapped')); return; }
